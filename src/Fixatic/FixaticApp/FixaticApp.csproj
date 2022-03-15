@@ -9,4 +9,8 @@
     <Authors>Jiri Falta;Tomas Kral; Daniel Kucera</Authors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MudBlazor" Version="6.0.7" />
+  </ItemGroup>
+
 </Project>
