@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fixatic.Types
 {
-    public internal class Attachement
+    public class Attachement
     {
         public int AttachementId { get; set; }
 
