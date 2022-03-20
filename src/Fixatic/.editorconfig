@@ -85,7 +85,7 @@ dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggest
 #Style - Modifier preferences
 
 #when this rule is set to a list of modifiers, prefer the specified ordering.
-csharp_preferred_modifier_order = public, private, internal, readonly, static:suggestion
+csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async:suggestion
 
 #Style - qualification options
 
@@ -196,3 +196,4 @@ dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 dotnet_code_quality_unused_parameters = all:suggestion
 dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
 dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
+indent_style = tab

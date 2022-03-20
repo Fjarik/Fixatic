@@ -1,111 +1,112 @@
 using System.Data;
 using System.Data.SqlClient;
+using Fixatic.DO.Types;
 using Fixatic.Types;
 using Microsoft.Extensions.Logging;
 
 namespace Fixatic.DO
 {
-    public class GroupsDataObject
-    {
-        public readonly DB _db;
-        public readonly ILogger _logger;
+	public class GroupsDataObject
+	{
+		public readonly DB _db;
+		public readonly ILogger _logger;
 
-        public GroupsDataObject(ILogger logger, IDBConnector dbConnector)
-        {
-            _db = new DB(dbConnector.GetCns());
-            _logger = logger;
-        }
+		public GroupsDataObject(ILogger logger, IDBConnector dbConnector)
+		{
+			_db = new DB(dbConnector.GetCns());
+			_logger = logger;
+		}
 
-        async public Task<int> CreateOrUpdateAsync(Group group)
-        {
-            _logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(CreateOrUpdateAsync)}...");
+		public async Task<int> CreateOrUpdateAsync(Group group)
+		{
+			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(CreateOrUpdateAsync)}...");
 
-            var id = group.GroupId;
+			var id = group.GroupId;
 
-            string sql;
-            if (id == DB.IgnoredID)
-            {
-                // TODO(Dan): SQL INSERT
-                sql = @"";
-            }
-            else
-            {
-                // TODO(Dan): SQL UPDATE
-                sql = @"";
-            }
+			string sql;
+			if (id == DB.IgnoredID)
+			{
+				// TODO(Dan): SQL INSERT
+				sql = @"";
+			}
+			else
+			{
+				// TODO(Dan): SQL UPDATE
+				sql = @"";
+			}
 
-            var cmd = new SqlCommand(sql);
+			var cmd = new SqlCommand(sql);
 
-            cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-            // TODO(Tom) : zbytek parametrů
+			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
+			// TODO(Tom) : zbytek parametrů
 
-            try
-            {
-                var objId = await _db.ExecuteScalarAsync(cmd);
-                if (objId != null) id = (int)objId;
-            }
-            finally
-            {
-                await cmd.Connection.CloseAsync();
-            }
+			try
+			{
+				var objId = await _db.ExecuteScalarAsync(cmd);
+				if (objId != null) id = (int)objId;
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
 
-            _logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(CreateOrUpdateAsync)}... Done");
-            return id;
-        }
+			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(CreateOrUpdateAsync)}... Done");
+			return id;
+		}
 
-        async public Task<List<User>> GetAllAsync()
-        {
-            _logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(GetAllAsync)}...");
+		public async Task<List<User>> GetAllAsync()
+		{
+			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(GetAllAsync)}...");
 
-            // TODO(Dan): SQL SELECT
-            var sql = @"";
+			// TODO(Dan): SQL SELECT
+			var sql = @"";
 
-            var cmd = new SqlCommand(sql);
+			var cmd = new SqlCommand(sql);
 
-            var res = new List<User>();
+			var res = new List<User>();
 
-            try
-            {
-                var r = await _db.ExecuteReaderAsync(cmd);
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
 
-                while (await r.ReadAsync())
-                {
-                    // TODO(Tom): přidat Group objekt
-                }
+				while (await r.ReadAsync())
+				{
+					// TODO(Tom): přidat Group objekt
+				}
 
-                await r.CloseAsync();
-            }
-            finally
-            {
-                await cmd.Connection.CloseAsync();
-            }
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
 
-            _logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(GetAllAsync)}... Done");
-            return res;
-        }
+			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(GetAllAsync)}... Done");
+			return res;
+		}
 
-        async public Task<bool> DeleteAsync(int id)
-        {
-            _logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(DeleteAsync)}...");
+		public async Task<bool> DeleteAsync(int id)
+		{
+			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(DeleteAsync)}...");
 
-            // TODO(Dan): SQL DELETE
-            var sql = @"";
+			// TODO(Dan): SQL DELETE
+			var sql = @"";
 
-            var cmd = new SqlCommand(sql);
-            cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
 
-            int res;
-            try
-            {
-                res = await _db.ExecuteNonQueryAsync(cmd);
-            }
-            finally
-            {
-                await cmd.Connection.CloseAsync();
-            }
+			int res;
+			try
+			{
+				res = await _db.ExecuteNonQueryAsync(cmd);
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
 
-            _logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(DeleteAsync)}... Done");
-            return res != 0;
-        }
-    }
+			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(DeleteAsync)}... Done");
+			return res != 0;
+		}
+	}
 }

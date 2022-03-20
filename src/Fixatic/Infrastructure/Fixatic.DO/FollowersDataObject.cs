@@ -1,122 +1,123 @@
 using System.Data;
 using System.Data.SqlClient;
+using Fixatic.DO.Types;
 using Fixatic.Types;
 using Microsoft.Extensions.Logging;
 
 namespace Fixatic.DO
 {
-    public class FollowersDataObject
-    {
-        public readonly DB _db;
-        public readonly ILogger _logger;
+	public class FollowersDataObject
+	{
+		public readonly DB _db;
+		public readonly ILogger _logger;
 
-        public FollowersDataObject(ILogger logger, IDBConnector dbConnector)
-        {
-            _db = new DB(dbConnector.GetCns());
-            _logger = logger;
-        }
+		public FollowersDataObject(ILogger logger, IDBConnector dbConnector)
+		{
+			_db = new DB(dbConnector.GetCns());
+			_logger = logger;
+		}
 
-        async public Task<int> CreateOrUpdateAsync(Follower follower)
-        {
-            _logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(CreateOrUpdateAsync)}...");
+		public async Task<int> CreateOrUpdateAsync(Follower follower)
+		{
+			_logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(CreateOrUpdateAsync)}...");
 
-            var id = 69;
-            var userId = follower.UserId;
-            var ticketId = follower.TicketId;
+			var id = 69;
+			var userId = follower.UserId;
+			var ticketId = follower.TicketId;
 
-            if (userId == DB.IgnoredID || ticketId == DB.IgnoredID)
-            {
-                throw new ArgumentException("Follower object must have a valid UserID and TicketID");
-            }
-            
-            // TODO: tady asi bude jiná logika na zkontrolování, jestli se má záznam vytvořit nebo updatovat
-            
-            string sql = "";
-            if (userId == DB.IgnoredID)
-            {
-                // TODO(Dan): SQL INSERT
-                sql = @"";
-            }
-            else
-            {
-                // TODO(Dan): SQL UPDATE
-                sql = @"";
-            }
+			if (userId == DB.IgnoredID || ticketId == DB.IgnoredID)
+			{
+				throw new ArgumentException("Follower object must have a valid UserID and TicketID");
+			}
 
-            var cmd = new SqlCommand(sql);
+			// TODO: tady asi bude jiná logika na zkontrolování, jestli se má záznam vytvořit nebo updatovat
 
-            cmd.Parameters.Add("@UserID", SqlDbType.Int).Value = id;
-            cmd.Parameters.Add("@TicketID", SqlDbType.Int).Value = id;
-            // TODO(Tom) : zbytek parametrů
+			string sql;
+			if (userId == DB.IgnoredID)
+			{
+				// TODO(Dan): SQL INSERT
+				sql = @"";
+			}
+			else
+			{
+				// TODO(Dan): SQL UPDATE
+				sql = @"";
+			}
 
-            try
-            {
-                var objId = await _db.ExecuteScalarAsync(cmd);
-                if (objId != null) id = (int)objId;
-            }
-            finally
-            {
-                await cmd.Connection.CloseAsync();
-            }
+			var cmd = new SqlCommand(sql);
 
-            _logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(CreateOrUpdateAsync)}... Done");
-            return id;
-        }
+			cmd.Parameters.Add("@UserID", SqlDbType.Int).Value = id;
+			cmd.Parameters.Add("@TicketID", SqlDbType.Int).Value = id;
+			// TODO(Tom) : zbytek parametrů
 
-        async public Task<List<User>> GetAllAsync()
-        {
-            _logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(GetAllAsync)}...");
+			try
+			{
+				var objId = await _db.ExecuteScalarAsync(cmd);
+				if (objId != null) id = (int)objId;
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
 
-            // TODO(Dan): SQL SELECT
-            var sql = @"";
+			_logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(CreateOrUpdateAsync)}... Done");
+			return id;
+		}
 
-            var cmd = new SqlCommand(sql);
+		public async Task<List<User>> GetAllAsync()
+		{
+			_logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(GetAllAsync)}...");
 
-            var res = new List<User>();
+			// TODO(Dan): SQL SELECT
+			var sql = @"";
 
-            try
-            {
-                var r = await _db.ExecuteReaderAsync(cmd);
+			var cmd = new SqlCommand(sql);
 
-                while (await r.ReadAsync())
-                {
-                    // TODO(Tom): přidat Follower objekt
-                }
+			var res = new List<User>();
 
-                await r.CloseAsync();
-            }
-            finally
-            {
-                await cmd.Connection.CloseAsync();
-            }
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
 
-            _logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(GetAllAsync)}... Done");
-            return res;
-        }
+				while (await r.ReadAsync())
+				{
+					// TODO(Tom): přidat Follower objekt
+				}
 
-        async public Task<bool> DeleteAsync(int userId, int ticketId)
-        {
-            _logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(DeleteAsync)}...");
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
 
-            // TODO(Dan): SQL DELETE
-            var sql = @"";
+			_logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(GetAllAsync)}... Done");
+			return res;
+		}
 
-            var cmd = new SqlCommand(sql);
-            cmd.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-            cmd.Parameters.Add("@TicketID", SqlDbType.Int).Value = ticketId;
+		public async Task<bool> DeleteAsync(int userId, int ticketId)
+		{
+			_logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(DeleteAsync)}...");
 
-            int res;
-            try
-            {
-                res = await _db.ExecuteNonQueryAsync(cmd);
-            }
-            finally
-            {
-                await cmd.Connection.CloseAsync();
-            }
+			// TODO(Dan): SQL DELETE
+			var sql = @"";
 
-            _logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(DeleteAsync)}... Done");
-            return res != 0;
-        }
-    }
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+			cmd.Parameters.Add("@TicketID", SqlDbType.Int).Value = ticketId;
+
+			int res;
+			try
+			{
+				res = await _db.ExecuteNonQueryAsync(cmd);
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(FollowersDataObject)}.{nameof(DeleteAsync)}... Done");
+			return res != 0;
+		}
+	}
 }

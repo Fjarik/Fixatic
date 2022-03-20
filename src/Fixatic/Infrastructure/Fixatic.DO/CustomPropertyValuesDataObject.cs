@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.SqlClient;
+using Fixatic.DO.Types;
 using Fixatic.Types;
 using Microsoft.Extensions.Logging;
 
@@ -16,7 +17,7 @@ namespace Fixatic.DO
             _logger = logger;
         }
 
-        async public Task<int> CreateOrUpdateAsync(CustomPropertyValue customPropertyValue)
+        public async Task<int> CreateOrUpdateAsync(CustomPropertyValue customPropertyValue)
         {
             _logger.LogInformation($"{nameof(CustomPropertyValuesDataObject)}.{nameof(CreateOrUpdateAsync)}...");
 
@@ -53,7 +54,7 @@ namespace Fixatic.DO
             return id;
         }
 
-        async public Task<List<User>> GetAllAsync()
+        public async Task<List<User>> GetAllAsync()
         {
             _logger.LogInformation($"{nameof(CustomPropertyValuesDataObject)}.{nameof(GetAllAsync)}...");
 
@@ -84,7 +85,7 @@ namespace Fixatic.DO
             return res;
         }
 
-        async public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation($"{nameof(CustomPropertyValuesDataObject)}.{nameof(DeleteAsync)}...");
 
