@@ -13,4 +13,8 @@
     <PackageReference Include="MudBlazor" Version="6.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Fixatic.Services.Implementation\Fixatic.Services.Implementation.csproj" />
+  </ItemGroup>
+
 </Project>
