@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <NeutralLanguage>en-GB</NeutralLanguage>
-    <Company>UHK</Company>
-    <Authors>Jiri Falta;Tomas Kral; Daniel Kucera</Authors>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <NeutralLanguage>en-GB</NeutralLanguage>
+        <Company>UHK</Company>
+        <Authors>Jiri Falta;Tomas Kral; Daniel Kucera</Authors>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MudBlazor" Version="6.0.7" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="MudBlazor" Version="6.0.7"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Services\Fixatic.Services.Implementation\Fixatic.Services.Implementation.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Services\Fixatic.Services.Implementation\Fixatic.Services.Implementation.csproj"/>
+    </ItemGroup>
 
 </Project>

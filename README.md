@@ -1,2 +1,2 @@
 # Fixatic
-Simple issue tracking system. (Student group project - UHK) 
+Simple issue tracking system. (Student group project - UHK)

@@ -8,7 +8,7 @@ namespace Fixatic.Types
 {
     public class CustomPropertyValue
     {
-        public int CustomPropertyOptionId { get; set; }
+        public int CustomPropertyValueId { get; set; }
 
         public int TicketId { get; set; }
 
