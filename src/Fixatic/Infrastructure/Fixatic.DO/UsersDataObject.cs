@@ -134,7 +134,7 @@ namespace Fixatic.DO
             return res;
         }
 
-        public async Task<bool> DeleteAsync()
+        public async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(DeleteAsync)}...");
 
@@ -144,6 +144,7 @@ namespace Fixatic.DO
             ";
 
             var cmd = new SqlCommand(sql);
+            cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
 
             int res;
             try
