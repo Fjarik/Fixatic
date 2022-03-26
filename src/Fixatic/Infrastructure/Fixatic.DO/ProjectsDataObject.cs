@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 using Fixatic.DO.Types;
 using Fixatic.Types;
 using Microsoft.Extensions.Logging;
@@ -57,7 +58,7 @@ namespace Fixatic.DO
 			return id;
 		}
 
-		public async Task<List<User>> GetAllAsync()
+		public async Task<List<Project>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetAllAsync)}...");
 
@@ -65,7 +66,7 @@ namespace Fixatic.DO
 
 			var cmd = new SqlCommand(sql);
 
-			var res = new List<User>();
+			var res = new List<Project>();
 
 			try
 			{
@@ -91,7 +92,10 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(DeleteAsync)}...");
 
-			var sql = @"DELETE FROM Projects WHERE Project_ID = @ID;";
+			var sql = @"
+				DELETE FROM ProjectsAccess WHERE Project_ID = @ID;
+				DELETE FROM ProjectsCategories WHERE Project_ID = @ID;
+				DELETE FROM Projects WHERE Project_ID = @ID;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
@@ -108,6 +112,76 @@ namespace Fixatic.DO
 
 			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(DeleteAsync)}... Done");
 			return res != 0;
+		}
+
+		public async Task<bool> SetCategoriesAsync(int projectId, List<int> categoryIds)
+		{
+			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(SetCategoriesAsync)}...");
+
+			var sb = new StringBuilder();
+
+			sb.Append(@"DELETE FROM ProjectCategories WHERE Project_ID = @ID;");
+
+			if (categoryIds.Any())
+			{
+				sb.Append(@"INSERT INTO ProjectCategories (category_id, project_id) VALUES ");
+				for (var i = 0; i < categoryIds.Count; i++)
+				{
+					sb.Append($@"(@category_id{i}, @ID)");
+					sb.Append(i == categoryIds.Count - 1 ? ";" : ",");
+				}
+			}
+
+			var cmd = new SqlCommand(sb.ToString());
+			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = projectId;
+			for (var i = 0; i < categoryIds.Count; i++)
+			{
+				cmd.Parameters.Add($"@category_id{i}", SqlDbType.Int).Value = categoryIds[i];
+			}
+
+			int res;
+			try
+			{
+				res = await _db.ExecuteNonQueryAsync(cmd);
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(SetCategoriesAsync)}... Done");
+			return true;
+		}
+
+		public async Task<List<int>> GetCategoryIdsAsync(int projectId)
+		{
+			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetCategoryIdsAsync)}...");
+
+			var sql = @"SELECT Category_ID FROM ProjectCategories WHERE Project_ID = @project_id;";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@project_id", SqlDbType.Int).Value = projectId;
+
+			var res = new List<int>();
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add((int)r["Category_ID"]);
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetCategoryIdsAsync)}... Done");
+			return res;
 		}
 	}
 }

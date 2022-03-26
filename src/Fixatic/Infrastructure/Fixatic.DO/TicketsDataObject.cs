@@ -27,7 +27,7 @@ namespace Fixatic.DO
 			if (id == DB.IgnoredID)
 			{
 				sql = @"INSERT INTO Tickets (content, created, datesolved, modified, priority, status, title, type, visibility, project_id, assigneduser_id, creator_id)
-				VALUES (@content, @created, @datesolved, @modified, @priority, @status, @title, @type, @visibility, @project_id, @assigneduser_id, @creator_id);
+									VALUES (@content, @created, @datesolved, @modified, @priority, @status, @title, @type, @visibility, @project_id, @assigneduser_id, @creator_id);
 				
 				SET @ID = SCOPE_IDENTITY();
 
@@ -35,8 +35,19 @@ namespace Fixatic.DO
 			}
 			else
 			{
-				sql = @"UPDATE Tickets SET content = @content, created = @created, datesolved = @datesolved, modified = @modified, priority = @priority, status = @status,
-				title = @title, type = @type, visibility = @visibility, project_id = @project_id, assigned_user = @assigned_user, creator_id = @creator_id WHERE ticket_id = @ID;";
+				sql = @"UPDATE Tickets 
+						SET 
+							content = @content, 
+							datesolved = @datesolved, 
+							modified = @modified, 
+							priority = @priority, 
+							status = @status,
+							title = @title, 
+							type = @type, 
+							visibility = @visibility, 
+							project_id = @project_id, 
+							assigned_user = @assigned_user
+						WHERE ticket_id = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
@@ -62,7 +73,8 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAllAsync)}...");
 
-			var sql = @"SELECT Ticket_ID, Title, Content, Created, Modified, DateSolved, Priority, Status, Type, Visibility, Project_ID, AssignedUser_ID, Creator_ID
+			var sql = @"SELECT 
+					Ticket_ID, Title, Content, Created, Modified, DateSolved, Priority, Status, Type, Visibility, Project_ID, AssignedUser_ID, Creator_ID
 			FROM Tickets;";
 
 			var cmd = new SqlCommand(sql);
@@ -93,7 +105,13 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(DeleteAsync)}...");
 
-			var sql = @"DELETE FROM Tickets WHERE Ticket_ID = @ID;";
+			var sql = @"
+DELETE FROM Followers WHERE Ticker_ID = @ID;
+DELETE FROM Comments WHERE Ticket_ID = @ID;
+DELETE FROM CumstomPropertyValues WHERE Ticket_ID = @ID;
+DELETE FROM Attachements WHERE Ticket_ID = @ID;
+DELETE FROM Tickets WHERE Ticket_ID = @ID;
+";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
@@ -111,5 +129,125 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(DeleteAsync)}... Done");
 			return res != 0;
 		}
+
+		public async Task<List<Follower>> GetFollowerByUserAsync(int userId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowerByUserAsync)}...");
+
+			var sql = @"SELECT Ticket_ID, User_ID, Type, Since FROM Followers WHERE User_ID = @user_id;";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = userId;
+
+			var res = new List<Follower>();
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					// TODO(Tom): přidat Follower objekt
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowerByUserAsync)}... Done");
+			return res;
+		}
+
+		public async Task<List<Follower>> GetFollowerByTicketAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowerByTicketAsync)}...");
+
+			var sql = @"SELECT Ticket_ID, User_ID, Type, Since FROM Followers WHERE Ticket_ID = @ticket_id;";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = ticketId;
+
+			var res = new List<Follower>();
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					// TODO(Tom): přidat Follower objekt
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowerByTicketAsync)}... Done");
+			return res;
+		}
+
+		public async Task<bool> AddFollowerAsync(int tickedId, int userId, int type)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(AddFollowerAsync)}...");
+
+			var sql = @"
+				INSERT INTO Followers (since, type, ticket_id, user_id)
+				VALUES (@since, @type, @ticket_id, @user_id);";
+
+
+			var cmd = new SqlCommand(sql);
+
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = tickedId;
+			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = userId;
+			cmd.Parameters.Add("@type", SqlDbType.Int).Value = type;
+			cmd.Parameters.Add("@since", SqlDbType.DateTime2).Value = DateTime.UtcNow;
+
+			try
+			{
+				await _db.ExecuteScalarAsync(cmd);
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(AddFollowerAsync)}... Done");
+			return true;
+		}
+
+		public async Task<bool> RemoveFollowerAsync(int tickerId, int userId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(RemoveFollowerAsync)}...");
+
+			var sql = @"
+				DELETE FROM Followers WHERE Ticket_ID = @ticket_id AND User_ID = @user_id);";
+
+
+			var cmd = new SqlCommand(sql);
+
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = tickerId;
+			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = userId;
+
+			int res;
+			try
+			{
+				res = await _db.ExecuteNonQueryAsync(cmd);
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(RemoveFollowerAsync)}... Done");
+			return res != 0;
+		}
+
+
 	}
 }
