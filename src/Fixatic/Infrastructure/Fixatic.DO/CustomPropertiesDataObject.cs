@@ -27,11 +27,14 @@ namespace Fixatic.DO
 			if (id == DB.IgnoredID)
 			{
 				sql = @"INSERT INTO CustomProperties (description, name)
-				VALUES (@description, @name);";
+											  VALUES (@description, @name);
+
+						SET @ID = SCOPE_IDENTITY();
+
+						SELECT @ID;";
 			}
 			else
 			{
-				//TODO: vyřešit ID
 				sql = @"UPDATE CustomProperties SET description = @description, name = @name WHERE CustomProperty_ID = @ID;";
 			}
 

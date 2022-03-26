@@ -221,7 +221,7 @@ DELETE FROM Tickets WHERE Ticket_ID = @ID;
 			return true;
 		}
 
-		public async Task<bool> RemoveFollowerAsync(int tickerId, int userId)
+		public async Task<bool> RemoveFollowerAsync(int ticketId, int userId)
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(RemoveFollowerAsync)}...");
 
@@ -231,7 +231,7 @@ DELETE FROM Tickets WHERE Ticket_ID = @ID;
 
 			var cmd = new SqlCommand(sql);
 
-			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = tickerId;
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = ticketId;
 			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = userId;
 
 			int res;
@@ -248,6 +248,91 @@ DELETE FROM Tickets WHERE Ticket_ID = @ID;
 			return res != 0;
 		}
 
+		public async Task<List<int>> GetCustomPropertyIdsAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetCustomPropertyIdsAsync)}...");
+
+			var sql = @"SELECT CustomPropertyOption_ID FROM CustomPropertyValues WHERE Ticket_ID = @ticket_id;";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = ticketId;
+
+			var res = new List<int>();
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add((int)r["CustomPropertyOption_ID"]);
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetCustomPropertyIdsAsync)}... Done");
+			return res;
+		}
+
+		public async Task<bool> AddPropertyOptionAsync(int tickedId, int propertyOptionId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(AddPropertyOptionAsync)}...");
+
+			var sql = @"
+				INSERT INTO CustomPropertyValues (created, custompropertyoption_id, ticket_id)
+				VALUES (@created, @custompropertyoption_id, @ticket_id);";
+
+
+			var cmd = new SqlCommand(sql);
+
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = tickedId;
+			cmd.Parameters.Add("@custompropertyoption_id", SqlDbType.Int).Value = propertyOptionId;
+			cmd.Parameters.Add("@created", SqlDbType.DateTime2).Value = DateTime.UtcNow;
+
+			try
+			{
+				await _db.ExecuteScalarAsync(cmd);
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(AddPropertyOptionAsync)}... Done");
+			return true;
+		}
+
+		public async Task<bool> RemovePropertyOptionAsync(int ticketId, int propertyOptionId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(RemovePropertyOptionAsync)}...");
+
+			var sql = @"
+				DELETE FROM CustomPropertyValues WHERE Ticket_ID = @ticket_id AND CustomPropertyOption_ID = @custompropertyoption_id);";
+
+
+			var cmd = new SqlCommand(sql);
+
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = ticketId;
+			cmd.Parameters.Add("@custompropertyoption_id", SqlDbType.Int).Value = propertyOptionId;
+
+			int res;
+			try
+			{
+				res = await _db.ExecuteNonQueryAsync(cmd);
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(RemovePropertyOptionAsync)}... Done");
+			return res != 0;
+		}
 
 	}
 }
