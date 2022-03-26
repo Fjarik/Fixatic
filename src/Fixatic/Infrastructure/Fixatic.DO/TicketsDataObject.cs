@@ -106,12 +106,12 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(DeleteAsync)}...");
 
 			var sql = @"
-DELETE FROM Followers WHERE Ticker_ID = @ID;
-DELETE FROM Comments WHERE Ticket_ID = @ID;
-DELETE FROM CumstomPropertyValues WHERE Ticket_ID = @ID;
-DELETE FROM Attachements WHERE Ticket_ID = @ID;
-DELETE FROM Tickets WHERE Ticket_ID = @ID;
-";
+				DELETE FROM Followers WHERE Ticket_ID = @ID;
+				DELETE FROM Comments WHERE Ticket_ID = @ID;
+				DELETE FROM CumstomPropertyValues WHERE Ticket_ID = @ID;
+				DELETE FROM Attachements WHERE Ticket_ID = @ID;
+				DELETE FROM Tickets WHERE Ticket_ID = @ID;
+			";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
