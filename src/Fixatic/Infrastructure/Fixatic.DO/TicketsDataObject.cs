@@ -26,13 +26,17 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				// TODO(Dan): SQL INSERT
-				sql = @"";
+				sql = @"INSERT INTO Tickets (content, created, datesolved, modified, priority, status, title, type, visibility, project_id, assigneduser_id, creator_id)
+				VALUES (@content, @created, @datesolved, @modified, @priority, @status, @title, @type, @visibility, @project_id, @assigneduser_id, @creator_id);
+				
+				SET @ID = SCOPE_IDENTITY();
+
+                SELECT @ID;";
 			}
 			else
 			{
-				// TODO(Dan): SQL UPDATE
-				sql = @"";
+				sql = @"UPDATE Tickets SET content = @content, created = @created, datesolved = @datesolved, modified = @modified, priority = @priority, status = @status,
+				title = @title, type = @type, visibility = @visibility, project_id = @project_id, assigned_user = @assigned_user, creator_id = @creator_id WHERE ticket_id = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
@@ -58,8 +62,8 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAllAsync)}...");
 
-			// TODO(Dan): SQL SELECT
-			var sql = @"";
+			var sql = @"SELECT Ticket_ID, Title, Content, Created, Modified, DateSolved, Priority, Status, Type, Visibility, Project_ID, AssignedUser_ID, Creator_ID
+			FROM Tickets;";
 
 			var cmd = new SqlCommand(sql);
 
@@ -89,8 +93,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(DeleteAsync)}...");
 
-			// TODO(Dan): SQL DELETE
-			var sql = @"";
+			var sql = @"DELETE FROM Tickets WHERE Ticket_ID = @ID;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;

@@ -26,13 +26,17 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				// TODO(Dan): SQL INSERT
-				sql = @"";
+				sql = @"INSERT INTO CustomPropertyOptions (content, isenabled, sequence, customproperty_id)
+				VALUES (@content, @isenabled, @sequence, @customproperty_id);
+				
+				SET @ID = SCOPE_IDENTITY();
+
+                SELECT @ID;";
 			}
 			else
 			{
-				// TODO(Dan): SQL UPDATE
-				sql = @"";
+				sql = @"UPDATE CustomPropertyOptions SET content = @content, isenabled = @isenabled, sequence = @sequence, customproperty_id = @customproperty_id 
+				WHERE CustomPropertyOption_ID = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
@@ -58,8 +62,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(GetAllAsync)}...");
 
-			// TODO(Dan): SQL SELECT
-			var sql = @"";
+			var sql = @"SELECT CustomPropertyOption_ID, Content, IsEnabled, Sequence, CustomProperty_ID FROM CustomPropertyOptions;";
 
 			var cmd = new SqlCommand(sql);
 
@@ -89,8 +92,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(DeleteAsync)}...");
 
-			// TODO(Dan): SQL DELETE
-			var sql = @"";
+			var sql = @"DELETE FROM CustomPropertyOptions WHERE CustomPropertyOption_ID = @ID;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;

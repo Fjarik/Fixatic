@@ -26,13 +26,17 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				// TODO(Dan): SQL INSERT
-				sql = @"";
+				sql = @"INSERT INTO Comments (content, created, isinternal, ticket_id, user_id)
+				VALUES (@content, @created, @isinternal, @ticket_id, @user_id);
+				
+				SET @ID = SCOPE_IDENTITY();
+
+                SELECT @ID;";
 			}
 			else
 			{
-				// TODO(Dan): SQL UPDATE
-				sql = @"";
+				sql = @"UPDATE Comments SET content = @content, created = @created, isinternal = @isinternal, ticket_id = @ticket_id, user_id = @user_id
+				WHERE comment_id = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
@@ -58,8 +62,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(CommentsDataObject)}.{nameof(GetAllAsync)}...");
 
-			// TODO(Dan): SQL SELECT
-			var sql = @"";
+			var sql = @"SELECT Comment_ID, Content, Created, IsInternal, Ticket_ID, User_ID FROM Comments;";
 
 			var cmd = new SqlCommand(sql);
 
@@ -89,8 +92,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(CommentsDataObject)}.{nameof(DeleteAsync)}...");
 
-			// TODO(Dan): SQL DELETE
-			var sql = @"";
+			var sql = @"DELETE FROM Comments WHERE comment_id = @ID;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;

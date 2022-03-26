@@ -26,13 +26,17 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				// TODO(Dan): SQL INSERT
-				sql = @"";
+				sql = @"INSERT INTO Attachements (content, name, size, type, uploaded, alternativetext, ticket_id, user_id, comment_id)
+				VALUES (@content, @name, @size, @type, @uploaded, @alternativetext, @ticket_id, @user_id, @comment_id);
+				
+				SET @ID = SCOPE_IDENTITY();
+
+                SELECT @ID;";
 			}
 			else
 			{
-				// TODO(Dan): SQL UPDATE
-				sql = @"";
+				sql = @"UPDATE Attachements SET content = @content, name = @name, size = @size, type = @type, uploaded = @uploaded, alternativetext = @alternativetext, 
+				ticket_id = @ticket_id, user_id = @user_id, comment_id = @comment_id WHERE Attachement_ID = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
@@ -58,8 +62,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(AttachementsDataObject)}.{nameof(GetAllAsync)}...");
 
-			// TODO(Dan): SQL SELECT
-			var sql = @"";
+			var sql = @"SELECT Attachement_ID, Content, Name, Size, Type, Uploaded, AlternativeText, Ticket_ID, User_ID, Comment_ID FROM Attachements;";
 
 			var cmd = new SqlCommand(sql);
 
@@ -89,8 +92,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(AttachementsDataObject)}.{nameof(DeleteAsync)}...");
 
-			// TODO(Dan): SQL DELETE
-			var sql = @"";
+			var sql = @"DELETE FROM Attachements WHERE Attachement_ID = @ID;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;

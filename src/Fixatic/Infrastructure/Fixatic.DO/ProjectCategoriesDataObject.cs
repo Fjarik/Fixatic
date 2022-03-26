@@ -26,13 +26,13 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				// TODO(Dan): SQL INSERT
-				sql = @"";
+				sql = @"INSERT INTO ProjectCategories (category_id, project_id)
+				VALUES (@category_id, @project_id);";
 			}
 			else
 			{
-				// TODO(Dan): SQL UPDATE
-				sql = @"";
+				//TODO: Vyřešit ID
+				sql = @"UPDATE ProjectCategories SET category_id = @category_id, project_id = @project_id;";
 			}
 
 			var cmd = new SqlCommand(sql);
@@ -58,8 +58,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(ProjectCategoriesDataObject)}.{nameof(GetAllAsync)}...");
 
-			// TODO(Dan): SQL SELECT
-			var sql = @"";
+			var sql = @"SELECT Category_ID, Project_ID FROM ProjectCategories;";
 
 			var cmd = new SqlCommand(sql);
 
@@ -89,8 +88,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(ProjectCategoriesDataObject)}.{nameof(DeleteAsync)}...");
 
-			// TODO(Dan): SQL DELETE
-			var sql = @"";
+			var sql = @"DELETE FROM ProjectCategories;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;

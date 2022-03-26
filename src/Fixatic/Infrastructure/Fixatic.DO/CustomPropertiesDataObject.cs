@@ -26,13 +26,13 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				// TODO(Dan): SQL INSERT
-				sql = @"";
+				sql = @"INSERT INTO CustomProperties (description, name)
+				VALUES (@description, @name);";
 			}
 			else
 			{
-				// TODO(Dan): SQL UPDATE
-				sql = @"";
+				//TODO: vyřešit ID
+				sql = @"UPDATE CustomProperties SET description = @description, name = @name WHERE CustomProperty_ID = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
@@ -58,8 +58,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(CustomPropertiesDataObject)}.{nameof(GetAllAsync)}...");
 
-			// TODO(Dan): SQL SELECT
-			var sql = @"";
+			var sql = @"SELECT CustomPropertyID, Description, Name FROM CustomProperties;";
 
 			var cmd = new SqlCommand(sql);
 
@@ -89,8 +88,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(CustomPropertiesDataObject)}.{nameof(DeleteAsync)}...");
 
-			// TODO(Dan): SQL DELETE
-			var sql = @"";
+			var sql = @"DELETE FROM CustomProperties WHERE CustomPropertyID = @ID;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;

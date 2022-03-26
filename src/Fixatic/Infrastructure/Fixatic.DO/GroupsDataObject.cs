@@ -26,13 +26,16 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				// TODO(Dan): SQL INSERT
-				sql = @"";
+				sql = @"INSERT INTO Groups (description, name, type)
+				VALUES (@description, @name, @type);
+				
+				SET @ID = SCOPE_IDENTITY();
+
+                SELECT @ID;";
 			}
 			else
-			{
-				// TODO(Dan): SQL UPDATE
-				sql = @"";
+			{	
+				sql = @"UPDATE Groups SET description = @description, @name = name, @type = type WHERE Group_ID = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
@@ -58,8 +61,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(GetAllAsync)}...");
 
-			// TODO(Dan): SQL SELECT
-			var sql = @"";
+			var sql = @"SELECT Group_ID, Name, Type, Description FROM Groups;";
 
 			var cmd = new SqlCommand(sql);
 
@@ -89,8 +91,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(DeleteAsync)}...");
 
-			// TODO(Dan): SQL DELETE
-			var sql = @"";
+			var sql = @"DELETE FROM Groups WHERE Group_ID = @ID;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
