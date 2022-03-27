@@ -41,7 +41,9 @@ namespace Fixatic.DO
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			// TODO(Tom) : zbytek parametrů
+			
+			cmd.Parameters.Add("@description", SqlDbType.NVarChar).Value = customProperty.Description;
+			cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = customProperty.Name;
 
 			try
 			{
@@ -57,15 +59,15 @@ namespace Fixatic.DO
 			return id;
 		}
 
-		public async Task<List<User>> GetAllAsync()
+		public async Task<List<CustomProperty>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(CustomPropertiesDataObject)}.{nameof(GetAllAsync)}...");
 
-			var sql = @"SELECT CustomPropertyID, Description, Name FROM CustomProperties;";
+			var sql = @"SELECT CustomProperty_ID, Description, Name FROM CustomProperties;";
 
 			var cmd = new SqlCommand(sql);
 
-			var res = new List<User>();
+			var res = new List<CustomProperty>();
 
 			try
 			{
@@ -73,7 +75,12 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					// TODO(Tom): přidat CustomProperty objekt
+					res.Add(new CustomProperty
+					{
+						CustomPropertyId = (int)r["CustomProperty_ID"],
+						Description = (string)r["Description"],
+						Name = (string)r["Name"]
+					});
 				}
 
 				await r.CloseAsync();
@@ -91,7 +98,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(CustomPropertiesDataObject)}.{nameof(DeleteAsync)}...");
 
-			var sql = @"DELETE FROM CustomProperties WHERE CustomPropertyID = @ID;";
+			var sql = @"DELETE FROM CustomProperties WHERE CustomProperty_ID = @ID;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;

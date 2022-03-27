@@ -42,8 +42,12 @@ namespace Fixatic.DO
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			// TODO(Tom) : zbytek parametrů
 
+			cmd.Parameters.Add("@content", SqlDbType.NText).Value = customPropertyOption.Content;
+			cmd.Parameters.Add("@isenabled", SqlDbType.Bit).Value = customPropertyOption.IsEnabled;
+			cmd.Parameters.Add("@sequence", SqlDbType.Int).Value = customPropertyOption.Sequence;
+			cmd.Parameters.Add("@customproperty_id", SqlDbType.Int).Value = customPropertyOption.CustomPropertyId;
+			
 			try
 			{
 				var objId = await _db.ExecuteScalarAsync(cmd);
@@ -58,7 +62,7 @@ namespace Fixatic.DO
 			return id;
 		}
 
-		public async Task<List<User>> GetAllAsync()
+		public async Task<List<CustomPropertyOption>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(GetAllAsync)}...");
 
@@ -66,7 +70,7 @@ namespace Fixatic.DO
 
 			var cmd = new SqlCommand(sql);
 
-			var res = new List<User>();
+			var res = new List<CustomPropertyOption>();
 
 			try
 			{
@@ -74,7 +78,14 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					// TODO(Tom): přidat CustomPropertyOption objekt
+					res.Add(new CustomPropertyOption
+					{
+						CustomPropertyOptionId = (int)r["CustomPropertyOption_ID"],
+						CustomPropertyId = (int)r["CustomProperty_ID"],
+						Content = (string)r["Content"],
+						IsEnabled = (bool)r["IsEnabled"],
+						Sequence = (int)r["Sequence"]
+					});
 				}
 
 				await r.CloseAsync();

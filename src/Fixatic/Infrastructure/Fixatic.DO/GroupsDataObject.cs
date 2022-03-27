@@ -35,13 +35,16 @@ namespace Fixatic.DO
 			}
 			else
 			{	
-				sql = @"UPDATE Groups SET description = @description, @name = name, @type = type WHERE Group_ID = @ID;";
+				sql = @"UPDATE Groups SET description = @description, name = @name, type = @type WHERE Group_ID = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			// TODO(Tom) : zbytek parametrů
+
+			cmd.Parameters.Add("@description", SqlDbType.NVarChar).Value = group.Description;
+			cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = group.Name;
+			cmd.Parameters.Add("@type", SqlDbType.Int).Value = group.Type;
 
 			try
 			{
@@ -57,7 +60,7 @@ namespace Fixatic.DO
 			return id;
 		}
 
-		public async Task<List<User>> GetAllAsync()
+		public async Task<List<Group>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(GetAllAsync)}...");
 
@@ -65,7 +68,7 @@ namespace Fixatic.DO
 
 			var cmd = new SqlCommand(sql);
 
-			var res = new List<User>();
+			var res = new List<Group>();
 
 			try
 			{
@@ -73,7 +76,13 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					// TODO(Tom): přidat Group objekt
+					res.Add(new Group
+					{
+						GroupId = (int)r["Group_ID"],
+						Description = (string)r["Description"],
+						Name = (string)r["Name"],
+						Type = (int)r["Type"]
+					});
 				}
 
 				await r.CloseAsync();

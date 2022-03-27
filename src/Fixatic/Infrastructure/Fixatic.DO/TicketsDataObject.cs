@@ -37,7 +37,8 @@ namespace Fixatic.DO
 			{
 				sql = @"UPDATE Tickets 
 						SET 
-							content = @content, 
+							content = @content,
+						    created = @created,
 							datesolved = @datesolved, 
 							modified = @modified, 
 							priority = @priority, 
@@ -46,14 +47,27 @@ namespace Fixatic.DO
 							type = @type, 
 							visibility = @visibility, 
 							project_id = @project_id, 
-							assigned_user = @assigned_user
+							assigneduser_id = @assigneduser_id,
+						    creator_id = @creator_id
 						WHERE ticket_id = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			// TODO(Tom) : zbytek parametrů
+			
+			cmd.Parameters.Add("@content", SqlDbType.NText).Value = ticket.Content;
+			cmd.Parameters.Add("@created", SqlDbType.DateTime2).Value = ticket.Created;
+			cmd.Parameters.Add("@datesolved", SqlDbType.DateTime2).Value = ticket.DateSolved;
+			cmd.Parameters.Add("@modified", SqlDbType.DateTime2).Value = ticket.Modified;
+			cmd.Parameters.Add("@priority", SqlDbType.Int).Value = ticket.Priority;
+			cmd.Parameters.Add("@status", SqlDbType.Int).Value = ticket.Status;
+			cmd.Parameters.Add("@title", SqlDbType.NVarChar).Value = ticket.Title;
+			cmd.Parameters.Add("@type", SqlDbType.Int).Value = ticket.Type;
+			cmd.Parameters.Add("@visibility", SqlDbType.Int).Value = ticket.Visibility;
+			cmd.Parameters.Add("@project_id", SqlDbType.Int).Value = ticket.ProjectId;
+			cmd.Parameters.Add("@assigneduser_id", SqlDbType.Int).Value = ticket.AssignedUserId;
+			cmd.Parameters.Add("@creator_id", SqlDbType.Int).Value = ticket.CreatorId;
 
 			try
 			{
@@ -69,7 +83,7 @@ namespace Fixatic.DO
 			return id;
 		}
 
-		public async Task<List<User>> GetAllAsync()
+		public async Task<List<Ticket>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAllAsync)}...");
 
@@ -79,7 +93,7 @@ namespace Fixatic.DO
 
 			var cmd = new SqlCommand(sql);
 
-			var res = new List<User>();
+			var res = new List<Ticket>();
 
 			try
 			{
@@ -87,7 +101,22 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					// TODO(Tom): přidat Ticket objekt
+					res.Add(new Ticket
+					{
+						TicketId = (int)r["Ticket_ID"],
+						ProjectId = (int)r["Project_ID"],
+						AssignedUserId = (int)r["AssignedUser_ID"],
+						CreatorId = (int)r["Creator_ID"],
+						Content = (string)r["Content"],
+						Created = (DateTime)r["Created"],
+						DateSolved = (DateTime)r["DateSolved"],
+						Modified = (DateTime)r["Modified"],
+						Priority = (int)r["Priority"],
+						Status = (int)r["Status"],
+						Title = (string)r["Title"],
+						Type = (int)r["Type"],
+						Visibility = (int)r["Visibility"]
+					});
 				}
 
 				await r.CloseAsync();
@@ -108,7 +137,7 @@ namespace Fixatic.DO
 			var sql = @"
 				DELETE FROM Followers WHERE Ticket_ID = @ID;
 				DELETE FROM Comments WHERE Ticket_ID = @ID;
-				DELETE FROM CumstomPropertyValues WHERE Ticket_ID = @ID;
+				DELETE FROM CustomPropertyValues WHERE Ticket_ID = @ID;
 				DELETE FROM Attachements WHERE Ticket_ID = @ID;
 				DELETE FROM Tickets WHERE Ticket_ID = @ID;
 			";
@@ -147,7 +176,13 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					// TODO(Tom): přidat Follower objekt
+					res.Add(new Follower
+					{
+						UserId = (int)r["User_ID"],
+						TicketId = (int)r["Ticket_ID"],
+						Since = (DateTime)r["Since"],
+						Type = (int)r["Type"]
+					});
 				}
 
 				await r.CloseAsync();
@@ -178,7 +213,13 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					// TODO(Tom): přidat Follower objekt
+					res.Add(new Follower
+					{
+						UserId = (int)r["User_ID"],
+						TicketId = (int)r["Ticket_ID"],
+						Since = (DateTime)r["Since"],
+						Type = (int)r["Type"]
+					});
 				}
 
 				await r.CloseAsync();

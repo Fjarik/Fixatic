@@ -36,13 +36,15 @@ namespace Fixatic.DO
 			}
 			else
 			{
-				sql = @"UPDATE Categories SET description = @description, name = @name WHER Category_ID = @ID;";
+				sql = @"UPDATE Categories SET description = @description, name = @name WHERE Category_ID = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			// TODO(Tom) : zbytek parametrů
+
+			cmd.Parameters.Add("@description", SqlDbType.NVarChar).Value = category.Description;
+			cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = category.Name;
 
 			try
 			{
@@ -74,7 +76,12 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					// TODO(Tom): přidat Project objekt
+					res.Add(new ProjectCategory
+					{
+						CategoryId = (int)r["Category_ID"],
+						Description = (string)r["Description"],
+						Name = (string)r["Name"]
+					});
 				}
 
 				await r.CloseAsync();

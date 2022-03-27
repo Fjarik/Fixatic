@@ -42,7 +42,16 @@ namespace Fixatic.DO
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			// TODO(Tom) : zbytek parametrů
+			
+			cmd.Parameters.Add("@content", SqlDbType.VarBinary).Value = attachement.Content;
+			cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = attachement.Name;
+			cmd.Parameters.Add("@size", SqlDbType.Int).Value = attachement.Size;
+			cmd.Parameters.Add("@type", SqlDbType.VarChar).Value = attachement.Type;
+			cmd.Parameters.Add("@uploaded", SqlDbType.DateTime2).Value = attachement.Uploaded;
+			cmd.Parameters.Add("@alternativetext", SqlDbType.NVarChar).Value = attachement.AlternativeText;
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = attachement.TicketId;
+			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = attachement.UserId;
+			cmd.Parameters.Add("@comment_id", SqlDbType.Int).Value = attachement.CommentId;
 
 			try
 			{
@@ -58,7 +67,7 @@ namespace Fixatic.DO
 			return id;
 		}
 
-		public async Task<List<User>> GetAllAsync()
+		public async Task<List<Attachement>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(AttachementsDataObject)}.{nameof(GetAllAsync)}...");
 
@@ -66,7 +75,7 @@ namespace Fixatic.DO
 
 			var cmd = new SqlCommand(sql);
 
-			var res = new List<User>();
+			var res = new List<Attachement>();
 
 			try
 			{
@@ -74,7 +83,19 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					// TODO(Tom): přidat Attachement objekt
+					res.Add(new Attachement
+					{
+						AttachementId = (int)r["Attachement_ID"],
+						UserId = (int)r["User_ID"],
+						TicketId = (int)r["Ticket_ID"],
+						CommentId = (int)r["Comment_ID"],
+						Content = (byte[])r["Content"],
+						Name = (string)r["Name"],
+						Size = (int)r["Size"],
+						Type = (string)r["Type"],
+						Uploaded = (DateTime)r["Uploaded"],
+						AlternativeText = (string)r["AlternativeText"],
+					});
 				}
 
 				await r.CloseAsync();

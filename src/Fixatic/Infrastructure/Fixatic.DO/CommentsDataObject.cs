@@ -42,8 +42,13 @@ namespace Fixatic.DO
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			// TODO(Tom) : zbytek parametrů
 
+			cmd.Parameters.Add("@content", SqlDbType.NText).Value = comment.Content;
+			cmd.Parameters.Add("@created", SqlDbType.DateTime2).Value = comment.Created;
+			cmd.Parameters.Add("@isinternal", SqlDbType.Bit).Value = comment.IsInternal;
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = comment.TicketId;
+			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = comment.UserId;
+			
 			try
 			{
 				var objId = await _db.ExecuteScalarAsync(cmd);
@@ -58,7 +63,7 @@ namespace Fixatic.DO
 			return id;
 		}
 
-		public async Task<List<User>> GetAllAsync()
+		public async Task<List<Comment>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(CommentsDataObject)}.{nameof(GetAllAsync)}...");
 
@@ -66,7 +71,7 @@ namespace Fixatic.DO
 
 			var cmd = new SqlCommand(sql);
 
-			var res = new List<User>();
+			var res = new List<Comment>();
 
 			try
 			{
@@ -74,7 +79,15 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					// TODO(Tom): přidat Comment objekt
+					res.Add(new Comment
+					{
+						CommentId = (int)r["Comment_ID"],
+						TicketId = (int)r["Ticket_ID"],
+						UserId = (int)r["User_ID"],
+						Content = (string)r["Content"],
+						Created = (DateTime)r["Created"],
+						IsInternal = (bool)r["IsInternal"]
+					});
 				}
 
 				await r.CloseAsync();
