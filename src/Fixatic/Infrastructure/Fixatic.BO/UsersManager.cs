@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Fixatic.DO;
 using Fixatic.DO.Types;
 using Fixatic.Types;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Fixatic.BO
@@ -26,6 +27,18 @@ namespace Fixatic.BO
 		public async Task<int> CreateOrUpdateAsync(User user)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(CreateOrUpdateAsync)}...");
+
+			if (user == null)
+				return DB.IgnoredID;
+
+			// TODO: Validation
+
+			user.Email = user.Email?.ToLower();
+
+			var hasher = new PasswordHasher<User>();
+
+			if (!string.IsNullOrWhiteSpace(user.Password))
+				user.Password = hasher.HashPassword(user, user.Password);
 
 			var mainDo = new UsersDataObject(_logger, _dbConnector);
 			var res = await mainDo.CreateOrUpdateAsync(user);

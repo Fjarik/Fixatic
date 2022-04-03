@@ -129,9 +129,9 @@ namespace Fixatic.DO
 			return res;
 		}
 
-		public async Task<User?> GetUserAsync(string email, string password)
+		public async Task<User?> GetUserWithPasswordAsync(string email)
 		{
-			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetUserAsync)}...");
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetUserWithPasswordAsync)}...");
 
 			var sql = @"
                 SELECT 
@@ -139,17 +139,16 @@ namespace Fixatic.DO
                     Firstname, 
                     Lastname, 
                     Email, 
+					Password,
                     Phone, 
                     Created, 
                     IsEnabled 
                 FROM Users
-				WHERE Email = @email AND
-					  Password = @password;
+				WHERE Email = @email;
             ";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@email", SqlDbType.NVarChar).Value = email;
-			cmd.Parameters.Add("@password", SqlDbType.NVarChar).Value = password;
 
 			User? res = null;
 
@@ -165,7 +164,7 @@ namespace Fixatic.DO
 						Firstname = (string)r["Firstname"],
 						Lastname = (string)r["Lastname"],
 						Email = (string)r["Email"],
-						Password = null,
+						Password = (string)r["Password"],
 						Phone = (string)r["Phone"],
 						Created = (DateTime)r["Created"],
 						IsEnabled = (bool)r["IsEnabled"],
@@ -178,7 +177,7 @@ namespace Fixatic.DO
 				await cmd.Connection.CloseAsync();
 			}
 
-			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetUserAsync)}... Done");
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetUserWithPasswordAsync)}... Done");
 			return res;
 		}
 
