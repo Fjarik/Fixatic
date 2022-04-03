@@ -7,8 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Infrastructure\Fixatic.BO\Fixatic.BO.csproj"/>
-        <ProjectReference Include="..\Fixatic.Services\Fixatic.Services.csproj"/>
+      <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.3" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Infrastructure\Fixatic.BO\Fixatic.BO.csproj" />
+        <ProjectReference Include="..\Fixatic.Services\Fixatic.Services.csproj" />
     </ItemGroup>
 
 </Project>

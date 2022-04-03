@@ -10,11 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MudBlazor" Version="6.0.7"/>
+        <PackageReference Include="MudBlazor" Version="6.0.9" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Services\Fixatic.Services.Implementation\Fixatic.Services.Implementation.csproj"/>
+        <ProjectReference Include="..\Services\Fixatic.Services.Implementation\Fixatic.Services.Implementation.csproj" />
     </ItemGroup>
 
 </Project>

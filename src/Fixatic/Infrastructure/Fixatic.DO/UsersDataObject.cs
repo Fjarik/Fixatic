@@ -90,7 +90,6 @@ namespace Fixatic.DO
                     Firstname, 
                     Lastname, 
                     Email, 
-                    Password, 
                     Phone, 
                     Created, 
                     IsEnabled 
@@ -113,8 +112,8 @@ namespace Fixatic.DO
 						Firstname = (string)r["Firstname"],
 						Lastname = (string)r["Lastname"],
 						Email = (string)r["Email"],
-						Password = (string)r["Password"],
 						Phone = (string)r["Phone"],
+						Password = null,
 						Created = (DateTime)r["Created"],
 						IsEnabled = (bool)r["IsEnabled"],
 					});
@@ -127,6 +126,110 @@ namespace Fixatic.DO
 			}
 
 			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetAllAsync)}... Done");
+			return res;
+		}
+
+		public async Task<User?> GetUserAsync(string email, string password)
+		{
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetUserAsync)}...");
+
+			var sql = @"
+                SELECT 
+                    User_ID, 
+                    Firstname, 
+                    Lastname, 
+                    Email, 
+                    Phone, 
+                    Created, 
+                    IsEnabled 
+                FROM Users
+				WHERE Email = @email AND
+					  Password = @password;
+            ";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@email", SqlDbType.NVarChar).Value = email;
+			cmd.Parameters.Add("@password", SqlDbType.NVarChar).Value = password;
+
+			User? res = null;
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				if (await r.ReadAsync())
+				{
+					res = new User
+					{
+						UserId = (int)r["User_ID"],
+						Firstname = (string)r["Firstname"],
+						Lastname = (string)r["Lastname"],
+						Email = (string)r["Email"],
+						Password = null,
+						Phone = (string)r["Phone"],
+						Created = (DateTime)r["Created"],
+						IsEnabled = (bool)r["IsEnabled"],
+					};
+				}
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetUserAsync)}... Done");
+			return res;
+		}
+
+		public async Task<CurrentUser?> GetCurrentUserAsync(string email)
+		{
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetCurrentUserAsync)}...");
+
+			var sql = @"
+                SELECT 
+                    User_ID, 
+                    Firstname, 
+                    Lastname, 
+                    Email, 
+                    Phone, 
+                    Created, 
+                    IsEnabled 
+                FROM Users
+				WHERE Email = @email;
+            ";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@email", SqlDbType.NVarChar).Value = email;
+
+			CurrentUser? res = null;
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				if (await r.ReadAsync())
+				{
+					res = new CurrentUser
+					{
+						UserId = (int)r["User_ID"],
+						Firstname = (string)r["Firstname"],
+						Lastname = (string)r["Lastname"],
+						Email = (string)r["Email"],
+						Password = null,
+						Phone = (string)r["Phone"],
+						Created = (DateTime)r["Created"],
+						IsEnabled = (bool)r["IsEnabled"],
+					};
+				}
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetCurrentUserAsync)}... Done");
 			return res;
 		}
 

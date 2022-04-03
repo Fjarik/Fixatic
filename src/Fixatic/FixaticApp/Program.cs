@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Services;
 using Fixatic.Types;
 using Microsoft.Extensions.Options;
+using Fixatic.Services;
+using Fixatic.Services.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +29,21 @@ services.Configure<ApplicationSettings>(section);
 services.AddSingleton<WeatherForecastService>();
 services.AddMudServices(x =>
 {
-    x.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomLeft;
-    x.SnackbarConfiguration.PreventDuplicates = true;
-    x.SnackbarConfiguration.SnackbarVariant = MudBlazor.Variant.Filled;
+	x.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomLeft;
+	x.SnackbarConfiguration.PreventDuplicates = true;
+	x.SnackbarConfiguration.SnackbarVariant = MudBlazor.Variant.Filled;
 });
+
+services.AddTransient<IAttachementsService, AttachementsService>();
+services.AddTransient<ICategoriesService, CategoriesService>();
+services.AddTransient<ICommentsService, CommentsService>();
+services.AddTransient<ICurrentUserService, CurrentUserService>();
+services.AddTransient<ICustomPropertiesService, CustomPropertiesService>();
+services.AddTransient<ICustomPropertyOptionsService, CustomPropertyOptionsService>();
+services.AddTransient<IGroupsService, GroupsService>();
+services.AddTransient<IProjectsService, ProjectsService>();
+services.AddTransient<ITicketsService, TicketsService>();
+services.AddTransient<IUsersService, UsersService>();
 
 var app = builder.Build();
 var settingOpt = app.Services.GetRequiredService<IOptions<ApplicationSettings>>();
@@ -42,18 +55,18 @@ settingOpt.Value.AppVersion = version;
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+	app.UseExceptionHandler("/Error");
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
 }
 else
 {
-    app.UseDeveloperExceptionPage();
+	app.UseDeveloperExceptionPage();
 }
 
 if (!string.IsNullOrWhiteSpace(settingOpt.Value.BasePath))
 {
-    app.UsePathBase(settingOpt.Value.BasePath);
+	app.UsePathBase(settingOpt.Value.BasePath);
 }
 
 app.UseHttpsRedirection();

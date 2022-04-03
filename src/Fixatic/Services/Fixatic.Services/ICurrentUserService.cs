@@ -10,5 +10,7 @@ namespace Fixatic.Services
 	public interface ICurrentUserService
 	{
 		Task<CurrentUser> GetUserInfoAsync();
+
+		void InvalidateCache();
 	}
 }
