@@ -1,0 +1,108 @@
+@page "/ticket"
+@layout AppLayout
+<PageTitle>Ticket View</PageTitle>
+
+@if (Model == null)
+{
+    <p>Loading ticket</p>
+}
+else
+{
+    <MudPaper Elevation="4">
+        <MudGrid Class="pa-8">
+            <MudItem xs="12">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudItem xs="7">
+                        <MudPaper Elevation="4" Class="pa-4">
+                            <MudText Typo="Typo.h4">@Model.Title</MudText>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudPaper Elevation="4" Class="pa-4">
+                            <MudCheckBox @bind-Checked="@Model.DateSolved" Label="Solved" Color="Color.Secondary"></MudCheckBox>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+            <MudItem xs="12">
+                <MudGrid Justify="Justify.SpaceBetween">
+                    <MudItem xs="7">
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudPaper Elevation="4" Class="pa-4">
+                                    <MudText Typo="Typo.body1">@Model.Content</MudText>
+                                </MudPaper>
+                            </MudItem>
+                            @if (Attachement != null)
+                            {
+                                <MudItem xs="2">
+                                    <MudGrid Spacing="1">
+                                        <MudPaper Elevation="4" Class="pa-4">
+                                            <MudItem xs="12">
+                                                @*Tady by šel udělat náhled, ale to bych asi dělal jen když zbyde čas (copium)*@
+                                                <MudImage Fluid="true" Src="/img/attachement_skeleton.png"></MudImage>
+                                            </MudItem>
+                                            <MudItem>
+                                                <MudText Typo="Typo.subtitle1">@Attachement.Name</MudText>
+                                            </MudItem>
+                                        </MudPaper>
+                                    </MudGrid>
+                                </MudItem>
+                            }
+                        </MudGrid>
+                    </MudItem>
+                    <MudItem xs="3">
+                        <MudStack>
+                            <MudPaper Elevation="4" Class="pa-4">
+                                <MudStack Row="true">
+                                    <MudGrid>
+                                        <MudItem xs="5">
+                                            <MudText Typo="Typo.body1">Priority: @Model.Priority</MudText>
+                                        </MudItem>
+                                        <MudItem xs="5">
+                                            <MudText Typo="Typo.body1">Type: @Model.Type</MudText>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudStack>
+
+                            </MudPaper>
+                            <MudPaper Elevation="4" Class="pa-4">
+                                <MudStack Row="true">
+                                    <MudText Typo="Typo.body1">Assignee: @GetAssigneeName()</MudText>
+                                </MudStack>
+                            </MudPaper>
+                            <MudPaper Elevation="4" Class="pa-4">
+                                <MudStack Row="true">
+                                    <MudStack>
+                                        <MudStack Row="true">
+                                            <MudText Typo="Typo.body1">Created: @Model.Created</MudText>
+                                        </MudStack>
+                                        <MudStack Row="true">
+                                            <MudText Typo="Typo.body1">Modified: @Model.Modified</MudText>
+                                        </MudStack>
+                                        <MudStack Row="true">
+                                            <MudText Typo="Typo.body1">Solved: @Model.DateSolved</MudText>
+                                        </MudStack>
+                                    </MudStack>
+                                </MudStack>
+                            </MudPaper>
+                        </MudStack>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+    <MudStack Spacing="8">
+        @if (Comments != null)
+        {
+            @foreach (var comment in Comments)
+            {
+                <MudPaper Class="pa-4">
+                    <MudStack Row="true">
+                        <MudText Typo="Typo.body1">@comment.Content</MudText>
+                    </MudStack>
+                </MudPaper>
+            }
+        }
+    </MudStack>
+}
