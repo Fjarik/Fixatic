@@ -7,17 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FixaticApp", "FixaticApp\Fi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{39416CDB-BA88-4AF5-ACA7-3950F63EB29D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixatic.Services.Implementation", "Services\Fixatic.Services.Implementation\Fixatic.Services.Implementation.csproj", "{4F78C71C-3955-472F-B0F2-32D7920AB582}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixatic.Services.Implementation", "Services\Fixatic.Services.Implementation\Fixatic.Services.Implementation.csproj", "{4F78C71C-3955-472F-B0F2-32D7920AB582}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixatic.Services", "Services\Fixatic.Services\Fixatic.Services.csproj", "{79F66297-75BA-4FCB-8FBF-97923AFE912A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixatic.Services", "Services\Fixatic.Services\Fixatic.Services.csproj", "{79F66297-75BA-4FCB-8FBF-97923AFE912A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{0DD4A726-AC9F-4EE8-A9DD-95C70960C641}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixatic.BO", "Infrastructure\Fixatic.BO\Fixatic.BO.csproj", "{B885D61D-4673-4265-927E-3AFBAE76AC95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixatic.BO", "Infrastructure\Fixatic.BO\Fixatic.BO.csproj", "{B885D61D-4673-4265-927E-3AFBAE76AC95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixatic.DO", "Infrastructure\Fixatic.DO\Fixatic.DO.csproj", "{11C4A900-FB01-401D-AE52-9EF2F460B801}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixatic.DO", "Infrastructure\Fixatic.DO\Fixatic.DO.csproj", "{11C4A900-FB01-401D-AE52-9EF2F460B801}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixatic.Types", "Infrastructure\Fixatic.Types\Fixatic.Types.csproj", "{8AF4412C-D175-4EE1-B55F-483059CA3E99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixatic.Types", "Infrastructure\Fixatic.Types\Fixatic.Types.csproj", "{8AF4412C-D175-4EE1-B55F-483059CA3E99}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{88D4B1D6-B888-479C-A3C4-1517A1207582}"
 	ProjectSection(SolutionItems) = preProject

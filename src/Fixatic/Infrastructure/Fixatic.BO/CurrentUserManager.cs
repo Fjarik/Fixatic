@@ -18,7 +18,7 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
-		public async Task<ClaimsPrincipal?> LoginAsync(string email, string password)
+		public async Task<ClaimsPrincipal?> LoginAsync(string? email, string? password)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(LoginAsync)}...");
 
@@ -58,7 +58,6 @@ namespace Fixatic.BO
 			return user;
 		}
 
-
 		private static ClaimsPrincipal GenerateClaims(User user)
 		{
 			var identity = new ClaimsIdentity(new[]
@@ -68,7 +67,7 @@ namespace Fixatic.BO
 				new Claim(ClaimTypes.GivenName, user.Firstname),
 				new Claim(ClaimTypes.Surname, user.Lastname),
 				new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
-			});
+			}, "Fixatic");
 
 			var res = new ClaimsPrincipal(identity);
 

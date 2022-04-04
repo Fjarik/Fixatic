@@ -5,6 +5,7 @@ using Fixatic.Types;
 using Microsoft.Extensions.Options;
 using Fixatic.Services;
 using Fixatic.Services.Implementation;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ services.AddLogging();
 services.AddRazorPages();
 services.AddServerSideBlazor();
 
+services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 services.AddAuthorization();
 services.AddHttpClient();
 services.AddHttpContextAccessor();
@@ -76,7 +78,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.UseEndpoints(endpoints =>
+{
+	endpoints.MapRazorPages();
+	endpoints.MapBlazorHub(); //.RequireAuthorization(new AuthorizeAttribute());
+	endpoints.MapFallbackToPage("/_Host");
+});
 
 app.Run();
