@@ -2,6 +2,7 @@
 using Fixatic.DO;
 using Fixatic.DO.Types;
 using Fixatic.Types;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Fixatic.BO
@@ -25,9 +26,14 @@ namespace Fixatic.BO
 				return null;
 
 			var mainDo = new UsersDataObject(_logger, _dbConnector);
-			var user = await mainDo.GetUserAsync(email, password);
+			var user = await mainDo.GetUserWithPasswordAsync(email);
 
 			if (user == null)
+				return null;
+
+			var hasher = new PasswordHasher<User>();
+			var hashRes = hasher.VerifyHashedPassword(user, user.Password, password);
+			if (hashRes == PasswordVerificationResult.Failed)
 				return null;
 
 			var res = GenerateClaims(user);
