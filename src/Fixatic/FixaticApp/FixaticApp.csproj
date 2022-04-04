@@ -17,4 +17,8 @@
         <ProjectReference Include="..\Services\Fixatic.Services.Implementation\Fixatic.Services.Implementation.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\img" />
+    </ItemGroup>
+
 </Project>
