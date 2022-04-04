@@ -26,7 +26,7 @@ namespace FixaticApp.Pages
 		[BindProperty]
 		public string Password { get; set; } = string.Empty;
 
-		public string Message { get; set; }
+		public string? Message { get; set; }
 
 
 		public IActionResult OnGet()
@@ -39,7 +39,7 @@ namespace FixaticApp.Pages
 			if (!ModelState.IsValid)
 				return Page();
 
-
+			Message = null;
 			var props = new AuthenticationProperties
 			{
 				RedirectUri = "./",
@@ -51,7 +51,10 @@ namespace FixaticApp.Pages
 			var manager = new CurrentUserManager(_logger, _applicationSettings);
 			var res = await manager.LoginAsync(Email, Password);
 			if (res == null)
-				return Unauthorized();
+			{
+				Message = "Invalid email or password";
+				return Page();
+			}				
 
 			return SignIn(res, props, CookieAuthenticationDefaults.AuthenticationScheme);
 		}

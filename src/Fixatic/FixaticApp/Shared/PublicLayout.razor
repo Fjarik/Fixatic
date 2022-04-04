@@ -7,6 +7,11 @@
 <MudSnackbarProvider />
 
 <MudLayout>
+    <MudAppBar Elevation="1">
+        <MudText Typo="Typo.h5" Class="ml-3">Fixatic</MudText>
+        <MudSpacer />
+        <MudNavLink Href="/login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
+    </MudAppBar>
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.Small" Class="my-16 pt-16">
             @Body

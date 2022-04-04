@@ -6,7 +6,7 @@
                     <RouteView RouteData="@routeData" DefaultLayout="@typeof(AppLayout)" />
                 </Authorized>
                 <NotAuthorized>
-                    <RouteView RouteData="@routeData" DefaultLayout="@typeof(UnauthorizedLayout)" />
+                    <RouteView RouteData="@routeData" DefaultLayout="@typeof(PublicLayout)" />
                 </NotAuthorized>
             </AuthorizeView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
