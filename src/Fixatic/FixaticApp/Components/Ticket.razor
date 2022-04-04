@@ -1,0 +1,124 @@
+@page "/ticket"
+@layout AppLayout
+<PageTitle>Ticket View</PageTitle>
+
+<MudPaper Elevation="4">
+    <MudGrid Class="pa-8">
+        <MudItem xs="12">
+            <MudGrid Justify="Justify.SpaceBetween">
+                <MudItem xs="7">
+                    <MudPaper Elevation="4" Class="pa-4">
+                        <MudText Typo="Typo.h4">@title</MudText>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="3">
+                    <MudPaper Elevation="4" Class="pa-4">
+                        <MudCheckBox @bind-Checked="@isSolved" Label="Solved" Color="Color.Secondary"></MudCheckBox>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12">
+            <MudGrid Justify="Justify.SpaceBetween">
+                <MudItem xs="7">
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudPaper Elevation="4" Class="pa-4">
+                                <MudText Typo="Typo.body1">@content</MudText>
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="2">
+                            <MudGrid Spacing="1">
+                                <MudPaper Elevation="4" Class="pa-4">
+                                    <MudItem xs="12">
+                                        @*Tady by šel udělat náhled, ale to bych asi dělal jen když zbyde čas (copium)*@
+                                        <MudImage Fluid="true" Src="/img/attachement_skeleton.png"></MudImage>
+                                    </MudItem>
+                                    <MudItem>
+                                        <MudText Typo="Typo.subtitle1">@attachementName</MudText>
+                                    </MudItem>
+                                </MudPaper>
+                            </MudGrid>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudItem xs="3">
+                    <MudStack>
+                        <MudPaper Elevation="4" Class="pa-4">
+                            <MudStack Row="true">
+                                <MudGrid>
+                                    <MudItem xs="5">
+                                        <MudText Typo="Typo.body1">Priority: @priority</MudText>
+                                    </MudItem>
+                                    <MudItem xs="5">
+                                        <MudText Typo="Typo.body1">Type: @ticketType</MudText>
+                                    </MudItem>
+                                </MudGrid>
+                            </MudStack>
+
+                        </MudPaper>
+                        <MudPaper Elevation="4" Class="pa-4">
+                            <MudStack Row="true">
+                                <MudText Typo="Typo.body1">Assignee: @assignedUser</MudText>
+                            </MudStack>
+                        </MudPaper>
+                        <MudPaper Elevation="4" Class="pa-4">
+                            <MudStack Row="true">
+                                <MudStack>
+                                    <MudStack Row="true">
+                                        <MudText Typo="Typo.body1">Created: @dateCreated</MudText>
+                                    </MudStack>
+                                    <MudStack Row="true">
+                                        <MudText Typo="Typo.body1">Modified: @dateModified</MudText>
+                                    </MudStack>
+                                    <MudStack Row="true">
+                                        <MudText Typo="Typo.body1">Solved: @dateSolved</MudText>
+                                    </MudStack>
+                                </MudStack>
+                            </MudStack>
+                        </MudPaper>
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+
+@code
+{
+    [Parameter]
+    public bool isSolved { get; set; } = false;
+
+    [Parameter]
+    public string title { get; set; } = "My hovercraft is full of eels";
+
+    [Parameter]
+    public string content { get; set; } = "Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
+                                          "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+                                          "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris " +
+                                          "nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor " +
+                                          "in reprehenderit in voluptate velit esse cillum dolore eu " +
+                                          "fugiat nulla pariatur. Excepteur sint occaecat cupidatat non " +
+                                          "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+    [Parameter]
+    public string attachementName { get; set; } = "Soubor.jpg";
+
+    [Parameter]
+    public int priority { get; set; } = 0;
+
+    [Parameter]
+    public string ticketType { get; set; } = "Bug";
+
+    [Parameter]
+    public string assignedUser { get; set; } = "Ben Dover";
+
+    [Parameter]
+    public DateTime dateCreated { get; set; } = DateTime.Now;
+
+    [Parameter]
+    public DateTime dateModified { get; set; } = DateTime.Today;
+
+    [Parameter]
+    public DateTime dateSolved { get; set; } = DateTime.Today.AddDays(-1.0);
+}

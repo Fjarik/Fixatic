@@ -1,4 +1,3 @@
-using FixaticApp.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Services;
@@ -26,7 +25,6 @@ services.AddHttpContextAccessor();
 
 services.Configure<ApplicationSettings>(section);
 
-services.AddSingleton<WeatherForecastService>();
 services.AddMudServices(x =>
 {
 	x.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomLeft;
