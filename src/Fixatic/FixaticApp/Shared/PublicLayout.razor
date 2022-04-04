@@ -1,24 +1,25 @@
 ﻿@inherits LayoutComponentBase
-
+@layout MainLayout
 @* Layout for the login page without the appbar / sidebar *@
 
-<MudThemeProvider />
-<MudDialogProvider />
-<MudSnackbarProvider />
-
-<MudLayout>
-    <MudAppBar Elevation="1">
-        <MudText Typo="Typo.h5" Class="ml-3">Fixatic</MudText>
-        <MudSpacer />
-        <MudButton Href="/login" Variant="Variant.Text" StartIcon="@Icons.Filled.Login" Color="Color.Inherit">Login</MudButton>
-    </MudAppBar>
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Small" Class="my-16 pt-16">
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+<MudAppBar Elevation="1">
+    <MudText Typo="Typo.h5" Class="ml-3">Fixatic</MudText>
+    <MudSpacer />
+    <MudButton Href="/login" Variant="Variant.Text" StartIcon="@Icons.Filled.Login" Color="Color.Inherit">Login</MudButton>
+    <MudTooltip Text="@(DarkMode ? "Switch to Light Theme" : "Switch to Dark Theme")">
+        <MudIconButton Icon="@(DarkMode? @Icons.Rounded.LightMode : @Icons.Material.Outlined.DarkMode)" Color="Color.Inherit" OnClick="@ToggleDarkMode" />
+    </MudTooltip>
+</MudAppBar>
+<MudMainContent>
+    <MudContainer MaxWidth="MaxWidth.Small" Class="my-16 pt-16">
+        @Body
+    </MudContainer>
+</MudMainContent>
 
 @code {
+    [CascadingParameter(Name = "DarkMode")]
+    public bool DarkMode { get; set; }
 
+    [CascadingParameter(Name = "ToggleDarkMode")]
+    public Action ToggleDarkMode { get; set; }
 }

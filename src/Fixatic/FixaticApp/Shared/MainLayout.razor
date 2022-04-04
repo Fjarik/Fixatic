@@ -1,15 +1,13 @@
 ﻿@inherits LayoutComponentBase
 
-@* Layout for the login page without the appbar / sidebar *@
-
-<MudThemeProvider />
+<MudThemeProvider IsDarkMode="@_isDarkMode" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    @Body
+    <CascadingValue Value="@_isDarkMode" Name="DarkMode">
+        <CascadingValue Value="@SwitchMode" Name="ToggleDarkMode">
+            @Body
+        </CascadingValue>
+    </CascadingValue>
 </MudLayout>
-
-@code {
-
-}
