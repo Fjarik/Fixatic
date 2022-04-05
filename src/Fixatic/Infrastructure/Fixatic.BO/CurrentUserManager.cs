@@ -83,7 +83,7 @@ namespace Fixatic.BO
 			if (identity == null)
 				throw new UnauthorizedAccessException("You are not authorized");
 
-			if (identity.IsAuthenticated)
+			if (!identity.IsAuthenticated)
 				throw new UnauthorizedAccessException("You are not authorized");
 
 			if (string.IsNullOrWhiteSpace(identity.Name))
