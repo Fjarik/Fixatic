@@ -1,9 +1,14 @@
+@using Fixatic.Services
+
 @page "/ticket"
 @layout AppLayout
 <PageTitle>Ticket View</PageTitle>
 
+@inject ITicketsService _ticketsService;
+
 @if (Model == null)
 {
+    @LoadTestTicket()
     <p>Loading ticket</p>
 }
 else

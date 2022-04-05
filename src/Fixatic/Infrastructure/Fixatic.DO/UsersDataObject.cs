@@ -41,11 +41,11 @@ namespace Fixatic.DO
                     UPDATE Users
                     SET
                         firstname = @firstname,
-                        lastname = @lastname, 
-                        email = @email, 
-                        password = @password, 
-                        phone = @phone, 
-                        created = @created, 
+                        lastname = @lastname,
+                        email = @email,
+                        password = @password,
+                        phone = @phone,
+                        created = @created,
                         isenabled = @isenabled
                     WHERE User_ID = @ID;
                 ";
@@ -85,14 +85,14 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetAllAsync)}...");
 
 			var sql = @"
-                SELECT 
-                    User_ID, 
-                    Firstname, 
-                    Lastname, 
-                    Email, 
-                    Phone, 
-                    Created, 
-                    IsEnabled 
+                SELECT
+                    User_ID,
+                    Firstname,
+                    Lastname,
+                    Email,
+                    Phone,
+                    Created,
+                    IsEnabled
                 FROM Users;
             ";
 
@@ -134,15 +134,15 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetUserWithPasswordAsync)}...");
 
 			var sql = @"
-                SELECT 
-                    User_ID, 
-                    Firstname, 
-                    Lastname, 
-                    Email, 
+                SELECT
+                    User_ID,
+                    Firstname,
+                    Lastname,
+                    Email,
 					Password,
-                    Phone, 
-                    Created, 
-                    IsEnabled 
+                    Phone,
+                    Created,
+                    IsEnabled
                 FROM Users
 				WHERE Email = @email;
             ";
@@ -186,14 +186,14 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetCurrentUserAsync)}...");
 
 			var sql = @"
-                SELECT 
-                    User_ID, 
-                    Firstname, 
-                    Lastname, 
-                    Email, 
-                    Phone, 
-                    Created, 
-                    IsEnabled 
+                SELECT
+                    User_ID,
+                    Firstname,
+                    Lastname,
+                    Email,
+                    Phone,
+                    Created,
+                    IsEnabled
                 FROM Users
 				WHERE Email = @email;
             ";

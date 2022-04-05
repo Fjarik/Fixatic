@@ -28,25 +28,25 @@ namespace Fixatic.DO
 			{
 				sql = @"INSERT INTO Tickets (content, created, datesolved, modified, priority, status, title, type, visibility, project_id, assigneduser_id, creator_id)
 									VALUES (@content, @created, @datesolved, @modified, @priority, @status, @title, @type, @visibility, @project_id, @assigneduser_id, @creator_id);
-				
+
 				SET @ID = SCOPE_IDENTITY();
 
                 SELECT @ID;";
 			}
 			else
 			{
-				sql = @"UPDATE Tickets 
-						SET 
+				sql = @"UPDATE Tickets
+						SET
 							content = @content,
 						    created = @created,
-							datesolved = @datesolved, 
-							modified = @modified, 
-							priority = @priority, 
+							datesolved = @datesolved,
+							modified = @modified,
+							priority = @priority,
 							status = @status,
-							title = @title, 
-							type = @type, 
-							visibility = @visibility, 
-							project_id = @project_id, 
+							title = @title,
+							type = @type,
+							visibility = @visibility,
+							project_id = @project_id,
 							assigneduser_id = @assigneduser_id,
 						    creator_id = @creator_id
 						WHERE ticket_id = @ID;";
@@ -55,7 +55,7 @@ namespace Fixatic.DO
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			
+
 			cmd.Parameters.Add("@content", SqlDbType.NText).Value = ticket.Content;
 			cmd.Parameters.Add("@created", SqlDbType.DateTime2).Value = ticket.Created;
 			cmd.Parameters.Add("@datesolved", SqlDbType.DateTime2).Value = ticket.DateSolved;
@@ -87,7 +87,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAllAsync)}...");
 
-			var sql = @"SELECT 
+			var sql = @"SELECT
 					Ticket_ID, Title, Content, Created, Modified, DateSolved, Priority, Status, Type, Visibility, Project_ID, AssignedUser_ID, Creator_ID
 			FROM Tickets;";
 
@@ -109,8 +109,8 @@ namespace Fixatic.DO
 						CreatorId = (int)r["Creator_ID"],
 						Content = (string)r["Content"],
 						Created = (DateTime)r["Created"],
-						DateSolved = (DateTime)r["DateSolved"],
-						Modified = (DateTime)r["Modified"],
+						DateSolved = r["DateSolved"] as DateTime?,
+						Modified = r["Modified"] as DateTime?,
 						Priority = (int)r["Priority"],
 						Status = (int)r["Status"],
 						Title = (string)r["Title"],

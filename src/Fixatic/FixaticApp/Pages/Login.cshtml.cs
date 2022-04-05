@@ -54,7 +54,7 @@ namespace FixaticApp.Pages
 			{
 				Message = "Invalid email or password";
 				return Page();
-			}				
+			}
 
 			return SignIn(res, props, CookieAuthenticationDefaults.AuthenticationScheme);
 		}

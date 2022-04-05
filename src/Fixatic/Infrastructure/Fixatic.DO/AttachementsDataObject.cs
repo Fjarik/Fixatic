@@ -28,21 +28,21 @@ namespace Fixatic.DO
 			{
 				sql = @"INSERT INTO Attachements (content, name, size, type, uploaded, alternativetext, ticket_id, user_id, comment_id)
 				VALUES (@content, @name, @size, @type, @uploaded, @alternativetext, @ticket_id, @user_id, @comment_id);
-				
+
 				SET @ID = SCOPE_IDENTITY();
 
                 SELECT @ID;";
 			}
 			else
 			{
-				sql = @"UPDATE Attachements SET content = @content, name = @name, size = @size, type = @type, uploaded = @uploaded, alternativetext = @alternativetext, 
+				sql = @"UPDATE Attachements SET content = @content, name = @name, size = @size, type = @type, uploaded = @uploaded, alternativetext = @alternativetext,
 				ticket_id = @ticket_id, user_id = @user_id, comment_id = @comment_id WHERE Attachement_ID = @ID;";
 			}
 
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			
+
 			cmd.Parameters.Add("@content", SqlDbType.VarBinary).Value = attachement.Content;
 			cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = attachement.Name;
 			cmd.Parameters.Add("@size", SqlDbType.Int).Value = attachement.Size;
