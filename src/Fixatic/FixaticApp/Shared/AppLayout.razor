@@ -5,6 +5,9 @@
     <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
     <MudText Typo="Typo.h5" Class="ml-3">Fixatic</MudText>
     <MudSpacer />
+    <MudTooltip Text="Log out">
+        <MudIconButton Icon="@Icons.Filled.Logout" Color="Color.Inherit" Href="./logout" />
+    </MudTooltip>
     <MudTooltip Text="@(DarkMode ? "Switch to Light Theme" : "Switch to Dark Theme")">
         <MudIconButton Icon="@(DarkMode? @Icons.Rounded.LightMode : @Icons.Material.Outlined.DarkMode)" Color="Color.Inherit" OnClick="@ToggleDarkMode" />
     </MudTooltip>
@@ -29,8 +32,8 @@
 
     [CascadingParameter(Name = "ToggleDarkMode")]
     public Action ToggleDarkMode { get; set; }
-    
-    
+
+
     bool _drawerOpen = true;
 
     private void DrawerToggle()

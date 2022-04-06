@@ -42,7 +42,7 @@ namespace FixaticApp.Pages
 			Message = null;
 			var props = new AuthenticationProperties
 			{
-				RedirectUri = "./",
+				RedirectUri = "~/dashboard",
 				IsPersistent = true,
 				ExpiresUtc = DateTime.UtcNow.AddDays(14),
 				AllowRefresh = true,
@@ -56,7 +56,9 @@ namespace FixaticApp.Pages
 				return Page();
 			}
 
-			return SignIn(res, props, CookieAuthenticationDefaults.AuthenticationScheme);
+			await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, res, props);
+
+			return LocalRedirect(props.RedirectUri);
 		}
 	}
 }
