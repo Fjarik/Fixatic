@@ -1,0 +1,58 @@
+@using Fixatic.Services
+
+@page "/dashboard"
+@layout AppLayout
+<PageTitle>Dashboard</PageTitle>
+
+@inject IProjectsService _projectsService;
+@inject IGroupsService _groupsService;
+@inject ICurrentUserService _currentUserService;
+@inject IDialogService _dialogService;
+@inject ITicketsService _ticketService;
+
+<MudText Typo="Typo.h5" Class="pa-4">Dashboard</MudText>
+@if (SelectedGroup != null)
+{
+    <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="@ReturnButtonClicked"></MudIconButton>
+}
+
+<MudDivider></MudDivider>
+
+<MudGrid>
+    @if (Groups != null && SelectedGroup == null)
+    {
+        foreach (var group in Groups)
+        {
+            <MudItem xs="3">
+                <MudCard>
+                    <MudCardContent>
+                        <MudText>@group.Name</MudText>
+                        <MudText Typo="Typo.body2">@group.Description</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => GroupButtonClicked(group))">Projects</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    }
+    
+    @if (SelectedGroup != null && Projects != null)
+    {
+        foreach (var project in Projects)
+        {
+            <MudItem xs="3">
+                <MudCard>
+                    <MudCardContent>
+                        <MudText>@project.Name</MudText>
+                        <MudText Typo="Typo.body2">@project.Shortcut</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => ProjectButtonClicked())">Project</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    }
+</MudGrid>
+

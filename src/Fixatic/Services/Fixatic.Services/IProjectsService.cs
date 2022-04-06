@@ -8,6 +8,7 @@ namespace Fixatic.Services
 		Task<ServiceResponse<int>> CreateOrUpdateAsync(Project entry);
 
 		Task<ServiceResponse<List<Project>>> GetAllAsync();
+		Task<ServiceResponse<List<Project>>> GetGroupProjectsAsync(int groupGroupId);
 
 		Task<ServiceResponse<bool>> DeleteAsync(int id);
 	}

@@ -55,6 +55,22 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		public async Task<ServiceResponse<List<Project>>> GetGroupProjectsAsync(int groupId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<List<Project>>();
+			try
+			{
+				response.Item = await _manager!.GetGroupProjectsAsync(groupId);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+		
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();

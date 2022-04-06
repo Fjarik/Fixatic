@@ -44,6 +44,17 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(GroupsManager)}.{nameof(GetAllAsync)}... Done");
 			return res;
 		}
+		
+		public async Task<List<Group>> GetUserGroupsAsync()
+		{
+			_logger.LogInformation($"{nameof(GroupsManager)}.{nameof(GetUserGroupsAsync)}...");
+
+			var mainDo = new GroupsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetUserGroups(_currentUser.UserId);
+
+			_logger.LogInformation($"{nameof(GroupsManager)}.{nameof(GetUserGroupsAsync)}... Done");
+			return res;
+		}
 
 		public async Task<bool> DeleteAsync(int id)
 		{

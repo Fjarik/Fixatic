@@ -16,8 +16,10 @@
     <NavMenu />
 </MudDrawer>
 <MudMainContent>
-    <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
-        @Body
+    <MudContainer MaxWidth="MaxWidth.False" Class="pa-0">
+        <MudPaper Elevation="4" Class="pa-4">
+            @Body
+        </MudPaper>
     </MudContainer>
 </MudMainContent>
 

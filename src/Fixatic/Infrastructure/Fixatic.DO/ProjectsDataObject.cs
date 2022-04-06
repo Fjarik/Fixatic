@@ -100,6 +100,52 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetAllAsync)}... Done");
 			return res;
 		}
+		
+		public async Task<List<Project>?> GetGroupProjectsAsync(int groupId)
+		{
+			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetGroupProjectsAsync)}...");
+
+			// TODO: tady lze použít pohled
+			var sql = @"
+				SELECT p.Project_ID, Name, IsEnabled, IsInternal, Description, Shortcut
+				FROM Projects p
+				INNER JOIN ProjectsAccess PA on p.Project_ID = PA.Project_ID
+				WHERE PA.Group_ID = @groupid
+			;";
+
+			var cmd = new SqlCommand(sql);
+
+			cmd.Parameters.Add("@groupid", SqlDbType.Int).Value = groupId;
+
+			var res = new List<Project>();
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new Project
+					{
+						ProjectId = (int)r["Project_ID"],
+						Description = (string)r["Description"],
+						IsEnabled = (bool)r["IsEnabled"],
+						IsInternal = (bool)r["IsInternal"],
+						Name = (string)r["Name"],
+						Shortcut = (string)r["Shortcut"]
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetGroupProjectsAsync)}... Done");
+			return res;
+		}
 
 		public async Task<bool> DeleteAsync(int id)
 		{

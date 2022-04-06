@@ -96,6 +96,50 @@ namespace Fixatic.DO
 			return res;
 		}
 
+		public async Task<List<Group>> GetUserGroups(int userId)
+		{
+			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(GetUserGroups)}...");
+
+			// TODO: tady lze použít pohled
+			var sql = @"
+				SELECT g.Group_ID, Name, Type, Description
+				FROM Groups g
+				INNER JOIN UsersGroups UG on g.Group_ID = UG.Group_ID
+				WHERE UG.User_ID = @userid
+			;";
+
+			var cmd = new SqlCommand(sql);
+
+			cmd.Parameters.Add("@userid", SqlDbType.Int).Value = userId;
+
+			var res = new List<Group>();
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new Group
+					{
+						GroupId = (int)r["Group_ID"],
+						Description = (string)r["Description"],
+						Name = (string)r["Name"],
+						Type = (int)r["Type"]
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(GetUserGroups)}... Done");
+			return res;
+		}
+
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(GroupsDataObject)}.{nameof(DeleteAsync)}...");
