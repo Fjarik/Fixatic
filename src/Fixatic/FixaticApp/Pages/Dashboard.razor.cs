@@ -8,14 +8,14 @@ namespace FixaticApp.Pages
 	public partial class Dashboard
 	{
 		[Parameter] public List<Project>? Projects { get; set; }
-		
+
 		[Parameter] public List<Group>? Groups { get; set; }
 
 		[Parameter] public Group? SelectedGroup { get; set; }
-		
+
 		// TODO: just for testing, remove later
 		[Parameter] public Ticket? SelectedTicket { get; set; }
-		
+
 		protected override async Task OnInitializedAsync()
 		{
 			var groups = await _groupsService.GetUserGroupsAsync();
@@ -32,11 +32,11 @@ namespace FixaticApp.Pages
 			}
 		}
 
-		private async void GroupButtonClicked(Group group)
+		private async Task GroupButtonClicked(Group group)
 		{
 			this.SelectedGroup = group;
 			var projects = (await _projectsService.GetGroupProjectsAsync(group.GroupId));
-			
+
 			switch (projects.IsSuccess)
 			{
 				case true when projects.Item != null:
@@ -47,17 +47,16 @@ namespace FixaticApp.Pages
 					_dialogService.Show<ErrorDialog>("DB error", options);
 					break;
 			}
+			StateHasChanged();
 		}
 
 		private void ReturnButtonClicked()
 		{
 			SelectedGroup = null;
-			// TODO: FIXME z nějakého důvodu mi to neukazuje žádné projekty když tohle není zakomentované ?!
-			// A vždycky to musím refreshnout, aby se mi zobrazily ty správný.. wtf :DD
-			// Projects = null;
+			Projects = null;
 		}
 
-		private async void ProjectButtonClicked()
+		private async Task ProjectButtonClicked(Project project)
 		{
 			// TODO: navigovat na projekt ... jak to vyřešit v UI ?
 		}
