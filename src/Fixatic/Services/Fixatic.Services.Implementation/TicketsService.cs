@@ -55,6 +55,39 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		public async Task<ServiceResponse<bool>> IsFollowedAsync(int ticketId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<bool>();
+			try
+			{
+				var follower = await _manager!.GetFollowerAsync(ticketId);
+				response.Item = follower != null;
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
+		public async Task<ServiceResponse<bool>> SetFollowTicketAsync(int ticketId, bool shouldFollow)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<bool>();
+			try
+			{
+				response.Item = await _manager!.SetFollowTicketAsync(ticketId, shouldFollow);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();
@@ -79,5 +112,6 @@ namespace Fixatic.Services.Implementation
 				_manager = new TicketsManager(_logger, _applicationSettings, currentTicket);
 			}
 		}
+
 	}
 }

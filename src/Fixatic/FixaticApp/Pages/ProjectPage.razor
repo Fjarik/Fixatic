@@ -4,13 +4,6 @@
 @using Fixatic.Services
 @using FixaticApp.Components
 
-@inject IProjectsService _projectsService;
-@inject IDialogService _dialogService;
-@inject ITicketsService _ticketsService;
-@inject ICommentsService _commentsService;
-@inject IUsersService _usersService;
-@inject IAttachementsService _attachementsService;
-
 <style>
     .selected {
         background-color: #1E88E5 !important;
@@ -53,9 +46,22 @@
     <MudItem xs="10">
         <MudPaper Elevation="25">
             <MudToolBar>
-                <MudIconButton Icon="@Icons.Material.Outlined.Comment" OnClick="OnRemoveTicket" />
                 <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="OnAddTicket" />
-                <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" OnClick="OnRemoveTicket" />
+                @if (_selectedTicket != null)
+                {
+                    <MudIconButton Icon="@Icons.Material.Outlined.Comment" OnClick="OnCommentTicket" />
+                    
+                    <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" OnClick="OnRemoveTicket" />
+                    
+                    @if (_isFollowed)
+                    {
+                        <MudIconButton Title="Followed" Icon="@Icons.Filled.Star" OnClick="OnFollowTicketClick" />
+                    }
+                    else
+                    {
+                        <MudIconButton Title="Follow" Icon="@Icons.Filled.StarBorder" OnClick="OnFollowTicketClick" />
+                    }
+                }
             </MudToolBar>
         </MudPaper>
 

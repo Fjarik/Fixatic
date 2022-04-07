@@ -1,3 +1,4 @@
+using Fixatic.Services;
 using Fixatic.Types;
 using FixaticApp.Components;
 using Microsoft.AspNetCore.Components;
@@ -12,6 +13,24 @@ public partial class ProjectPage
 	[Parameter] public Project? Project { get; set; }
 
 
+	[Inject]
+	private IProjectsService ProjectsService { get; set; }
+
+	[Inject]
+	private IDialogService DialogService { get; set; }
+
+	[Inject]
+	private ITicketsService TicketsService { get; set; }
+
+	[Inject]
+	private ICommentsService CommentsService { get; set; }
+
+	[Inject]
+	private IUsersService UsersService { get; set; }
+
+	[Inject]
+	private IAttachementsService _attachementsService { get; set; }
+
 	private MudTable<Ticket> ticketsTable;
 	private int _selectedRow = -1;
 	private Ticket? _selectedTicket = null;
@@ -21,10 +40,11 @@ public partial class ProjectPage
 	private List<Comment>? _comments;
 	private User? _assignee;
 	private Attachement? _attachement;
+	private bool _isFollowed = false;
 
 	protected override async Task OnInitializedAsync()
 	{
-		var project = await _projectsService.GetAllAsync();
+		var project = await ProjectsService.GetAllAsync();
 
 		switch (project.IsSuccess)
 		{
@@ -32,12 +52,12 @@ public partial class ProjectPage
 				Project = project.Item.Find(t => t.ProjectId == this.ProjectId);
 				break;
 			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				_dialogService.Show<ErrorDialog>("Failed to fetch Project data from database", options);
+				var options = new DialogOptions { CloseOnEscapeKey = true };
+				DialogService.Show<ErrorDialog>("Failed to fetch Project data from database", options);
 				break;
 		}
 
-		var tickets = await _ticketsService.GetAllAsync();
+		var tickets = await TicketsService.GetAllAsync();
 
 		switch (tickets.IsSuccess)
 		{
@@ -46,8 +66,8 @@ public partial class ProjectPage
 				_tickets = tickets.Item.FindAll(t => t.ProjectId == this.ProjectId);
 				break;
 			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				_dialogService.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
+				var options = new DialogOptions { CloseOnEscapeKey = true };
+				DialogService.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
 				break;
 		}
 	}
@@ -72,8 +92,10 @@ public partial class ProjectPage
 
 	private async void LoadTicketInfo(Ticket ticket)
 	{
+		_isFollowed = (await TicketsService.IsFollowedAsync(ticket.TicketId))?.Item == true;
+
 		// TODO: tady by šly použít pohledy
-		var comments = await _commentsService.GetAllAsync();
+		var comments = await CommentsService.GetAllAsync();
 
 		switch (comments.IsSuccess)
 		{
@@ -81,12 +103,12 @@ public partial class ProjectPage
 				_comments = comments.Item.FindAll(c => c.TicketId == ticket.TicketId);
 				break;
 			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				_dialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
+				var options = new DialogOptions { CloseOnEscapeKey = true };
+				DialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
 				break;
 		}
 
-		var users = await _usersService.GetAllAsync();
+		var users = await UsersService.GetAllAsync();
 
 		switch (users.IsSuccess)
 		{
@@ -94,8 +116,8 @@ public partial class ProjectPage
 				_assignee = users.Item.Find(c => c.UserId == ticket.AssignedUserId);
 				break;
 			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				_dialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
+				var options = new DialogOptions { CloseOnEscapeKey = true };
+				DialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
 				break;
 		}
 
@@ -107,11 +129,11 @@ public partial class ProjectPage
 				_attachement = attachements.Item.Find(a => a.TicketId == ticket.TicketId);
 				break;
 			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				_dialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
+				var options = new DialogOptions { CloseOnEscapeKey = true };
+				DialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
 				break;
 		}
-		
+
 		StateHasChanged();
 	}
 
@@ -122,11 +144,30 @@ public partial class ProjectPage
 
 	private void OnRemoveTicket()
 	{
+		if (_selectedTicket == null)
+			return;
+		
 		// TODO: remove Ticket
 	}
-	
+
 	private void OnCommentTicket()
 	{
-		// TODO: remove Ticket
+		if (_selectedTicket == null)
+			return;
+		
+		// TODO: comment Ticket
 	}
+
+	private async Task OnFollowTicketClick()
+	{
+		if (_selectedTicket == null)
+			return;
+
+		var result = await TicketsService.SetFollowTicketAsync(_selectedTicket!.TicketId, !_isFollowed);
+		if (result.IsSuccess)
+		{
+			_isFollowed = result.Item;
+		}
+	}
+
 }

@@ -10,5 +10,9 @@ namespace Fixatic.Services
 		Task<ServiceResponse<List<Ticket>>> GetAllAsync();
 
 		Task<ServiceResponse<bool>> DeleteAsync(int id);
+
+		Task<ServiceResponse<bool>> SetFollowTicketAsync(int ticketId, bool shouldFollow);
+		
+		Task<ServiceResponse<bool>> IsFollowedAsync(int ticketId);
 	}
 }

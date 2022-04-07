@@ -45,6 +45,36 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		public async Task<Follower> GetFollowerAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowerAsync)}...");
+
+			var mainDo = new TicketsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetFollowerAsync(ticketId, _currentUser.UserId);
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowerAsync)}... Done");
+			return res;
+		}
+
+		public async Task<bool> SetFollowTicketAsync(int ticketId, bool shouldFollow)
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(SetFollowTicketAsync)}...");
+
+			var mainDo = new TicketsDataObject(_logger, _dbConnector);
+			bool success;
+			if (shouldFollow)
+			{
+				success = await mainDo.AddFollowerAsync(ticketId, _currentUser.UserId, 0);
+			}
+			else
+			{
+				success = await mainDo.RemoveFollowerAsync(ticketId, _currentUser.UserId);
+			}
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(SetFollowTicketAsync)}... Done");
+			return success && shouldFollow;
+		}
+
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(DeleteAsync)}...");
@@ -55,5 +85,6 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(DeleteAsync)}... Done");
 			return res;
 		}
+
 	}
 }

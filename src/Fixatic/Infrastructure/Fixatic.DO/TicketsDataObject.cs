@@ -233,6 +233,44 @@ namespace Fixatic.DO
 			return res;
 		}
 
+		public async Task<Follower> GetFollowerAsync(int ticketId, int userId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowerAsync)}...");
+
+			var sql = @"SELECT Ticket_ID, User_ID, Type, Since FROM Followers WHERE Ticket_ID = @ticket_id AND User_ID = @user_id;";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = ticketId;
+			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = userId;
+
+			Follower? res = null;
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				if (await r.ReadAsync())
+				{
+					res = new Follower
+					{
+						UserId = (int)r["User_ID"],
+						TicketId = (int)r["Ticket_ID"],
+						Since = (DateTime)r["Since"],
+						Type = (int)r["Type"]
+					};
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowerAsync)}... Done");
+			return res;
+		}
+
 		public async Task<bool> AddFollowerAsync(int tickedId, int userId, int type)
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(AddFollowerAsync)}...");
@@ -267,7 +305,7 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(RemoveFollowerAsync)}...");
 
 			var sql = @"
-				DELETE FROM Followers WHERE Ticket_ID = @ticket_id AND User_ID = @user_id);";
+				DELETE FROM Followers WHERE Ticket_ID = @ticket_id AND User_ID = @user_id;";
 
 
 			var cmd = new SqlCommand(sql);
