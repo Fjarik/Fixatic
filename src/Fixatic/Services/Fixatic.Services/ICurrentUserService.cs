@@ -11,6 +11,8 @@ namespace Fixatic.Services
 	{
 		Task<CurrentUser> GetUserInfoAsync();
 
+		Task<bool> IsLoggedInAsync();
+		
 		void InvalidateCache();
 	}
 }

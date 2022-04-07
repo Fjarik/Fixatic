@@ -18,7 +18,7 @@ namespace Fixatic.Services.Implementation
 		private readonly ILogger _logger;
 		private readonly AuthenticationStateProvider _authenticationStateProvider;
 		private readonly CurrentUserManager _manager;
-		
+
 		private CurrentUser? _currentUser;
 		private ClaimsPrincipal? _principal;
 
@@ -54,6 +54,15 @@ namespace Fixatic.Services.Implementation
 				await LoadCurrentUserAsync();
 		}
 
+		public async Task<bool> IsLoggedInAsync()
+		{
+			if (_currentUser != null)
+				return true;
+
+			var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+			return authState?.User?.Identity?.IsAuthenticated == true;
+		}
+
 		private async Task LoadCurrentUserAsync()
 		{
 			var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
@@ -66,5 +75,6 @@ namespace Fixatic.Services.Implementation
 		{
 			_currentUser = null;
 		}
+
 	}
 }
