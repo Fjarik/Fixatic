@@ -4,32 +4,35 @@
 @inject TokenProvider TokenProvider
 
 <PageTitle>Fixatic - Login</PageTitle>
-<MudGrid>
-    <MudItem Class="mud-width-full d-flex justify-center">
-        <MudImage Src="/img/logo.jpg" Alt="Fixatic Logo" Fluid="true" ObjectFit="ObjectFit.Fill" Elevation="10" Class="rounded-lg" />
-    </MudItem>
-    <MudItem Class="mud-width-full">
-        <MudPaper Class="pa-4" Elevation="10">
-            <form method="post" action="/loginCallback">
-                <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!" name="Email"
-                              Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
-                <MudTextField T="string" Label="Password" name="Password"
-                              InputType="InputType.Password"
-                              Required="true"
-                              RequiredError="Password is required!" />
+<MudContainer MaxWidth="MaxWidth.Small" Class="my-auto pt-16">
+    <MudGrid>
+        <MudItem Class="mud-width-full d-flex justify-center">
+            <MudImage Src="/img/logo.jpg" Alt="Fixatic Logo" Fluid="true" ObjectFit="ObjectFit.Fill" Elevation="10" Class="rounded-lg" />
+        </MudItem>
+        <MudItem Class="mud-width-full">
+            <MudPaper Class="pa-4" Elevation="10">
+                <form method="post" action="/loginCallback">
+                    <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!" name="Email"
+                                  Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})" />
+                    <MudTextField T="string" Label="Password" name="Password"
+                                  InputType="InputType.Password"
+                                  Required="true"
+                                  RequiredError="Password is required!" />
 
-                <input name="__RequestVerificationToken" type="hidden" value="@TokenProvider.AntiforgeryToken">
+                    <input name="__RequestVerificationToken" type="hidden" value="@TokenProvider.AntiforgeryToken">
 
-                @if (!string.IsNullOrWhiteSpace(_message))
-                {
-                    <MudAlert Severity="Severity.Error">@_message</MudAlert>
-                }
+                    @if (!string.IsNullOrWhiteSpace(_message))
+                    {
+                        <MudAlert Severity="Severity.Error">@_message</MudAlert>
+                    }
 
-                <div class="d-flex align-center justify-space-between mt-5">
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
-                </div>
-            </form>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+                    <div class="d-flex align-center justify-space-between mt-5">
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+                    </div>
+                </form>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
 

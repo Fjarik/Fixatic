@@ -15,6 +15,7 @@ using MudBlazor;
 using FixaticApp;
 using FixaticApp.Shared;
 using Fixatic.Services;
+using Fixatic.Types;
 
 namespace FixaticApp.Pages.Public
 {
@@ -26,9 +27,14 @@ namespace FixaticApp.Pages.Public
 		private ICurrentUserService CurrentUserService { get; set; }
 
 		[Inject]
+		private IPublicTicketsService TicketService { get; set; }
+
+		[Inject]
 		private NavigationManager NavigationManager { get; set; }
 
+		private List<Ticket> _tickets = new List<Ticket>();
 		private bool _load = false;
+		private Ticket? _selectedTicket;
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -38,8 +44,19 @@ namespace FixaticApp.Pages.Public
 				NavigationManager.NavigateTo("/dashboard");
 				return;
 			}
+			var res = await TicketService.GetPublicAsync();
+			if (res.IsSuccess)
+			{
+				_tickets = res.Item!;
+			}
 			_load = true;
 		}
-
+		private string GetText(DateTime? dateTime)
+		{
+			if (dateTime == null)
+				return "Never";
+			
+			return dateTime.Value.ToString("dd/MM/yyyy HH:mm");
+		}
 	}
 }

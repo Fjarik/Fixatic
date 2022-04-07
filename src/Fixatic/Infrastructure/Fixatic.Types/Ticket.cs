@@ -32,6 +32,6 @@ namespace Fixatic.Types
 
         public int Type { get; set; }
 
-        public int Visibility { get; set; }
+        public TicketVisibility Visibility { get; set; }
     }
 }

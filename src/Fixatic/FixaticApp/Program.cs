@@ -44,6 +44,7 @@ services.AddTransient<ICustomPropertiesService, CustomPropertiesService>();
 services.AddTransient<ICustomPropertyOptionsService, CustomPropertyOptionsService>();
 services.AddTransient<IGroupsService, GroupsService>();
 services.AddTransient<IProjectsService, ProjectsService>();
+services.AddTransient<IPublicTicketsService, PublicTicketsService>();
 services.AddTransient<ITicketsService, TicketsService>();
 services.AddTransient<IUsersService, UsersService>();
 

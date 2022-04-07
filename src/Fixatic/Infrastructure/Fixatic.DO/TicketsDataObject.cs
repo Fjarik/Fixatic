@@ -64,7 +64,7 @@ namespace Fixatic.DO
 			cmd.Parameters.Add("@status", SqlDbType.Int).Value = ticket.Status;
 			cmd.Parameters.Add("@title", SqlDbType.NVarChar).Value = ticket.Title;
 			cmd.Parameters.Add("@type", SqlDbType.Int).Value = ticket.Type;
-			cmd.Parameters.Add("@visibility", SqlDbType.Int).Value = ticket.Visibility;
+			cmd.Parameters.Add("@visibility", SqlDbType.Int).Value = (int)ticket.Visibility;
 			cmd.Parameters.Add("@project_id", SqlDbType.Int).Value = ticket.ProjectId;
 			cmd.Parameters.Add("@assigneduser_id", SqlDbType.Int).Value = ticket.AssignedUserId;
 			cmd.Parameters.Add("@creator_id", SqlDbType.Int).Value = ticket.CreatorId;
@@ -115,7 +115,67 @@ namespace Fixatic.DO
 						Status = (int)r["Status"],
 						Title = (string)r["Title"],
 						Type = (int)r["Type"],
-						Visibility = (int)r["Visibility"]
+						Visibility = (TicketVisibility)(int)r["Visibility"]
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAllAsync)}... Done");
+			return res;
+		}
+
+		public async Task<List<Ticket>> GetAllAsync(TicketVisibility visibility)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAllAsync)}...");
+
+			var sql = @"SELECT
+							Ticket_ID, 
+							Title, 
+							Content, 
+							Created, 
+							Modified, 
+							DateSolved, 
+							Priority, 
+							Status, 
+							Type, 
+							Visibility, 
+							Project_ID, 
+							AssignedUser_ID, 
+							Creator_ID
+						FROM Tickets
+						WHERE Visibility = @visibility;";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@visibility", SqlDbType.Int).Value = (int)visibility;
+
+			var res = new List<Ticket>();
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new Ticket
+					{
+						TicketId = (int)r["Ticket_ID"],
+						ProjectId = (int)r["Project_ID"],
+						AssignedUserId = (int)r["AssignedUser_ID"],
+						CreatorId = (int)r["Creator_ID"],
+						Content = (string)r["Content"],
+						Created = (DateTime)r["Created"],
+						DateSolved = r["DateSolved"] as DateTime?,
+						Modified = r["Modified"] as DateTime?,
+						Priority = (int)r["Priority"],
+						Status = (int)r["Status"],
+						Title = (string)r["Title"],
+						Type = (int)r["Type"],
+						Visibility = (TicketVisibility)(int)r["Visibility"]
 					});
 				}
 

@@ -1,6 +1,65 @@
 ﻿@page "/"
+@using Fixatic.Types
 @layout PublicLayout
 
 <PageTitle>Fixatic</PageTitle>
 
 @* !!! this page is for users that are NOT logged in !!! *@
+@if (_load && _tickets != null)
+{
+    <div class="mt-5">
+        <MudTable Items="@_tickets" T="Ticket" Hover="true" Striped="true"
+              Breakpoint="Breakpoint.Sm" @bind-SelectedItem="@_selectedTicket">
+            <ToolBarContent>
+                <MudText Typo="Typo.h5">Public tickets</MudText>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>#</MudTh>
+                <MudTh>Title</MudTh>
+                <MudTh>Status</MudTh>
+                <MudTh>Created</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="ID">@context.TicketId</MudTd>
+                <MudTd DataLabel="Title">@context.Title</MudTd>
+                <MudTd DataLabel="Status">@context.Status</MudTd>
+                <MudTd DataLabel="Created">@context.Created</MudTd>
+            </RowTemplate>
+            <ChildRowContent>
+                @if (context.TicketId == _selectedTicket?.TicketId)
+                {
+                    <MudTr>
+                        <td colspan="4">
+                            <MudCard Elevation="0">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText Typo="Typo.body1">@context.Content</MudText>
+                                    </CardHeaderContent>
+                                </MudCardHeader>
+                                <MudCardContent Class="pt-0">
+                                    <MudGrid>
+                                        <MudItem xs="3">
+                                            Modified: @GetText(context.Modified)
+                                        </MudItem>
+                                        <MudItem xs="3">
+                                            Solved: @GetText(context.DateSolved)
+                                        </MudItem>
+                                        <MudItem xs="3">
+                                            Priority: @(context.Priority.ToString())
+                                        </MudItem>
+                                        <MudItem xs="3">
+                                            Type: @(context.Type.ToString())
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudCardContent>
+                            </MudCard>
+                        </td>
+                    </MudTr>
+                }
+            </ChildRowContent>
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+        </MudTable>
+    </div>
+}
