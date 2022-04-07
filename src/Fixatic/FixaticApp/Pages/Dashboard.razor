@@ -9,6 +9,7 @@
 @inject ICurrentUserService _currentUserService;
 @inject IDialogService _dialogService;
 @inject ITicketsService _ticketService;
+@inject NavigationManager _navigationManager;
 
 <MudText Typo="Typo.h5" Class="pa-4">Dashboard</MudText>
 @if (SelectedGroup != null)
@@ -37,6 +38,7 @@
         }
     }
     
+    @*TODO: nějak setřídit Projekty podle kategorií, aby se kategorie nějak využily*@
     @if (SelectedGroup != null && Projects != null)
     {
         foreach (var project in Projects)

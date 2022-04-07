@@ -24,5 +24,16 @@ namespace Fixatic.Types
 
         public string? Phone { get; set; }
 
+        public string GetFullName()
+        {
+	        if (Firstname != null && Lastname != null)
+	        {
+		        return Firstname + " " + Lastname;
+	        }
+	        else
+	        {
+		        return " ";
+	        }
+        }
     }
 }

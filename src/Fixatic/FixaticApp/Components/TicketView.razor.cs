@@ -19,10 +19,8 @@ namespace FixaticApp.Components
 			{
 				return "None";
 			}
-			else
-			{
-				return Assignee.Lastname + Assignee.Firstname;
-			}
+
+			return Assignee.GetFullName();
 		}
 
 		private async Task<string> LoadTestTicket()

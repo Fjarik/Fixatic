@@ -1,0 +1,45 @@
+@using Fixatic.Types
+@using Fixatic.Services
+
+@inject IDialogService _dialogService;
+@inject IUsersService _usersService;
+
+<MudPaper Class="pa-4">
+    @if (Author != null)
+    {
+        <MudStack Row="true" Class="pb-2">
+            <MudAvatar Color="Color.Secondary" Variant="Variant.Outlined" Size="Size.Small">@Author.GetFullName()[0]</MudAvatar>
+            <MudText Typo="Typo.body1" Class="rounded-lg">@Author.GetFullName()</MudText>
+        </MudStack>
+    }
+
+    <MudStack Row="true">
+        <MudText Typo="Typo.body1" Class="border-solid border mud-border-secondary rounded-lg pa-4">@Comment!.Content</MudText>
+    </MudStack>
+
+</MudPaper>
+
+@code
+{
+    [Parameter]
+    public Comment? Comment { get; set; }
+
+    [Parameter]
+    public User? Author { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var users = await _usersService.GetAllAsync();
+
+        switch (users.IsSuccess)
+        {
+            case true when users.Item != null:
+                Author = users.Item.Find(u => u.UserId == Comment!.UserId);
+                break;
+            case false:
+                var options = new DialogOptions {CloseOnEscapeKey = true};
+                _dialogService.Show<ErrorDialog>("Failed to fetch comment author from database", options);
+                break;
+        }
+    }
+}

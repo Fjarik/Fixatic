@@ -1,0 +1,66 @@
+@page "/project/{ProjectId:int}"
+@using Fixatic.Types
+@using Fixatic.Services
+@using FixaticApp.Components
+
+@inject IProjectsService _projectsService;
+@inject IDialogService _dialogService;
+@inject ITicketsService _ticketsService;
+@inject ICommentsService _commentsService;
+@inject IUsersService _usersService;
+@inject IAttachementsService _attachementsService;
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+</style>
+
+@*TODO: asi radši použít flexbox pokud*@
+<MudGrid>
+    <MudItem xs="2">
+        @if (Project != null)
+        {
+            <MudText Typo="Typo.h5" Class="pa-4">@Project.Name</MudText>
+            <MudDivider></MudDivider>
+
+            <MudTable Items="@_tickets" @ref="ticketsTable" @bind-SelectedItem="_selectedTicket" RowClassFunc="@OnTicketClicked" T="Ticket">
+                <HeaderContent>
+                    <MudTh>Tickets</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Nr">@context.Title</MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager HorizontalAlignment="HorizontalAlignment.Left" HidePageNumber="true" HideRowsPerPage="true"/>
+                </PagerContent>
+            </MudTable>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1">Loading project tickets</MudText>
+        }
+    </MudItem>
+    <MudItem xs="10">
+        <MudPaper Elevation="25">
+            <MudToolBar>
+                <MudIconButton Icon="@Icons.Material.Outlined.Comment" OnClick="OnRemoveTicket"/>
+                <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="OnAddTicket"/>
+                <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" OnClick="OnRemoveTicket"/>
+            </MudToolBar>
+        </MudPaper>
+
+        @if (_selectedTicket != null)
+        {
+            <TicketView Model="_selectedTicket" Comments="_comments" Assignee="_assignee" Attachement="_attachement"></TicketView>
+        }
+    </MudItem>
+</MudGrid>

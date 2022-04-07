@@ -14,7 +14,7 @@
 else
 {
     <MudPaper Elevation="4">
-        <MudGrid Class="pa-8">
+        <MudGrid Class="pa-8 mb-4">
             <MudItem xs="12">
                 <MudGrid Justify="Justify.SpaceBetween">
                     <MudItem xs="7">
@@ -24,7 +24,7 @@ else
                     </MudItem>
                     <MudItem xs="3">
                         <MudPaper Elevation="4" Class="pa-4">
-                            <MudCheckBox @bind-Checked="@Model.DateSolved" Label="Solved" Color="Color.Secondary"></MudCheckBox>
+                            <MudCheckBox @bind-Checked="@Model.DateSolved" Disabled="true" Label="Solved" Color="Color.Secondary"></MudCheckBox>
                         </MudPaper>
                     </MudItem>
                 </MudGrid>
@@ -97,16 +97,15 @@ else
             </MudItem>
         </MudGrid>
     </MudPaper>
+
+    <MudText Typo="Typo.h5">Comments</MudText>
+
     <MudStack Spacing="8">
         @if (Comments != null)
         {
             @foreach (var comment in Comments)
             {
-                <MudPaper Class="pa-4">
-                    <MudStack Row="true">
-                        <MudText Typo="Typo.body1">@comment.Content</MudText>
-                    </MudStack>
-                </MudPaper>
+                <CommentView Comment="comment"></CommentView>
             }
         }
     </MudStack>

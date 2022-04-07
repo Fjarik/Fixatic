@@ -58,7 +58,7 @@ namespace FixaticApp.Pages
 
 		private async Task ProjectButtonClicked(Project project)
 		{
-			// TODO: navigovat na projekt ... jak to vyřešit v UI ?
+			_navigationManager.NavigateTo("/project/" + project.ProjectId);
 		}
 	}
 }
