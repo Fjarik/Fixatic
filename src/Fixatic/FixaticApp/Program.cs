@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Fixatic.Services;
 using Fixatic.Services.Implementation;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using FixaticApp.Types;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,7 @@ services.AddMudServices(x =>
 	x.SnackbarConfiguration.SnackbarVariant = MudBlazor.Variant.Filled;
 });
 
+services.AddScoped<TokenProvider>();
 services.AddTransient<IAttachementsService, AttachementsService>();
 services.AddTransient<ICategoriesService, CategoriesService>();
 services.AddTransient<ICommentsService, CommentsService>();

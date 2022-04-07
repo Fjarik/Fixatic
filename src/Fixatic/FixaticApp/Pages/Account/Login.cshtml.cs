@@ -1,4 +1,6 @@
 using System.Reflection;
+using System.Text.Encodings.Web;
+using System.Web;
 using Fixatic.BO;
 using Fixatic.Types;
 using Microsoft.AspNetCore.Authentication;
@@ -26,20 +28,11 @@ namespace FixaticApp.Pages
 		[BindProperty]
 		public string Password { get; set; } = string.Empty;
 
-		public string? Message { get; set; }
-
-
-		public IActionResult OnGet()
-		{
-			return Page();
-		}
-
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if (!ModelState.IsValid)
-				return Page();
+				return Fail("Invalid email or password");
 
-			Message = null;
 			var props = new AuthenticationProperties
 			{
 				RedirectUri = "~/dashboard",
@@ -51,14 +44,16 @@ namespace FixaticApp.Pages
 			var manager = new CurrentUserManager(_logger, _applicationSettings);
 			var res = await manager.LoginAsync(Email, Password);
 			if (res == null)
-			{
-				Message = "Invalid email or password";
-				return Page();
-			}
+				return Fail("Invalid email or password");
 
 			await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, res, props);
 
 			return LocalRedirect(props.RedirectUri);
+		}
+
+		private IActionResult Fail(string message)
+		{
+			return LocalRedirect($"~/login?msg={HttpUtility.HtmlEncode(message)}");
 		}
 	}
 }

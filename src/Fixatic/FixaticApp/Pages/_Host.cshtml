@@ -1,8 +1,10 @@
 ﻿@page "/"
 @namespace FixaticApp.Pages
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery AntiforgeryService
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = "_Layout";
+    var token = AntiforgeryService.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
-<component type="typeof(App)" render-mode="ServerPrerendered" />
+<component type="typeof(App)" render-mode="ServerPrerendered" param-AntiforgeryToken="token" />
