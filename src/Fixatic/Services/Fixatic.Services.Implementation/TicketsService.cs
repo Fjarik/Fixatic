@@ -108,8 +108,8 @@ namespace Fixatic.Services.Implementation
 		{
 			if (_manager == null)
 			{
-				var currentTicket = await _currentUserService.GetUserInfoAsync();
-				_manager = new TicketsManager(_logger, _applicationSettings, currentTicket);
+				var currentUser = await _currentUserService.GetUserInfoAsync();
+				_manager = new TicketsManager(_logger, _applicationSettings, currentUser);
 			}
 		}
 

@@ -1,6 +1,9 @@
+using Fixatic.Services;
+using Fixatic.Services.Implementation;
 using Fixatic.Types;
 using FixaticApp.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.VisualBasic.CompilerServices;
 using MudBlazor;
 
 namespace FixaticApp.Pages
@@ -13,8 +16,10 @@ namespace FixaticApp.Pages
 
 		[Parameter] public Group? SelectedGroup { get; set; }
 
-		// TODO: just for testing, remove later
-		[Parameter] public Ticket? SelectedTicket { get; set; }
+		[Inject] private ITicketsService TicketsService { get; set; }
+
+		private MudTable<Ticket> ticketsTable;
+		private List<Ticket>? FollowedTickets { get; set; }
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -26,7 +31,34 @@ namespace FixaticApp.Pages
 					Groups = groups.Item;
 					break;
 				case false:
-					var options = new DialogOptions { CloseOnEscapeKey = true };
+					var options = new DialogOptions {CloseOnEscapeKey = true};
+					_dialogService.Show<ErrorDialog>("DB error", options);
+					break;
+			}
+
+			var tickets = await _ticketService.GetAllAsync();
+
+			switch (tickets.IsSuccess)
+			{
+				case true when tickets.Item != null:
+					FollowedTickets = new List<Ticket>();
+
+					// asi není úplně nejlepší dělat DB request pro každej Ticket, ale snad to nebude vadit
+					// pro naše malý množství :DDD
+					foreach (var ticket in tickets.Item)
+					{
+						var isFollowed = await TicketsService.IsFollowedAsync(ticket.TicketId);
+						if (isFollowed.IsSuccess && isFollowed.Item)
+						{
+							FollowedTickets.Add(ticket);
+						}
+					}
+					
+					StateHasChanged();
+
+					break;
+				case false:
+					var options = new DialogOptions {CloseOnEscapeKey = true};
 					_dialogService.Show<ErrorDialog>("DB error", options);
 					break;
 			}
@@ -43,10 +75,11 @@ namespace FixaticApp.Pages
 					Projects = projects.Item.FindAll(p => p.IsEnabled);
 					break;
 				case false:
-					var options = new DialogOptions { CloseOnEscapeKey = true };
+					var options = new DialogOptions {CloseOnEscapeKey = true};
 					_dialogService.Show<ErrorDialog>("DB error", options);
 					break;
 			}
+
 			StateHasChanged();
 		}
 
@@ -56,7 +89,7 @@ namespace FixaticApp.Pages
 			Projects = null;
 		}
 
-		private async Task ProjectButtonClicked(Project project)
+		private void ProjectButtonClicked(Project project)
 		{
 			_navigationManager.NavigateTo("/project/" + project.ProjectId);
 		}

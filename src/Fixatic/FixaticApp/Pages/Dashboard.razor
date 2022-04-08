@@ -37,7 +37,7 @@
             </MudItem>
         }
     }
-    
+
     @*TODO: nějak setřídit Projekty podle kategorií, aby se kategorie nějak využily*@
     @if (SelectedGroup != null && Projects != null)
     {
@@ -58,3 +58,20 @@
     }
 </MudGrid>
 
+@if (SelectedGroup == null)
+{
+    <MudText Typo="Typo.h5" Class="pa-4">Followed Tickets</MudText>
+    <MudDivider></MudDivider>
+
+    <MudTable Items="@FollowedTickets" @ref="ticketsTable">
+        <HeaderContent>
+            <MudTh>Tickets</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nr">@context.Title</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager HorizontalAlignment="HorizontalAlignment.Left" HidePageNumber="true" HideRowsPerPage="true"/>
+        </PagerContent>
+    </MudTable>
+}
