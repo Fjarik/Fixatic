@@ -138,12 +138,17 @@ public partial class ProjectPage
 		// TODO: add Ticket
 	}
 
-	private void OnRemoveTicket()
+	private async Task OnRemoveTicketAsync()
 	{
-		if (_selectedTicket == null)
+		if (_selectedTicket == null || _tickets == null)
 			return;
 
-		// TODO: remove Ticket
+		// TODO: check result
+		var result = await TicketsService.DeleteAsync(_selectedTicket.TicketId);
+		
+		_tickets.Remove(_selectedTicket);
+		_selectedTicket = null;
+		StateHasChanged();
 	}
 
 	private async Task OnCommentTicketAsync()
