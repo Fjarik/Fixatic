@@ -13,23 +13,19 @@ public partial class ProjectPage
 	[Parameter] public Project? Project { get; set; }
 
 
-	[Inject]
-	private IProjectsService ProjectsService { get; set; }
+	[Inject] private IProjectsService ProjectsService { get; set; }
 
-	[Inject]
-	private IDialogService DialogService { get; set; }
+	[Inject] private IDialogService DialogService { get; set; }
 
-	[Inject]
-	private ITicketsService TicketsService { get; set; }
+	[Inject] private ITicketsService TicketsService { get; set; }
 
-	[Inject]
-	private ICommentsService CommentsService { get; set; }
+	[Inject] private ICommentsService CommentsService { get; set; }
 
-	[Inject]
-	private IUsersService UsersService { get; set; }
+	[Inject] private IUsersService UsersService { get; set; }
 
-	[Inject]
-	private IAttachementsService _attachementsService { get; set; }
+	[Inject] private ICurrentUserService CurrentUserService { get; set; }
+
+	[Inject] private IAttachementsService _attachementsService { get; set; }
 
 	private MudTable<Ticket> ticketsTable;
 	private int _selectedRow = -1;
@@ -52,7 +48,7 @@ public partial class ProjectPage
 				Project = project.Item.Find(t => t.ProjectId == this.ProjectId);
 				break;
 			case false:
-				var options = new DialogOptions { CloseOnEscapeKey = true };
+				var options = new DialogOptions {CloseOnEscapeKey = true};
 				DialogService.Show<ErrorDialog>("Failed to fetch Project data from database", options);
 				break;
 		}
@@ -66,7 +62,7 @@ public partial class ProjectPage
 				_tickets = tickets.Item.FindAll(t => t.ProjectId == this.ProjectId);
 				break;
 			case false:
-				var options = new DialogOptions { CloseOnEscapeKey = true };
+				var options = new DialogOptions {CloseOnEscapeKey = true};
 				DialogService.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
 				break;
 		}
@@ -103,7 +99,7 @@ public partial class ProjectPage
 				_comments = comments.Item.FindAll(c => c.TicketId == ticket.TicketId);
 				break;
 			case false:
-				var options = new DialogOptions { CloseOnEscapeKey = true };
+				var options = new DialogOptions {CloseOnEscapeKey = true};
 				DialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
 				break;
 		}
@@ -116,7 +112,7 @@ public partial class ProjectPage
 				_assignee = users.Item.Find(c => c.UserId == ticket.AssignedUserId);
 				break;
 			case false:
-				var options = new DialogOptions { CloseOnEscapeKey = true };
+				var options = new DialogOptions {CloseOnEscapeKey = true};
 				DialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
 				break;
 		}
@@ -129,7 +125,7 @@ public partial class ProjectPage
 				_attachement = attachements.Item.Find(a => a.TicketId == ticket.TicketId);
 				break;
 			case false:
-				var options = new DialogOptions { CloseOnEscapeKey = true };
+				var options = new DialogOptions {CloseOnEscapeKey = true};
 				DialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
 				break;
 		}
@@ -146,16 +142,42 @@ public partial class ProjectPage
 	{
 		if (_selectedTicket == null)
 			return;
-		
+
 		// TODO: remove Ticket
 	}
 
-	private void OnCommentTicket()
+	private async Task OnCommentTicketAsync()
 	{
 		if (_selectedTicket == null)
 			return;
-		
-		// TODO: comment Ticket
+
+		var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
+		var dialog = DialogService.Show<TextInputDialog>("Add comment", options);
+		var result = await dialog.Result;
+
+		if (!result.Cancelled)
+		{
+			var (textContent, isInternal) = ((string, bool))result.Data;
+			var curentUser = await CurrentUserService.GetUserInfoAsync();
+
+			if (string.IsNullOrEmpty(textContent))
+			{
+				return;
+			}
+
+			var comment = new Comment
+			{
+				CommentId = -1,
+				TicketId = _selectedTicket.TicketId,
+				UserId = curentUser.UserId,
+				Content = textContent,
+				Created = DateTime.Now,
+				IsInternal = isInternal
+			};
+
+			await CommentsService.CreateOrUpdateAsync(comment);
+			// TODO: check errors
+		}
 	}
 
 	private async Task OnFollowTicketClick()
@@ -169,5 +191,4 @@ public partial class ProjectPage
 			_isFollowed = result.Item;
 		}
 	}
-
 }

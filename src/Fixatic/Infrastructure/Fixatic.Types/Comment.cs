@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace Fixatic.Types
 {
-    public class Comment
-    {
-        public int CommentId { get; set; }
+	public class Comment
+	{
+		public int CommentId { get; set; }
 
-        public int TicketId { get; set; }
+		public int TicketId { get; set; }
 
-        public int UserId { get; set; }
+		public int UserId { get; set; }
 
-        public string Content { get; set; }
+		public string Content { get; set; }
 
-        public DateTime Created { get; set; }
+		public DateTime Created { get; set; }
 
-        public bool IsInternal { get; set; }
-
-    }
+		public bool IsInternal { get; set; }
+	}
 }

@@ -1,0 +1,25 @@
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="@TextContent" Label="Comment" Lines="5"/>
+    </DialogContent>
+    <DialogActions>
+        <MudCheckBox @bind-Checked="@IsInternal" Label="Internal"></MudCheckBox>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter]
+    MudDialogInstance? MudDialog { get; set; }
+
+    [Parameter]
+    public string TextContent { get; set; } = "";
+
+    [Parameter]
+    public bool IsInternal { get; set; } = false;
+
+    void Submit() => MudDialog!.Close(DialogResult.Ok((TextContent, IsInternal)));
+    void Cancel() => MudDialog!.Cancel();
+}
