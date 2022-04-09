@@ -13,7 +13,7 @@
 }
 else
 {
-    <MudPaper Elevation="1">
+    <MudPaper Elevation="1" Class="pa-2">
         <MudGrid Class="pl-4 pr-4 mb-4">
             <MudItem xs="12">
                 <MudGrid Justify="Justify.SpaceBetween">
@@ -87,10 +87,8 @@ else
             </MudItem>
         </MudGrid>
     </MudPaper>
-
-    <MudText Typo="Typo.h5">Comments</MudText>
-
-    <MudStack Spacing="8">
+    
+    <MudStack Spacing="8" AlignItems="AlignItems.Center" Class="pa-4">
         @if (Comments != null)
         {
             @foreach (var comment in Comments)

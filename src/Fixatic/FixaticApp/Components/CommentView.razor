@@ -4,17 +4,17 @@
 @inject IDialogService _dialogService;
 @inject IUsersService _usersService;
 
-<MudPaper Class="pa-4">
+<MudPaper Style="min-width: 60%" Elevation="0" Class="border-solid border mud-border-secondary rounded-lg pa-4">
     @if (Author != null)
     {
         <MudStack Row="true" Class="pb-2">
-            <MudAvatar Color="Color.Secondary" Variant="Variant.Outlined" Size="Size.Small">@Author.GetFullName()[0]</MudAvatar>
+            <MudAvatar Color="Color.Tertiary" Variant="Variant.Outlined" Size="Size.Small">@Author.GetFullName()[0]</MudAvatar>
             <MudText Typo="Typo.body1" Class="rounded-lg">@Author.GetFullName()</MudText>
         </MudStack>
     }
 
     <MudStack Row="true">
-        <MudText Typo="Typo.body1" Class="border-solid border mud-border-secondary rounded-lg pa-4">@Comment!.Content</MudText>
+        <MudText Typo="Typo.body1" Class="pa-4">@Comment!.Content</MudText>
     </MudStack>
 
 </MudPaper>

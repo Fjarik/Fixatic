@@ -18,15 +18,14 @@
             }
 </style>
 
-@*TODO: asi radši použít flexbox*@
-<MudGrid>
-    <MudItem xs="2">
+<MudGrid Style="height: 100vh">
+    <MudItem xs="2" Class="pr-0">
         @if (Project != null)
         {
-            <MudText Typo="Typo.h5" Class="pa-4">@Project.Name</MudText>
+            <MudText Typo="Typo.h5" Class="pa-4 object-fill">@Project.Name</MudText>
             <MudDivider></MudDivider>
 
-            <MudTable Items="@_tickets" @ref="_ticketsTable" @bind-SelectedItem="_selectedTicket" RowClassFunc="@OnTicketClicked" T="Ticket">
+            <MudTable Style="height: 100vh" Items="@_tickets" @ref="_ticketsTable" @bind-SelectedItem="_selectedTicket" RowClassFunc="@OnTicketClicked" T="Ticket">
                 <HeaderContent>
                     <MudTh>Tickets</MudTh>
                 </HeaderContent>
@@ -43,9 +42,8 @@
             <MudText Typo="Typo.body1">Loading project tickets</MudText>
         }
     </MudItem>
-    <MudItem xs="10">
-        <MudPaper Elevation="1">
-            <MudToolBar Class="mb-4 pl-0">
+    <MudItem xs="10" Class="pl-0">
+            <MudToolBar Class="pl-0">
                 <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="OnAddTicket" />
                 @if (_selectedTicket != null)
                 {
@@ -63,8 +61,9 @@
                     }
                 }
             </MudToolBar>
-        </MudPaper>
 
+        <MudDivider></MudDivider>
+        
         @if (_selectedTicket != null)
         {
             <TicketView Model="_selectedTicket" Comments="_comments" Assignee="_assignee" Attachement="_attachement"></TicketView>
