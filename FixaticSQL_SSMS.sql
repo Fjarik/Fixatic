@@ -708,6 +708,75 @@ IF NOT EXISTS (SELECT * FROM sys.fn_listextendedproperty(N'MS_Description' , N'S
 	EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'a' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Attachements', @level2type=N'COLUMN',@level2name=N'Uploaded'
 GO
 
+CREATE OR ALTER FUNCTION fn_active_followers (@TicketId INT)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @Count INT;
+	
+	SELECT 
+		@Count = COUNT(*) 
+	FROM Followers fl
+	INNER JOIN Users u ON fl.User_ID = u.User_ID
+	WHERE 
+		fl.Ticket_ID = @TicketId AND 
+		u.IsEnabled = 1;
+
+	RETURN (@Count);
+END;
+GO
+
+CREATE OR ALTER FUNCTION fn_attach_size (@TicketId INT)
+RETURNS INT
+AS
+BEGIN
+	DECLARE @Size INT;
+	
+	SELECT 
+		@Size = SUM(att.Size) 
+	FROM Attachements att
+	WHERE 
+		att.Ticket_ID = @TicketId OR
+		att.Attachement_ID IN (
+			SELECT 
+				Attachement_ID
+			FROM Attachements a
+			INNER JOIN Comments c ON a.Comment_ID = c.Comment_ID
+			WHERE c.Ticket_ID = @TicketId
+		);
+
+	RETURN (@Size);
+END;
+GO
+
+CREATE OR ALTER PROCEDURE proc_anonymize_user @UserId INT
+AS
+	UPDATE Users
+	SET
+		Email = 'no-reply@fixatic.eu',
+		Firstname = 'Deleted',
+		Lastname = 'User',
+		IsEnabled = 0,
+		Phone = ''
+	WHERE User_ID = @UserId
+GO
+
+CREATE OR ALTER PROCEDURE proc_finish_ticket @TicketId INT
+AS
+	UPDATE Tickets
+	SET
+		DateSolved = SYSDATETIME(),
+		Status = 3,
+		AssignedUser_ID = NULL
+	WHERE Ticket_ID = @TicketId
+GO
+
+CREATE OR ALTER PROCEDURE proc_create_user (@email NVARCHAR(100), @name NVARCHAR(50), @lname NVARCHAR(50), @pwdHash NVARCHAR(250), @phone NVARCHAR(50))
+AS
+	INSERT INTO Users (Created, IsEnabled, Email, Firstname, Lastname, Password, Phone) 
+	VALUES (SYSDATETIME(), 1, @email, @name, @lname, @pwdHash, @phone)
+GO
+
 CREATE OR ALTER TRIGGER Projects_delete_trigger
 ON Projects
 INSTEAD OF DELETE
@@ -726,18 +795,6 @@ AS
 	DELETE FROM ProjectsAccess WHERE Project_ID = @ProjectId;
 	DELETE FROM ProjectsCategories WHERE Project_ID = @ProjectId;
 
-GO
-
-CREATE OR ALTER PROCEDURE proc_anonymize_user @UserId INT
-AS
-	UPDATE Users
-	SET
-		Email = 'no-reply@fixatic.eu',
-		Firstname = 'Deleted',
-		Lastname = 'User',
-		IsEnabled = 0,
-		Phone = ''
-	WHERE User_ID = @UserId
 GO
 
 CREATE OR ALTER TRIGGER Users_delete_trigger
