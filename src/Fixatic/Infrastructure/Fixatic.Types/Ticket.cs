@@ -33,5 +33,28 @@ namespace Fixatic.Types
         public int Type { get; set; }
 
         public TicketVisibility Visibility { get; set; }
+
+        public string GetTypeString()
+        {
+	        return Type switch
+	        {
+		        0 => "Security",
+		        1 => "Bug",
+		        2 => "Performance",
+		        _ => string.Empty
+	        };
+        }
+        
+        public string GetPriorityString()
+        {
+	        return Type switch
+	        {
+		        0 => "Low priority",
+		        1 => "Medium priority",
+		        2 => "High priority",
+		        3 => "Maximum priority",
+		        _ => string.Empty
+	        };
+        }
     }
 }

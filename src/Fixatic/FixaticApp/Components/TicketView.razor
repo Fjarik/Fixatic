@@ -13,19 +13,12 @@
 }
 else
 {
-    <MudPaper Elevation="4">
-        <MudGrid Class="pa-8 mb-4">
+    <MudPaper Elevation="1">
+        <MudGrid Class="pl-4 pr-4 mb-4">
             <MudItem xs="12">
                 <MudGrid Justify="Justify.SpaceBetween">
                     <MudItem xs="7">
-                        <MudPaper Elevation="4" Class="pa-4">
-                            <MudText Typo="Typo.h4">@Model.Title</MudText>
-                        </MudPaper>
-                    </MudItem>
-                    <MudItem xs="3">
-                        <MudPaper Elevation="4" Class="pa-4">
-                            <MudCheckBox @bind-Checked="@Model.DateSolved" Disabled="true" Label="Solved" Color="Color.Secondary"></MudCheckBox>
-                        </MudPaper>
+                        <MudText Typo="Typo.h4">@Model.Title</MudText>
                     </MudItem>
                 </MudGrid>
             </MudItem>
@@ -34,15 +27,13 @@ else
                     <MudItem xs="7">
                         <MudGrid>
                             <MudItem xs="12">
-                                <MudPaper Elevation="4" Class="pa-4">
-                                    <MudText Typo="Typo.body1">@Model.Content</MudText>
-                                </MudPaper>
+                                <MudText Typo="Typo.body1">@Model.Content</MudText>
                             </MudItem>
                             @if (Attachement != null)
                             {
                                 <MudItem xs="2">
                                     <MudGrid Spacing="1">
-                                        <MudPaper Elevation="4" Class="pa-4">
+                                        <MudPaper Elevation="1" Class="pa-4">
                                             <MudItem xs="12">
                                                 @*Tady by šel udělat náhled, ale to bych asi dělal jen když zbyde čas (copium)*@
                                                 <MudImage Fluid="true" Src="/img/attachement_skeleton.png"></MudImage>
@@ -57,41 +48,40 @@ else
                         </MudGrid>
                     </MudItem>
                     <MudItem xs="3">
-                        <MudStack>
-                            <MudPaper Elevation="4" Class="pa-4">
-                                <MudStack Row="true">
-                                    <MudGrid>
-                                        <MudItem xs="5">
-                                            <MudText Typo="Typo.body1">Priority: @Model.Priority</MudText>
-                                        </MudItem>
-                                        <MudItem xs="5">
-                                            <MudText Typo="Typo.body1">Type: @Model.Type</MudText>
-                                        </MudItem>
-                                    </MudGrid>
-                                </MudStack>
+                        <MudTreeView T="string">
+                            <MudTreeViewItem Value='@Model.GetPriorityString()' Icon="@Icons.Filled.PriorityHigh" IconColor="Color.Warning"/>
 
-                            </MudPaper>
-                            <MudPaper Elevation="4" Class="pa-4">
-                                <MudStack Row="true">
-                                    <MudText Typo="Typo.body1">Assignee: @GetAssigneeName()</MudText>
-                                </MudStack>
-                            </MudPaper>
-                            <MudPaper Elevation="4" Class="pa-4">
-                                <MudStack Row="true">
-                                    <MudStack>
-                                        <MudStack Row="true">
-                                            <MudText Typo="Typo.body1">Created: @Model.Created</MudText>
-                                        </MudStack>
-                                        <MudStack Row="true">
-                                            <MudText Typo="Typo.body1">Modified: @Model.Modified</MudText>
-                                        </MudStack>
-                                        <MudStack Row="true">
-                                            <MudText Typo="Typo.body1">Solved: @Model.DateSolved</MudText>
-                                        </MudStack>
-                                    </MudStack>
-                                </MudStack>
-                            </MudPaper>
-                        </MudStack>
+                            @if (Model.DateSolved == null)
+                            {
+                                <MudTreeViewItem Value='"Unsolved"' Icon="@Icons.Filled.CheckBoxOutlineBlank" IconColor="Color.Error"/>
+                            }
+                            else
+                            {
+                                <MudTreeViewItem Value='"Solved"' Icon="@Icons.Filled.CheckBox" IconColor="Color.Success"/>
+                            }
+
+                            @switch (Model.GetTypeString())
+                            {
+                                case "Security":
+                                    <MudTreeViewItem Value='"Security"' Icon="@Icons.Filled.Security" IconColor="Color.Error"/>
+                                    break;
+                                case "Bug":
+                                    <MudTreeViewItem Value='"Bug"' Icon="@Icons.Filled.BugReport" IconColor="Color.Warning"/>
+                                    break;
+                                case "Performance":
+                                    <MudTreeViewItem Value='"Performance"' Icon="@Icons.Filled.MoreTime"/>
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            <MudTreeViewItem Value='@GetAssigneeName()' Icon="@Icons.Filled.Person" IconColor="Color.Primary"/>
+                            <MudTreeViewItem Value='"Dates"' Icon="@Icons.Filled.CalendarMonth" ExpandedIcon="@Icons.Filled.ArrowRight">
+                                <MudTreeViewItem Value='@Model.Created' Icon="@Icons.Filled.Add" IconColor="Color.Primary"/>
+                                <MudTreeViewItem Value='@Model.Modified' Icon="@Icons.Filled.Edit" IconColor="Color.Secondary"/>
+                                <MudTreeViewItem Value='@Model.DateSolved' Icon="@Icons.Filled.Check" IconColor="Color.Success"/>
+                            </MudTreeViewItem>
+                        </MudTreeView>
                     </MudItem>
                 </MudGrid>
             </MudItem>
