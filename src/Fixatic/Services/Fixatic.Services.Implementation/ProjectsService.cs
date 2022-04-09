@@ -71,6 +71,22 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 		
+		public async Task<ServiceResponse<List<int>>> GetCategoryIdsAsync(int projectId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<List<int>>();
+			try
+			{
+				response.Item = await _manager!.GetCategoryIdsAsync(projectId);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+		
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();

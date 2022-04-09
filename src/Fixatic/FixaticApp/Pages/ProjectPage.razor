@@ -1,4 +1,4 @@
-@page "/project/{ProjectId:int}"
+@page "/project/{RouteProjectId:int}/{RouteSelectedTicketId:int?}"
 @layout AppLayout
 @using Fixatic.Types
 @using Fixatic.Services
@@ -18,7 +18,7 @@
             }
 </style>
 
-@*TODO: asi radši použít flexbox pokud*@
+@*TODO: asi radši použít flexbox*@
 <MudGrid>
     <MudItem xs="2">
         @if (Project != null)
@@ -26,7 +26,7 @@
             <MudText Typo="Typo.h5" Class="pa-4">@Project.Name</MudText>
             <MudDivider></MudDivider>
 
-            <MudTable Items="@_tickets" @ref="ticketsTable" @bind-SelectedItem="_selectedTicket" RowClassFunc="@OnTicketClicked" T="Ticket">
+            <MudTable Items="@_tickets" @ref="_ticketsTable" @bind-SelectedItem="_selectedTicket" RowClassFunc="@OnTicketClicked" T="Ticket">
                 <HeaderContent>
                     <MudTh>Tickets</MudTh>
                 </HeaderContent>

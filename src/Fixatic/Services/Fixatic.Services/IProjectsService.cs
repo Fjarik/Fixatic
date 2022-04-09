@@ -10,6 +10,8 @@ namespace Fixatic.Services
 		Task<ServiceResponse<List<Project>>> GetAllAsync();
 		Task<ServiceResponse<List<Project>>> GetGroupProjectsAsync(int groupGroupId);
 
+		Task<ServiceResponse<List<int>>> GetCategoryIdsAsync(int projectId);
+
 		Task<ServiceResponse<bool>> DeleteAsync(int id);
 	}
 }

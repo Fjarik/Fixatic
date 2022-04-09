@@ -1,20 +1,24 @@
-@using Fixatic.Services
+@using Fixatic.Types
 
 @page "/dashboard"
 @layout AppLayout
 <PageTitle>Dashboard</PageTitle>
 
-@inject IProjectsService _projectsService;
-@inject IGroupsService _groupsService;
-@inject ICurrentUserService _currentUserService;
-@inject IDialogService _dialogService;
-@inject ITicketsService _ticketService;
-@inject NavigationManager _navigationManager;
-
 <MudText Typo="Typo.h5" Class="pa-4">Dashboard</MudText>
+
 @if (SelectedGroup != null)
 {
-    <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="@ReturnButtonClicked"></MudIconButton>
+    <MudToolBar>
+        <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="@ReturnButtonClicked"></MudIconButton>
+        <MudSelect SelectedValuesChanged="@CategoryFilterClickedAsync" @bind-Value="@SelectedCategory" T="ProjectCategory"
+                   Margin="Margin.Dense" Variant="Variant.Outlined" Style="max-width: 300px"
+                   Placeholder="Category Filter">
+            @foreach (var category in ProjectCategories)
+            {
+                <MudSelectItem T="ProjectCategory" Value="category"/>
+            }
+        </MudSelect>
+    </MudToolBar>
 }
 
 <MudDivider></MudDivider>
@@ -37,8 +41,7 @@
             </MudItem>
         }
     }
-
-    @*TODO: nějak setřídit Projekty podle kategorií, aby se kategorie nějak využily*@
+    
     @if (SelectedGroup != null && Projects != null)
     {
         foreach (var project in Projects)
@@ -63,15 +66,31 @@
     <MudText Typo="Typo.h5" Class="pa-4">Followed Tickets</MudText>
     <MudDivider></MudDivider>
 
-    <MudTable Items="@FollowedTickets" @ref="ticketsTable">
+    <MudTable Items="@FollowedTickets" @ref="_ticketsTable" @bind-SelectedItem="_selectedTicket" RowClassFunc="@OnTicketClicked" T="Ticket">
         <HeaderContent>
             <MudTh>Tickets</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Nr">@context.Title</MudTd>
+            <MudTd DataLabel="Nr">
+                @context.Title
+            </MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager HorizontalAlignment="HorizontalAlignment.Left" HidePageNumber="true" HideRowsPerPage="true"/>
         </PagerContent>
     </MudTable>
 }
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+</style>

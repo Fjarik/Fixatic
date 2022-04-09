@@ -55,6 +55,17 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(GetGroupProjectsAsync)}... Done");
 			return res;
 		}
+		
+		public async Task<List<int>?> GetCategoryIdsAsync(int projectId)
+		{
+			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(GetCategoryIdsAsync)}...");
+
+			var mainDo = new ProjectsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetCategoryIdsAsync(projectId);
+
+			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(GetCategoryIdsAsync)}... Done");
+			return res;
+		}
 
 		public async Task<bool> DeleteAsync(int id)
 		{

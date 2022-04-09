@@ -8,62 +8,69 @@ namespace FixaticApp.Pages;
 
 public partial class ProjectPage
 {
-	[Parameter] public int ProjectId { get; set; }
+	[Parameter] public int RouteProjectId { get; set; }
+
+	[Parameter] public int? RouteSelectedTicketId { get; set; }
 
 	[Parameter] public Project? Project { get; set; }
 
+	[Inject] private IProjectsService? ProjectsService { get; set; }
 
-	[Inject] private IProjectsService ProjectsService { get; set; }
+	[Inject] private IDialogService? DialogService { get; set; }
 
-	[Inject] private IDialogService DialogService { get; set; }
+	[Inject] private ITicketsService? TicketsService { get; set; }
 
-	[Inject] private ITicketsService TicketsService { get; set; }
+	[Inject] private ICommentsService? CommentsService { get; set; }
 
-	[Inject] private ICommentsService CommentsService { get; set; }
+	[Inject] private IUsersService? UsersService { get; set; }
 
-	[Inject] private IUsersService UsersService { get; set; }
+	[Inject] private ICurrentUserService? CurrentUserService { get; set; }
 
-	[Inject] private ICurrentUserService CurrentUserService { get; set; }
+	[Inject] private IAttachementsService? AttachementsService { get; set; }
 
-	[Inject] private IAttachementsService _attachementsService { get; set; }
-
-	private MudTable<Ticket> ticketsTable;
+	private MudTable<Ticket>? _ticketsTable;
 	private int _selectedRow = -1;
-	private Ticket? _selectedTicket = null;
+	private Ticket? _selectedTicket;
 
 	// TicketView attribute
 	private List<Ticket>? _tickets;
 	private List<Comment>? _comments;
 	private User? _assignee;
 	private Attachement? _attachement;
-	private bool _isFollowed = false;
+	private bool _isFollowed;
 
 	protected override async Task OnInitializedAsync()
 	{
-		var project = await ProjectsService.GetAllAsync();
+		var project = await ProjectsService!.GetAllAsync();
 
 		switch (project.IsSuccess)
 		{
 			case true when project.Item != null:
-				Project = project.Item.Find(t => t.ProjectId == this.ProjectId);
+				Project = project.Item.Find(t => t.ProjectId == this.RouteProjectId);
 				break;
 			case false:
 				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService.Show<ErrorDialog>("Failed to fetch Project data from database", options);
+				DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database", options);
 				break;
 		}
 
-		var tickets = await TicketsService.GetAllAsync();
+		var tickets = await TicketsService!.GetAllAsync();
 
 		switch (tickets.IsSuccess)
 		{
 			case true when tickets.Item != null:
 				// TODO: tady by šel použít pohled
-				_tickets = tickets.Item.FindAll(t => t.ProjectId == this.ProjectId);
+				_tickets = tickets.Item.FindAll(t => t.ProjectId == this.RouteProjectId);
+
+				if (RouteSelectedTicketId != null)
+				{
+					_selectedTicket = tickets.Item.Find(t => t.TicketId == RouteSelectedTicketId);
+				}
+
 				break;
 			case false:
 				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
+				DialogService!.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
 				break;
 		}
 	}
@@ -76,7 +83,7 @@ public partial class ProjectPage
 			return string.Empty;
 		}
 
-		if (ticketsTable.SelectedItem == null || !ticketsTable.SelectedItem.Equals(ticket)) return string.Empty;
+		if (_ticketsTable!.SelectedItem == null || !_ticketsTable.SelectedItem.Equals(ticket)) return string.Empty;
 
 		this._selectedRow = rowNumber;
 		this._selectedTicket = ticket;
@@ -88,10 +95,10 @@ public partial class ProjectPage
 
 	private async void LoadTicketInfo(Ticket ticket)
 	{
-		_isFollowed = (await TicketsService.IsFollowedAsync(ticket.TicketId))?.Item == true;
+		_isFollowed = (await TicketsService!.IsFollowedAsync(ticket.TicketId))?.Item == true;
 
 		// TODO: tady by šly použít pohledy
-		var comments = await CommentsService.GetAllAsync();
+		var comments = await CommentsService!.GetAllAsync();
 
 		switch (comments.IsSuccess)
 		{
@@ -100,11 +107,11 @@ public partial class ProjectPage
 				break;
 			case false:
 				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
+				DialogService!.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
 				break;
 		}
 
-		var users = await UsersService.GetAllAsync();
+		var users = await UsersService!.GetAllAsync();
 
 		switch (users.IsSuccess)
 		{
@@ -113,11 +120,11 @@ public partial class ProjectPage
 				break;
 			case false:
 				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
+				DialogService!.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
 				break;
 		}
 
-		var attachements = await _attachementsService.GetAllAsync();
+		var attachements = await AttachementsService!.GetAllAsync();
 
 		switch (attachements.IsSuccess)
 		{
@@ -126,7 +133,7 @@ public partial class ProjectPage
 				break;
 			case false:
 				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
+				DialogService!.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
 				break;
 		}
 
@@ -144,8 +151,8 @@ public partial class ProjectPage
 			return;
 
 		// TODO: check result
-		var result = await TicketsService.DeleteAsync(_selectedTicket.TicketId);
-		
+		var result = await TicketsService!.DeleteAsync(_selectedTicket.TicketId);
+
 		_tickets.Remove(_selectedTicket);
 		_selectedTicket = null;
 		StateHasChanged();
@@ -157,13 +164,13 @@ public partial class ProjectPage
 			return;
 
 		var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
-		var dialog = DialogService.Show<TextInputDialog>("Add comment", options);
+		var dialog = DialogService!.Show<TextInputDialog>("Add comment", options);
 		var result = await dialog.Result;
 
 		if (!result.Cancelled)
 		{
 			var (textContent, isInternal) = ((string, bool))result.Data;
-			var curentUser = await CurrentUserService.GetUserInfoAsync();
+			var curentUser = await CurrentUserService!.GetUserInfoAsync();
 
 			if (string.IsNullOrEmpty(textContent))
 			{
@@ -180,7 +187,7 @@ public partial class ProjectPage
 				IsInternal = isInternal
 			};
 
-			await CommentsService.CreateOrUpdateAsync(comment);
+			await CommentsService!.CreateOrUpdateAsync(comment);
 			// TODO: check errors
 		}
 	}
@@ -190,7 +197,7 @@ public partial class ProjectPage
 		if (_selectedTicket == null)
 			return;
 
-		var result = await TicketsService.SetFollowTicketAsync(_selectedTicket!.TicketId, !_isFollowed);
+		var result = await TicketsService!.SetFollowTicketAsync(_selectedTicket!.TicketId, !_isFollowed);
 		if (result.IsSuccess)
 		{
 			_isFollowed = result.Item;
