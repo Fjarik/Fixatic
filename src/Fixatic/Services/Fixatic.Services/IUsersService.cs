@@ -9,6 +9,8 @@ namespace Fixatic.Services
 
 		Task<ServiceResponse<List<User>>> GetAllAsync();
 
+		Task<ServiceResponse<User>> GetByIdAsync(int userId);
+
 		Task<ServiceResponse<bool>> DeleteAsync(int id);
 	}
 }

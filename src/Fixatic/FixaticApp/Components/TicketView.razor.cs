@@ -1,3 +1,4 @@
+using Fixatic.Services;
 using Fixatic.Types;
 using Microsoft.AspNetCore.Components;
 
@@ -5,24 +6,27 @@ namespace FixaticApp.Components
 {
 	public partial class TicketView
 	{
-		[Parameter] public Ticket? Model { get; set; }
+		[Parameter] public FullTicket? Model { get; set; }
+		
+		[Inject]
+		private ICommentsService? CommentsService { get; set; }
+		
+		[Inject]
+		private IAttachementsService? AttachementsService { get; set; }
 
-		[Parameter] public List<Comment>? Comments { get; set; }
-
-		[Parameter] public Attachement? Attachement { get; set; }
-
-		[Parameter] public User? Assignee { get; set; }
+		private List<Comment> Comments { get; set; } = new();
+		private List<Attachement> Attachements { get; set; } = new();
 
 		private int PrevId { get; set; } = -1;
 
 		private string GetAssigneeName()
 		{
-			if (Assignee == null)
+			if (string.IsNullOrWhiteSpace(Model?.AssigneeName))
 			{
 				return "None";
 			}
 
-			return Assignee.GetFullName();
+			return Model.AssigneeName;
 		}
 
 		protected override async Task OnParametersSetAsync()
@@ -35,20 +39,24 @@ namespace FixaticApp.Components
 
 			PrevId = Model.TicketId;
 
-			await Task.CompletedTask;
-			// await LoadTestTicket();
+			await LoadInfoAsync();
 		}
 
-		private async Task LoadTestTicket()
+		private async Task LoadInfoAsync()
 		{
-			var tickets = (await _ticketsService.GetAllAsync());
-
-			if (!tickets.IsSuccess)
+			var commentsRes = await CommentsService!.GetByTicketAsync(Model!.TicketId);
+			if (commentsRes.IsSuccess)
 			{
-				return;
+				Comments = commentsRes.Item ?? new List<Comment>();
 			}
 
-			Model = tickets.Item[0];
+			var attachementsRes = await AttachementsService!.GetByTicketAsync(Model.TicketId);
+			if (attachementsRes.IsSuccess)
+			{
+				Attachements = attachementsRes.Item ?? new List<Attachement>();
+			}
+
 		}
+
 	}
 }

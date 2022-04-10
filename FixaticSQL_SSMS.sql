@@ -726,6 +726,21 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER FUNCTION fn_user_fullName (@UserId INT)
+RETURNS NVARCHAR(101)
+AS
+BEGIN
+	DECLARE @FullName NVARCHAR(101);
+	
+	SELECT 
+		@FullName = u.Firstname + ' ' + u.Lastname 
+	FROM Users u
+	WHERE u.User_ID = @UserId;
+
+	RETURN (@FullName);
+END;
+GO
+
 CREATE OR ALTER FUNCTION fn_attach_size (@TicketId INT)
 RETURNS INT
 AS
@@ -824,6 +839,7 @@ AS
 		Project_ID, 
 		AssignedUser_ID, 
 		Creator_ID,
-		Followers = dbo.fn_active_followers(Ticket_ID)
+		Followers = dbo.fn_active_followers(Ticket_ID),
+		AssigneeName = dbo.fn_user_fullName(AssignedUser_ID)
 	FROM Tickets
 GO

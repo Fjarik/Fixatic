@@ -58,6 +58,17 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		public async Task<User?> GetByIdAsync(int userId)
+		{
+			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetByIdAsync)}...");
+
+			var mainDo = new UsersDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetByIdAsync(userId);
+
+			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetByIdAsync)}... Done");
+			return res;
+		}
+
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(DeleteAsync)}...");

@@ -100,7 +100,49 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetAllAsync)}... Done");
 			return res;
 		}
-		
+
+		public async Task<Project?> GetByIdAsync(int projectId)
+		{
+			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetByIdAsync)}...");
+
+			var sql = @"
+				SELECT Project_ID, Name, IsEnabled, IsInternal, Description, Shortcut 
+				FROM Projects
+				WHERE Project_ID = @ID;";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = projectId;
+
+			Project? res = null;
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				if (await r.ReadAsync())
+				{
+					res = new Project
+					{
+						ProjectId = (int)r["Project_ID"],
+						Description = (string)r["Description"],
+						IsEnabled = (bool)r["IsEnabled"],
+						IsInternal = (bool)r["IsInternal"],
+						Name = (string)r["Name"],
+						Shortcut = (string)r["Shortcut"]
+					};
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetByIdAsync)}... Done");
+			return res;
+		}
+
 		public async Task<List<Project>?> GetGroupProjectsAsync(int groupId)
 		{
 			_logger.LogInformation($"{nameof(ProjectsDataObject)}.{nameof(GetGroupProjectsAsync)}...");

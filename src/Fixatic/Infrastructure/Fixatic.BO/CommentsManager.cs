@@ -45,6 +45,17 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		public async Task<List<Comment>> GetByTicketAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(CommentsManager)}.{nameof(GetByTicketAsync)}...");
+
+			var mainDo = new CommentsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetByTicketAsync(ticketId);
+
+			_logger.LogInformation($"{nameof(CommentsManager)}.{nameof(GetByTicketAsync)}... Done");
+			return res;
+		}
+
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(CommentsManager)}.{nameof(DeleteAsync)}...");
