@@ -807,3 +807,23 @@ AS
 
 	EXECUTE proc_anonymize_user @UserId
 GO
+
+CREATE OR ALTER VIEW view_tickets
+AS
+	SELECT
+		Ticket_ID, 
+		Title, 
+		Content, 
+		Created, 
+		Modified, 
+		DateSolved, 
+		Priority, 
+		Status, 
+		Type, 
+		Visibility, 
+		Project_ID, 
+		AssignedUser_ID, 
+		Creator_ID,
+		Followers = dbo.fn_active_followers(Ticket_ID)
+	FROM Tickets
+GO
