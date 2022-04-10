@@ -9,6 +9,8 @@ namespace Fixatic.Services
 
 		Task<ServiceResponse<List<Comment>>> GetAllAsync();
 
+		Task<ServiceResponse<List<Comment>>> GetByTicketAsync(int ticketId);
+
 		Task<ServiceResponse<bool>> DeleteAsync(int id);
 	}
 }

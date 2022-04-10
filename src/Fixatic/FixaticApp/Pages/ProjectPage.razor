@@ -25,7 +25,8 @@
             <MudText Typo="Typo.h5" Class="pa-4 object-fill">@Project.Name</MudText>
             <MudDivider></MudDivider>
 
-            <MudTable Style="height: 100vh" Items="@_tickets" @ref="_ticketsTable" @bind-SelectedItem="_selectedTicket" RowClassFunc="@OnTicketClicked" T="Ticket">
+            <MudTable T="FullTicket" Style="height: 100vh"
+                  Items="@_tickets" @bind-SelectedItem="_selectedTicket">
                 <HeaderContent>
                     <MudTh>Tickets</MudTh>
                 </HeaderContent>
@@ -43,30 +44,27 @@
         }
     </MudItem>
     <MudItem xs="10" Class="pl-0">
+        @if (_selectedTicket != null)
+        {
             <MudToolBar Class="pl-0">
                 <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="OnAddTicket" />
-                @if (_selectedTicket != null)
+                <MudIconButton Icon="@Icons.Material.Outlined.Comment" OnClick="OnCommentTicketAsync" />
+
+                <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" OnClick="OnRemoveTicketAsync" />
+
+                @if (_isFollowed)
                 {
-                    <MudIconButton Icon="@Icons.Material.Outlined.Comment" OnClick="OnCommentTicketAsync" />
-                    
-                    <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" OnClick="OnRemoveTicketAsync" />
-                    
-                    @if (_isFollowed)
-                    {
-                        <MudIconButton Title="Followed" Icon="@Icons.Filled.Star" OnClick="OnFollowTicketClick" />
-                    }
-                    else
-                    {
-                        <MudIconButton Title="Follow" Icon="@Icons.Filled.StarBorder" OnClick="OnFollowTicketClick" />
-                    }
+                    <MudIconButton Title="Followed" Icon="@Icons.Filled.Star" OnClick="OnFollowTicketClick" />
+                }
+                else
+                {
+                    <MudIconButton Title="Follow" Icon="@Icons.Filled.StarBorder" OnClick="OnFollowTicketClick" />
                 }
             </MudToolBar>
 
-        <MudDivider></MudDivider>
-        
-        @if (_selectedTicket != null)
-        {
-            <TicketView Model="_selectedTicket" Comments="_comments" Assignee="_assignee" Attachement="_attachement"></TicketView>
+            <MudDivider></MudDivider>
+
+            <TicketView Model="_selectedTicket" />
         }
     </MudItem>
 </MudGrid>

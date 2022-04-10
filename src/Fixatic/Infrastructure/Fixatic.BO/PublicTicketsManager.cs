@@ -26,7 +26,7 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(PublicTicketsManager)}.{nameof(GetPublicAsync)}...");
 
 			var mainDo = new TicketsDataObject(_logger, _dbConnector);
-			var res = await mainDo.GetAllAsync(TicketVisibility.Public);
+			var res = await mainDo.GetByVisibilityAsync(TicketVisibility.Public);
 
 			_logger.LogInformation($"{nameof(PublicTicketsManager)}.{nameof(GetPublicAsync)}... Done");
 			return res;

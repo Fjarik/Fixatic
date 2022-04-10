@@ -34,7 +34,7 @@ namespace Fixatic.BO
 			return res;
 		}
 
-		public async Task<List<Ticket>> GetAllAsync()
+		public async Task<List<FullTicket>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAllAsync)}...");
 

@@ -22,122 +22,41 @@ public partial class ProjectPage
 
 	[Inject] private ICommentsService? CommentsService { get; set; }
 
-	[Inject] private IUsersService? UsersService { get; set; }
-
 	[Inject] private ICurrentUserService? CurrentUserService { get; set; }
 
-	[Inject] private IAttachementsService? AttachementsService { get; set; }
 
-	private MudTable<Ticket>? _ticketsTable;
-	private int _selectedRow = -1;
-	private Ticket? _selectedTicket;
+	private FullTicket? _selectedTicket;
 
 	// TicketView attribute
-	private List<Ticket>? _tickets;
-	private List<Comment>? _comments;
-	private User? _assignee;
-	private Attachement? _attachement;
+	private List<FullTicket> _tickets = new();
 	private bool _isFollowed;
 
 	protected override async Task OnInitializedAsync()
 	{
-		var project = await ProjectsService!.GetAllAsync();
-
-		switch (project.IsSuccess)
+		var projectRes = await ProjectsService!.GetByIdAsync(this.RouteProjectId);
+		if (!projectRes.IsSuccess || projectRes.Item == null)
 		{
-			case true when project.Item != null:
-				Project = project.Item.Find(t => t.ProjectId == this.RouteProjectId);
-				break;
-			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database", options);
-				break;
+			var options = new DialogOptions { CloseOnEscapeKey = true };
+			DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database", options);
+			return;
 		}
 
-		var tickets = await TicketsService!.GetAllAsync();
+		Project = projectRes.Item;
 
-		switch (tickets.IsSuccess)
+		var ticketsRes = await TicketsService!.GetByProjectAsync(this.RouteProjectId);
+		if (!ticketsRes.IsSuccess)
 		{
-			case true when tickets.Item != null:
-				// TODO: tady by šel použít pohled
-				_tickets = tickets.Item.FindAll(t => t.ProjectId == this.RouteProjectId);
-
-				if (RouteSelectedTicketId != null)
-				{
-					_selectedTicket = tickets.Item.Find(t => t.TicketId == RouteSelectedTicketId);
-				}
-
-				break;
-			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService!.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
-				break;
-		}
-	}
-
-	private string OnTicketClicked(Ticket ticket, int rowNumber)
-	{
-		if (this._selectedRow == rowNumber)
-		{
-			this._selectedRow = -1;
-			return string.Empty;
+			var options = new DialogOptions { CloseOnEscapeKey = true };
+			DialogService!.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
+			return;
 		}
 
-		if (_ticketsTable!.SelectedItem == null || !_ticketsTable.SelectedItem.Equals(ticket)) return string.Empty;
-
-		this._selectedRow = rowNumber;
-		this._selectedTicket = ticket;
-
-		LoadTicketInfo(ticket);
-
-		return "selected";
-	}
-
-	private async void LoadTicketInfo(Ticket ticket)
-	{
-		_isFollowed = (await TicketsService!.IsFollowedAsync(ticket.TicketId))?.Item == true;
-
-		// TODO: tady by šly použít pohledy
-		var comments = await CommentsService!.GetAllAsync();
-
-		switch (comments.IsSuccess)
+		_tickets = ticketsRes.Item!;
+		if (RouteSelectedTicketId != null)
 		{
-			case true when comments.Item != null:
-				_comments = comments.Item.FindAll(c => c.TicketId == ticket.TicketId);
-				break;
-			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService!.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
-				break;
+			_selectedTicket = _tickets.FirstOrDefault(t => t.TicketId == RouteSelectedTicketId);
 		}
 
-		var users = await UsersService!.GetAllAsync();
-
-		switch (users.IsSuccess)
-		{
-			case true when users.Item != null:
-				_assignee = users.Item.Find(c => c.UserId == ticket.AssignedUserId);
-				break;
-			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService!.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
-				break;
-		}
-
-		var attachements = await AttachementsService!.GetAllAsync();
-
-		switch (attachements.IsSuccess)
-		{
-			case true when attachements.Item != null:
-				_attachement = attachements.Item.Find(a => a.TicketId == ticket.TicketId);
-				break;
-			case false:
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService!.Show<ErrorDialog>("Failed to fetch Ticket comments from database", options);
-				break;
-		}
-
-		StateHasChanged();
 	}
 
 	private void OnAddTicket()
@@ -147,7 +66,7 @@ public partial class ProjectPage
 
 	private async Task OnRemoveTicketAsync()
 	{
-		if (_selectedTicket == null || _tickets == null)
+		if (_selectedTicket == null)
 			return;
 
 		// TODO: check result
@@ -163,7 +82,7 @@ public partial class ProjectPage
 		if (_selectedTicket == null)
 			return;
 
-		var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
+		var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
 		var dialog = DialogService!.Show<TextInputDialog>("Add comment", options);
 		var result = await dialog.Result;
 

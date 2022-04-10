@@ -39,11 +39,11 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
-		public async Task<ServiceResponse<List<Ticket>>> GetAllAsync()
+		public async Task<ServiceResponse<List<FullTicket>>> GetAllAsync()
 		{
 			await EnsureManagerAsync();
 
-			var response = new ServiceResponse<List<Ticket>>();
+			var response = new ServiceResponse<List<FullTicket>>();
 			try
 			{
 				response.Item = await _manager!.GetAllAsync();
