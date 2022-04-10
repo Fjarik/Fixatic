@@ -3,58 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Fixatic.Types.Extensions;
 
 namespace Fixatic.Types
 {
-    public class Ticket
-    {
-        public int TicketId { get; set; }
+	public class Ticket
+	{
+		public int TicketId { get; set; }
 
-        public int ProjectId { get; set; }
+		public int ProjectId { get; set; }
 
-        public int? AssignedUserId { get; set; }
+		public int? AssignedUserId { get; set; }
 
-        public int CreatorId { get; set; }
+		public int CreatorId { get; set; }
 
-        public string Content { get; set; }
+		public string Content { get; set; }
 
-        public DateTime Created { get; set; }
+		public DateTime Created { get; set; }
 
-        public DateTime? DateSolved { get; set; }
+		public DateTime? DateSolved { get; set; }
 
-        public DateTime? Modified { get; set; }
+		public DateTime? Modified { get; set; }
 
-        public int Priority { get; set; }
+		public TicketPriority Priority { get; set; }
 
-        public int Status { get; set; }
+		public TicketStatus Status { get; set; }
 
-        public string Title { get; set; }
+		public string Title { get; set; }
 
-        public int Type { get; set; }
+		public TicketType Type { get; set; }
 
-        public TicketVisibility Visibility { get; set; }
+		public TicketVisibility Visibility { get; set; }
 
-        public string GetTypeString()
-        {
-	        return Type switch
-	        {
-		        0 => "Security",
-		        1 => "Bug",
-		        2 => "Performance",
-		        _ => string.Empty
-	        };
-        }
-        
-        public string GetPriorityString()
-        {
-	        return Type switch
-	        {
-		        0 => "Low priority",
-		        1 => "Medium priority",
-		        2 => "High priority",
-		        3 => "Maximum priority",
-		        _ => string.Empty
-	        };
-        }
-    }
+		public string PriorityString => Priority.GetName() + " priority";
+	}
 }

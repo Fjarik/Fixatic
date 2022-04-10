@@ -13,6 +13,8 @@ namespace FixaticApp.Components
 
 		[Parameter] public User? Assignee { get; set; }
 
+		private int PrevId { get; set; } = -1;
+
 		private string GetAssigneeName()
 		{
 			if (Assignee == null)
@@ -23,21 +25,30 @@ namespace FixaticApp.Components
 			return Assignee.GetFullName();
 		}
 
-		private async Task<string> LoadTestTicket()
+		protected override async Task OnParametersSetAsync()
+		{
+			if (Model == null)
+				return;
+
+			if (PrevId == Model.TicketId)
+				return;
+
+			PrevId = Model.TicketId;
+
+			await Task.CompletedTask;
+			// await LoadTestTicket();
+		}
+
+		private async Task LoadTestTicket()
 		{
 			var tickets = (await _ticketsService.GetAllAsync());
-			
-			if (tickets.IsSuccess && tickets.Item != null)
-			{
-				Model = tickets.Item[0];
-			}
 
 			if (!tickets.IsSuccess)
 			{
-				Console.WriteLine(tickets.Exception);
+				return;
 			}
-			
-            return "";
+
+			Model = tickets.Item[0];
 		}
 	}
 }

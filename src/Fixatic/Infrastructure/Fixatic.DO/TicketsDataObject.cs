@@ -60,10 +60,10 @@ namespace Fixatic.DO
 			cmd.Parameters.Add("@created", SqlDbType.DateTime2).Value = ticket.Created;
 			cmd.Parameters.Add("@datesolved", SqlDbType.DateTime2).Value = ticket.DateSolved;
 			cmd.Parameters.Add("@modified", SqlDbType.DateTime2).Value = ticket.Modified;
-			cmd.Parameters.Add("@priority", SqlDbType.Int).Value = ticket.Priority;
-			cmd.Parameters.Add("@status", SqlDbType.Int).Value = ticket.Status;
+			cmd.Parameters.Add("@priority", SqlDbType.Int).Value = (int)ticket.Priority;
+			cmd.Parameters.Add("@status", SqlDbType.Int).Value = (int)ticket.Status;
 			cmd.Parameters.Add("@title", SqlDbType.NVarChar).Value = ticket.Title;
-			cmd.Parameters.Add("@type", SqlDbType.Int).Value = ticket.Type;
+			cmd.Parameters.Add("@type", SqlDbType.Int).Value = (int)ticket.Type;
 			cmd.Parameters.Add("@visibility", SqlDbType.Int).Value = (int)ticket.Visibility;
 			cmd.Parameters.Add("@project_id", SqlDbType.Int).Value = ticket.ProjectId;
 			cmd.Parameters.Add("@assigneduser_id", SqlDbType.Int).Value = ticket.AssignedUserId;
@@ -111,10 +111,10 @@ namespace Fixatic.DO
 						Created = (DateTime)r["Created"],
 						DateSolved = r["DateSolved"] as DateTime?,
 						Modified = r["Modified"] as DateTime?,
-						Priority = (int)r["Priority"],
-						Status = (int)r["Status"],
+						Priority = (TicketPriority)(int)r["Priority"],
+						Status = (TicketStatus)(int)r["Status"],
 						Title = (string)r["Title"],
-						Type = (int)r["Type"],
+						Type = (TicketType)(int)r["Type"],
 						Visibility = (TicketVisibility)(int)r["Visibility"]
 					});
 				}
@@ -171,10 +171,10 @@ namespace Fixatic.DO
 						Created = (DateTime)r["Created"],
 						DateSolved = r["DateSolved"] as DateTime?,
 						Modified = r["Modified"] as DateTime?,
-						Priority = (int)r["Priority"],
-						Status = (int)r["Status"],
+						Priority = (TicketPriority)(int)r["Priority"],
+						Status = (TicketStatus)(int)r["Status"],
 						Title = (string)r["Title"],
-						Type = (int)r["Type"],
+						Type = (TicketType)(int)r["Type"],
 						Visibility = (TicketVisibility)(int)r["Visibility"]
 					});
 				}
@@ -293,7 +293,7 @@ namespace Fixatic.DO
 			return res;
 		}
 
-		public async Task<Follower> GetFollowerAsync(int ticketId, int userId)
+		public async Task<Follower?> GetFollowerAsync(int ticketId, int userId)
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowerAsync)}...");
 
@@ -451,7 +451,8 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(RemovePropertyOptionAsync)}...");
 
 			var sql = @"
-				DELETE FROM CustomPropertyValues WHERE Ticket_ID = @ticket_id AND CustomPropertyOption_ID = @custompropertyoption_id);";
+				DELETE FROM CustomPropertyValues WHERE Ticket_ID = @ticket_id AND CustomPropertyOption_ID = @custompropertyoption_id);
+			";
 
 
 			var cmd = new SqlCommand(sql);

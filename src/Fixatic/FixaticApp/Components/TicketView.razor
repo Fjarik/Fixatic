@@ -1,4 +1,5 @@
 @using Fixatic.Services
+@using Fixatic.Types
 
 @page "/ticket"
 @layout AppLayout
@@ -8,7 +9,6 @@
 
 @if (Model == null)
 {
-    @LoadTestTicket()
     <p>Loading ticket</p>
 }
 else
@@ -49,37 +49,37 @@ else
                     </MudItem>
                     <MudItem xs="3">
                         <MudTreeView T="string">
-                            <MudTreeViewItem Value='@Model.GetPriorityString()' Icon="@Icons.Filled.PriorityHigh" IconColor="Color.Warning"/>
+                            <MudTreeViewItem Value='@Model.PriorityString' Icon="@Icons.Filled.PriorityHigh" IconColor="Color.Warning" />
 
                             @if (Model.DateSolved == null)
                             {
-                                <MudTreeViewItem Value='"Unsolved"' Icon="@Icons.Filled.CheckBoxOutlineBlank" IconColor="Color.Error"/>
+                                <MudTreeViewItem Value='"Unsolved"' Icon="@Icons.Filled.CheckBoxOutlineBlank" IconColor="Color.Error" />
                             }
                             else
                             {
-                                <MudTreeViewItem Value='"Solved"' Icon="@Icons.Filled.CheckBox" IconColor="Color.Success"/>
+                                <MudTreeViewItem Value='"Solved"' Icon="@Icons.Filled.CheckBox" IconColor="Color.Success" />
                             }
 
-                            @switch (Model.GetTypeString())
+                            @switch (Model.Type)
                             {
-                                case "Security":
-                                    <MudTreeViewItem Value='"Security"' Icon="@Icons.Filled.Security" IconColor="Color.Error"/>
+                                case TicketType.Security:
+                                    <MudTreeViewItem Value='"Security"' Icon="@Icons.Filled.Security" IconColor="Color.Error" />
                                     break;
-                                case "Bug":
-                                    <MudTreeViewItem Value='"Bug"' Icon="@Icons.Filled.BugReport" IconColor="Color.Warning"/>
+                                case TicketType.Bug:
+                                    <MudTreeViewItem Value='"Bug"' Icon="@Icons.Filled.BugReport" IconColor="Color.Warning" />
                                     break;
-                                case "Performance":
-                                    <MudTreeViewItem Value='"Performance"' Icon="@Icons.Filled.MoreTime"/>
+                                case TicketType.Performance:
+                                    <MudTreeViewItem Value='"Performance"' Icon="@Icons.Filled.MoreTime" />
                                     break;
                                 default:
                                     break;
                             }
 
-                            <MudTreeViewItem Value='@GetAssigneeName()' Icon="@Icons.Filled.Person" IconColor="Color.Primary"/>
+                            <MudTreeViewItem Value='@GetAssigneeName()' Icon="@Icons.Filled.Person" IconColor="Color.Primary" />
                             <MudTreeViewItem Value='"Dates"' Icon="@Icons.Filled.CalendarMonth" ExpandedIcon="@Icons.Filled.ArrowRight">
-                                <MudTreeViewItem Value='@Model.Created' Icon="@Icons.Filled.Add" IconColor="Color.Primary"/>
-                                <MudTreeViewItem Value='@Model.Modified' Icon="@Icons.Filled.Edit" IconColor="Color.Secondary"/>
-                                <MudTreeViewItem Value='@Model.DateSolved' Icon="@Icons.Filled.Check" IconColor="Color.Success"/>
+                                <MudTreeViewItem Value='@Model.Created' Icon="@Icons.Filled.Add" IconColor="Color.Primary" />
+                                <MudTreeViewItem Value='@Model.Modified' Icon="@Icons.Filled.Edit" IconColor="Color.Secondary" />
+                                <MudTreeViewItem Value='@Model.DateSolved' Icon="@Icons.Filled.Check" IconColor="Color.Success" />
                             </MudTreeViewItem>
                         </MudTreeView>
                     </MudItem>
@@ -87,7 +87,7 @@ else
             </MudItem>
         </MudGrid>
     </MudPaper>
-    
+
     <MudStack Spacing="8" AlignItems="AlignItems.Center" Class="pa-4">
         @if (Comments != null)
         {
