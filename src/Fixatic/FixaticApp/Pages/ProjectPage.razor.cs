@@ -82,6 +82,9 @@ public partial class ProjectPage
 		if (_selectedTicket == null)
 			return;
 
+		var original = _selectedTicket;
+
+		_selectedTicket = null;
 		var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
 		var dialog = DialogService!.Show<TextInputDialog>("Add comment", options);
 		var result = await dialog.Result;
@@ -93,13 +96,14 @@ public partial class ProjectPage
 
 			if (string.IsNullOrEmpty(textContent))
 			{
+				_selectedTicket = original;
 				return;
 			}
 
 			var comment = new Comment
 			{
 				CommentId = -1,
-				TicketId = _selectedTicket.TicketId,
+				TicketId = original.TicketId,
 				UserId = curentUser.UserId,
 				Content = textContent,
 				Created = DateTime.Now,
@@ -109,6 +113,8 @@ public partial class ProjectPage
 			await CommentsService!.CreateOrUpdateAsync(comment);
 			// TODO: check errors
 		}
+
+		_selectedTicket = original;
 	}
 
 	private async Task OnFollowTicketClick()

@@ -45,6 +45,17 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		public async Task<List<Attachement>> GetByTicketAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(AttachementsManager)}.{nameof(GetByTicketAsync)}...");
+
+			var mainDo = new AttachementsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetByTicketAsync(ticketId);
+
+			_logger.LogInformation($"{nameof(AttachementsManager)}.{nameof(GetByTicketAsync)}... Done");
+			return res;
+		}
+
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(AttachementsManager)}.{nameof(DeleteAsync)}...");
@@ -55,5 +66,6 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(AttachementsManager)}.{nameof(DeleteAsync)}... Done");
 			return res;
 		}
+
 	}
 }

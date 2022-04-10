@@ -29,7 +29,7 @@ else
                             <MudItem xs="12">
                                 <MudText Typo="Typo.body1">@Model.Content</MudText>
                             </MudItem>
-                            @if (Attachement != null)
+                            @foreach (var attachement in Attachements)
                             {
                                 <MudItem xs="2">
                                     <MudGrid Spacing="1">
@@ -39,7 +39,7 @@ else
                                                 <MudImage Fluid="true" Src="/img/attachement_skeleton.png"></MudImage>
                                             </MudItem>
                                             <MudItem>
-                                                <MudText Typo="Typo.subtitle1">@Attachement.Name</MudText>
+                                                <MudText Typo="Typo.subtitle1">@attachement.Name</MudText>
                                             </MudItem>
                                         </MudPaper>
                                     </MudGrid>
@@ -89,12 +89,9 @@ else
     </MudPaper>
 
     <MudStack Spacing="8" AlignItems="AlignItems.Center" Class="pa-4">
-        @if (Comments != null)
+        @foreach (var comment in Comments)
         {
-            @foreach (var comment in Comments)
-            {
-                <CommentView Comment="comment"></CommentView>
-            }
+            <CommentView Comment="comment"></CommentView>
         }
     </MudStack>
 }

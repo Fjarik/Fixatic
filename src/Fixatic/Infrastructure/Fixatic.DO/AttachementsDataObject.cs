@@ -109,6 +109,52 @@ namespace Fixatic.DO
 			return res;
 		}
 
+		public async Task<List<Attachement>> GetByTicketAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(AttachementsDataObject)}.{nameof(GetByTicketAsync)}...");
+
+			var sql = @"
+				SELECT Attachement_ID, Content, Name, Size, Type, Uploaded, AlternativeText, Ticket_ID, User_ID, Comment_ID 
+				FROM Attachements 
+				WHERE Ticket_ID = @ticketId;";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@ticketId", SqlDbType.Int).Value = ticketId;
+
+			var res = new List<Attachement>();
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new Attachement
+					{
+						AttachementId = (int)r["Attachement_ID"],
+						UserId = (int)r["User_ID"],
+						TicketId = (int)r["Ticket_ID"],
+						CommentId = (int)r["Comment_ID"],
+						Content = (byte[])r["Content"],
+						Name = (string)r["Name"],
+						Size = (int)r["Size"],
+						Type = (string)r["Type"],
+						Uploaded = (DateTime)r["Uploaded"],
+						AlternativeText = (string)r["AlternativeText"],
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(AttachementsDataObject)}.{nameof(GetByTicketAsync)}... Done");
+			return res;
+		}
+
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(AttachementsDataObject)}.{nameof(DeleteAsync)}...");

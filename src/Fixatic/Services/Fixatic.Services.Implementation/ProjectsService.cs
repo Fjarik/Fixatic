@@ -55,6 +55,22 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		public async Task<ServiceResponse<Project?>> GetByIdAsync(int projectId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<Project?>();
+			try
+			{
+				response.Item = await _manager!.GetByIdAsync(projectId);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
 		public async Task<ServiceResponse<List<Project>>> GetGroupProjectsAsync(int groupId)
 		{
 			await EnsureManagerAsync();
@@ -70,7 +86,7 @@ namespace Fixatic.Services.Implementation
 			}
 			return response;
 		}
-		
+
 		public async Task<ServiceResponse<List<int>>> GetCategoryIdsAsync(int projectId)
 		{
 			await EnsureManagerAsync();
@@ -86,7 +102,7 @@ namespace Fixatic.Services.Implementation
 			}
 			return response;
 		}
-		
+
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();
@@ -111,5 +127,6 @@ namespace Fixatic.Services.Implementation
 				_manager = new ProjectsManager(_logger, _applicationSettings, currentProject);
 			}
 		}
+
 	}
 }

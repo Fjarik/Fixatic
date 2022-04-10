@@ -55,6 +55,23 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+
+		public async Task<ServiceResponse<List<Attachement>>> GetByTicketAsync(int ticketId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<List<Attachement>>();
+			try
+			{
+				response.Item = await _manager!.GetByTicketAsync(ticketId);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();
@@ -79,5 +96,6 @@ namespace Fixatic.Services.Implementation
 				_manager = new AttachementsManager(_logger, _applicationSettings, currentAttachement);
 			}
 		}
+
 	}
 }

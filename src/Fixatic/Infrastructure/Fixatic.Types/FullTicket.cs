@@ -12,5 +12,10 @@ namespace Fixatic.Types
 		/// Followers count
 		/// </summary>
 		public int Followers { get; set; }
+
+		/// <summary>
+		/// Assignee Name
+		/// </summary>
+		public string? AssigneeName { get; set; }
 	}
 }

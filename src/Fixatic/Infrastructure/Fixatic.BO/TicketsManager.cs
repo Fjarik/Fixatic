@@ -45,6 +45,17 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		public async Task<List<FullTicket>> GetByProjectAsync(int projectId)
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetByProjectAsync)}...");
+
+			var mainDo = new TicketsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetByProjectAsync(projectId);
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetByProjectAsync)}... Done");
+			return res;
+		}
+
 		public async Task<Follower> GetFollowerAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowerAsync)}...");

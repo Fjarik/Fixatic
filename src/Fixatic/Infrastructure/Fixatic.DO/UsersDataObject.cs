@@ -129,6 +129,57 @@ namespace Fixatic.DO
 			return res;
 		}
 
+		public async Task<User?> GetByIdAsync(int userId)
+		{
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetByIdAsync)}...");
+
+			var sql = @"
+                SELECT
+                    User_ID,
+                    Firstname,
+                    Lastname,
+                    Email,
+                    Phone,
+                    Created,
+                    IsEnabled
+                FROM Users
+				WHERE User_ID = @ID;
+            ";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = userId;
+
+			User? res = null;
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				if (await r.ReadAsync())
+				{
+					res = new User
+					{
+						UserId = (int)r["User_ID"],
+						Firstname = (string)r["Firstname"],
+						Lastname = (string)r["Lastname"],
+						Email = (string)r["Email"],
+						Phone = (string)r["Phone"],
+						Password = null,
+						Created = (DateTime)r["Created"],
+						IsEnabled = (bool)r["IsEnabled"],
+					};
+				}
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetByIdAsync)}... Done");
+			return res;
+		}
+
 		public async Task<User?> GetUserWithPasswordAsync(string email)
 		{
 			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetUserWithPasswordAsync)}...");

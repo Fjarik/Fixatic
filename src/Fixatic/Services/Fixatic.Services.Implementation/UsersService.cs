@@ -55,6 +55,23 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		public async Task<ServiceResponse<User>> GetByIdAsync(int userId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<User>();
+			try
+			{
+				response.Item = await _manager!.GetByIdAsync(userId);
+				response.IsSuccess = response.Item != null;
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();
@@ -79,5 +96,6 @@ namespace Fixatic.Services.Implementation
 				_manager = new UsersManager(_logger, _applicationSettings, currentUser);
 			}
 		}
+
 	}
 }

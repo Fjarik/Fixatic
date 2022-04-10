@@ -48,7 +48,7 @@ namespace Fixatic.DO
 			cmd.Parameters.Add("@isinternal", SqlDbType.Bit).Value = comment.IsInternal;
 			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = comment.TicketId;
 			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = comment.UserId;
-			
+
 			try
 			{
 				var objId = await _db.ExecuteScalarAsync(cmd);
@@ -98,6 +98,47 @@ namespace Fixatic.DO
 			}
 
 			_logger.LogInformation($"{nameof(CommentsDataObject)}.{nameof(GetAllAsync)}... Done");
+			return res;
+		}
+
+		public async Task<List<Comment>> GetByTicketAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(CommentsDataObject)}.{nameof(GetByTicketAsync)}...");
+
+			var sql = @"
+				SELECT Comment_ID, Content, Created, IsInternal, Ticket_ID, User_ID 
+				FROM Comments
+				WHERE Ticket_ID = @ticketId;";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@ticketId", SqlDbType.Int).Value = ticketId;
+
+			var res = new List<Comment>();
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new Comment
+					{
+						CommentId = (int)r["Comment_ID"],
+						TicketId = (int)r["Ticket_ID"],
+						UserId = (int)r["User_ID"],
+						Content = (string)r["Content"],
+						Created = (DateTime)r["Created"],
+						IsInternal = (bool)r["IsInternal"]
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(CommentsDataObject)}.{nameof(GetByTicketAsync)}... Done");
 			return res;
 		}
 
