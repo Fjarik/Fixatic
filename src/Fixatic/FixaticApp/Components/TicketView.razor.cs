@@ -7,11 +7,11 @@ namespace FixaticApp.Components
 	{
 		[Parameter] public Ticket? Model { get; set; }
 
-		[Parameter] public List<Comment>? Comments { get; set; }
+		public List<Comment>? Comments { get; set; }
 
-		[Parameter] public Attachement? Attachement { get; set; }
+		public Attachement? Attachement { get; set; }
 
-		[Parameter] public User? Assignee { get; set; }
+		public User? Assignee { get; set; }
 
 		private int PrevId { get; set; } = -1;
 
