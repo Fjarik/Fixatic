@@ -34,7 +34,6 @@ namespace FixaticApp.Pages.Public
 
 		private List<Ticket> _tickets = new List<Ticket>();
 		private bool _load = false;
-		private Ticket? _selectedTicket;
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -51,12 +50,6 @@ namespace FixaticApp.Pages.Public
 			}
 			_load = true;
 		}
-		private string GetText(DateTime? dateTime)
-		{
-			if (dateTime == null)
-				return "Never";
-			
-			return dateTime.Value.ToString("dd/MM/yyyy HH:mm");
-		}
+
 	}
 }

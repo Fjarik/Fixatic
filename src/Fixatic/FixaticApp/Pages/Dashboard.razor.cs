@@ -116,7 +116,7 @@ namespace FixaticApp.Pages
 			}
 			var item = args.Item;
 
-			NavigationManager!.NavigateTo("/project/" + item.ProjectId + "/" + item.TicketId);
+			NavigationManager!.NavigateTo("/tickets/" + item.TicketId);
 		}
 
 		private async Task CategoryFilterClickedAsync()

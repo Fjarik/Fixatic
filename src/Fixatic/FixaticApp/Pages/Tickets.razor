@@ -1,0 +1,12 @@
+﻿@page "/tickets"
+@page "/tickets/{TicketId:int}"
+@using FixaticApp.Components.Tickets
+
+@if (_selectedTicket == null)
+{
+    <TicketsTable Tickets="@BaseTickets" OnTicketSelect="@TicketSelected" />
+}
+else
+{
+    <TicketView Model="@_selectedTicket" />
+}
