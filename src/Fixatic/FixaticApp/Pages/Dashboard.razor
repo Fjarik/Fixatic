@@ -11,11 +11,11 @@
     <MudToolBar>
         <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="@ReturnButtonClicked"></MudIconButton>
         <MudSelect SelectedValuesChanged="@CategoryFilterClickedAsync" @bind-Value="@SelectedCategory" T="ProjectCategory"
-                   Margin="Margin.Dense" Variant="Variant.Outlined" Style="max-width: 300px"
-                   Placeholder="Category Filter">
+               Margin="Margin.Dense" Variant="Variant.Outlined" Style="max-width: 300px"
+               Placeholder="Category Filter">
             @foreach (var category in ProjectCategories)
             {
-                <MudSelectItem T="ProjectCategory" Value="category"/>
+                <MudSelectItem T="ProjectCategory" Value="category" />
             }
         </MudSelect>
     </MudToolBar>
@@ -23,7 +23,7 @@
 
 <MudDivider></MudDivider>
 
-<MudGrid>
+<MudGrid Class="mb-5">
     @if (Groups != null && SelectedGroup == null)
     {
         foreach (var group in Groups)
@@ -41,7 +41,7 @@
             </MudItem>
         }
     }
-    
+
     @if (SelectedGroup != null && Projects != null)
     {
         foreach (var project in Projects)
@@ -61,25 +61,26 @@
     }
 </MudGrid>
 
-@if (SelectedGroup == null)
+@if (SelectedGroup == null && _followedTickets.Any())
 {
-    <MudText Typo="Typo.h5" Class="pa-4">Followed Tickets</MudText>
-    <MudDivider></MudDivider>
+    <MudDivider />
 
-    <MudTable Items="@FollowedTickets" @ref="_ticketsTable" @bind-SelectedItem="_selectedTicket" RowClassFunc="@OnTicketClicked" T="Ticket">
+    <MudTable Items="@_followedTickets" T="FullTicket" OnRowClick="@OnTicketClicked" Hover="true">
         <HeaderContent>
-            <MudTh>Tickets</MudTh>
+            <MudTh>
+                <MudText Typo="Typo.h5">
+                    Followed Tickets
+                </MudText>
+            </MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Nr">
                 @context.Title
             </MudTd>
         </RowTemplate>
-        <PagerContent>
-            <MudTablePager HorizontalAlignment="HorizontalAlignment.Left" HidePageNumber="true" HideRowsPerPage="true"/>
-        </PagerContent>
     </MudTable>
 }
+
 
 <style>
     .selected {

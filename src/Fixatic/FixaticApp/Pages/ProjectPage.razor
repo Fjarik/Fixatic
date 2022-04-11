@@ -26,6 +26,7 @@
             <MudDivider></MudDivider>
 
             <MudTable T="FullTicket" Style="height: 100vh"
+                  Hover="true"
                   Items="@_tickets" @bind-SelectedItem="_selectedTicket">
                 <HeaderContent>
                     <MudTh>Tickets</MudTh>

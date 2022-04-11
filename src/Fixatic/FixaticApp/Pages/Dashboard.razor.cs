@@ -31,10 +31,7 @@ namespace FixaticApp.Pages
 		[Parameter] public Group? SelectedGroup { get; set; }
 		[Parameter] public ProjectCategory? SelectedCategory { get; set; }
 
-		private MudTable<Ticket>? _ticketsTable;
-		private Ticket? _selectedTicket;
-
-		private List<Ticket>? FollowedTickets { get; set; }
+		private List<FullTicket> _followedTickets = new();
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -46,7 +43,7 @@ namespace FixaticApp.Pages
 					Groups = groups.Item;
 					break;
 				case false:
-					var options = new DialogOptions {CloseOnEscapeKey = true};
+					var options = new DialogOptions { CloseOnEscapeKey = true };
 					DialogService!.Show<ErrorDialog>("DB error", options);
 					break;
 			}
@@ -56,7 +53,7 @@ namespace FixaticApp.Pages
 			switch (tickets.IsSuccess)
 			{
 				case true when tickets.Item != null:
-					FollowedTickets = new List<Ticket>();
+					_followedTickets = new List<FullTicket>();
 
 					// Asi není úplně nejlepší dělat DB request pro každej Ticket, ale snad to nebude vadit
 					// pro naše malý množství :DDD
@@ -65,7 +62,7 @@ namespace FixaticApp.Pages
 						var isFollowed = await TicketsService!.IsFollowedAsync(ticket.TicketId);
 						if (isFollowed.IsSuccess && isFollowed.Item)
 						{
-							FollowedTickets.Add(ticket);
+							_followedTickets.Add(ticket);
 						}
 					}
 
@@ -73,7 +70,7 @@ namespace FixaticApp.Pages
 
 					break;
 				case false:
-					var options = new DialogOptions {CloseOnEscapeKey = true};
+					var options = new DialogOptions { CloseOnEscapeKey = true };
 					DialogService!.Show<ErrorDialog>("DB error", options);
 					break;
 			}
@@ -86,7 +83,7 @@ namespace FixaticApp.Pages
 					ProjectCategories = categories.Item;
 					break;
 				case false:
-					var options = new DialogOptions {CloseOnEscapeKey = true};
+					var options = new DialogOptions { CloseOnEscapeKey = true };
 					DialogService!.Show<ErrorDialog>("DB error", options);
 					break;
 			}
@@ -111,19 +108,17 @@ namespace FixaticApp.Pages
 			NavigationManager!.NavigateTo("/project/" + project.ProjectId);
 		}
 
-
-		private string OnTicketClicked(Ticket ticket, int row)
+		private void OnTicketClicked(TableRowClickEventArgs<FullTicket> args)
 		{
-			if (_ticketsTable!.SelectedItem != null && _ticketsTable.SelectedItem.Equals(ticket))
+			if (args == null || args.Item == null)
 			{
-				NavigationManager!.NavigateTo("/project/" + ticket.ProjectId + "/" + ticket.TicketId);
-
-				return "selected";
+				return;
 			}
+			var item = args.Item;
 
-			return string.Empty;
+			NavigationManager!.NavigateTo("/project/" + item.ProjectId + "/" + item.TicketId);
 		}
-		
+
 		private async Task CategoryFilterClickedAsync()
 		{
 			if (SelectedGroup != null && Projects != null && SelectedCategory != null)
@@ -145,7 +140,7 @@ namespace FixaticApp.Pages
 
 							break;
 						case false:
-							var optionz = new DialogOptions {CloseOnEscapeKey = true};
+							var optionz = new DialogOptions { CloseOnEscapeKey = true };
 							DialogService!.Show<ErrorDialog>("DB error", optionz);
 							break;
 					}
@@ -167,7 +162,7 @@ namespace FixaticApp.Pages
 						Projects = projects.Item.FindAll(p => p.IsEnabled);
 						break;
 					case false:
-						var options = new DialogOptions {CloseOnEscapeKey = true};
+						var options = new DialogOptions { CloseOnEscapeKey = true };
 						DialogService!.Show<ErrorDialog>("DB error", options);
 						break;
 				}
