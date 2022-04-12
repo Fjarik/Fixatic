@@ -14,6 +14,6 @@ namespace Fixatic.Types
 
         public string Name { get; set; }
 
-        public int Type { get; set; }
+        public UserGroupType Type { get; set; }
     }
 }

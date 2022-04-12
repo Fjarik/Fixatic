@@ -375,6 +375,8 @@ INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The 
 GO
 INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of the external company testing the software', N'Microsoft Testers', 2, 5)
 GO
+INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of administrators', N'Admins', 3, 6)
+GO
 SET IDENTITY_INSERT [dbo].[Groups] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Projects] ON 
@@ -554,6 +556,8 @@ GO
 INSERT [dbo].[UsersGroups] ([Group_ID], [User_ID]) VALUES (4, 21)
 GO
 INSERT [dbo].[UsersGroups] ([Group_ID], [User_ID]) VALUES (5, 21)
+GO
+INSERT [dbo].[UsersGroups] ([Group_ID], [User_ID]) VALUES (6, 21)
 GO
 /****** Object:  Index [IXFK_CustomPropertyOptions_CustomProperties]    Script Date: 20.03.2022 12:16:00 ******/
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[CustomPropertyOptions]') AND name = N'IXFK_CustomPropertyOptions_CustomProperties')

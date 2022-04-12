@@ -34,7 +34,7 @@ namespace Fixatic.DO
                 SELECT @ID;";
 			}
 			else
-			{	
+			{
 				sql = @"UPDATE Groups SET description = @description, name = @name, type = @type WHERE Group_ID = @ID;";
 			}
 
@@ -44,7 +44,7 @@ namespace Fixatic.DO
 
 			cmd.Parameters.Add("@description", SqlDbType.NVarChar).Value = group.Description;
 			cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = group.Name;
-			cmd.Parameters.Add("@type", SqlDbType.Int).Value = group.Type;
+			cmd.Parameters.Add("@type", SqlDbType.Int).Value = (int)group.Type;
 
 			try
 			{
@@ -81,7 +81,7 @@ namespace Fixatic.DO
 						GroupId = (int)r["Group_ID"],
 						Description = (string)r["Description"],
 						Name = (string)r["Name"],
-						Type = (int)r["Type"]
+						Type = (UserGroupType)(int)r["Type"]
 					});
 				}
 
@@ -125,7 +125,7 @@ namespace Fixatic.DO
 						GroupId = (int)r["Group_ID"],
 						Description = (string)r["Description"],
 						Name = (string)r["Name"],
-						Type = (int)r["Type"]
+						Type = (UserGroupType)(int)r["Type"]
 					});
 				}
 
