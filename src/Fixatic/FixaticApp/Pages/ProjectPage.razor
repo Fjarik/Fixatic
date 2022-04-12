@@ -4,29 +4,21 @@
 @using Fixatic.Services
 @using FixaticApp.Components
 
-<style>
-    .selected {
-        background-color: #1E88E5 !important;
-    }
-
-        .selected > td {
-            color: white !important;
-        }
-
-            .selected > td .mud-input {
-                color: white !important;
-            }
-</style>
-
-<MudGrid Style="height: 100vh">
-    <MudItem xs="2" Class="pr-0">
+<MudGrid>
+    <MudItem xs="12">
         @if (Project != null)
         {
-            <MudText Typo="Typo.h5" Class="pa-4 object-fill">@Project.Name</MudText>
-            <MudDivider></MudDivider>
-
-            <MudTable T="FullTicket" Style="height: 100vh"
-                  Hover="true"
+            <MudText Typo="Typo.h5" Class="pa-4 object-fill">Project: @Project.Name</MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1">Loading project tickets</MudText>
+        }
+    </MudItem>
+    <MudItem xs="2">
+        @if (Project != null)
+        {
+            <MudTable T="FullTicket" Hover="true" Striped="true"
                   Items="@_tickets" @bind-SelectedItem="_selectedTicket">
                 <HeaderContent>
                     <MudTh>Tickets</MudTh>
@@ -39,12 +31,8 @@
                 </PagerContent>
             </MudTable>
         }
-        else
-        {
-            <MudText Typo="Typo.body1">Loading project tickets</MudText>
-        }
     </MudItem>
-    <MudItem xs="10" Class="pl-0">
+    <MudItem xs="10">
         @if (_selectedTicket != null)
         {
             <MudToolBar Class="pl-0">
@@ -63,7 +51,7 @@
                 }
             </MudToolBar>
 
-            <MudDivider></MudDivider>
+            <MudDivider />
 
             <TicketView Model="_selectedTicket" />
         }

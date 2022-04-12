@@ -1,5 +1,3 @@
-USE [Fixatic]
-GO
 ALTER TABLE [dbo].[UsersGroups] DROP CONSTRAINT [FK_UsersGroups_Users]
 GO
 ALTER TABLE [dbo].[UsersGroups] DROP CONSTRAINT [FK_UsersGroups_Groups]

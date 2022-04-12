@@ -21,9 +21,7 @@
     </MudToolBar>
 }
 
-<MudDivider></MudDivider>
-
-<MudGrid Class="mb-5">
+<MudGrid>
     @if (Groups != null && SelectedGroup == null)
     {
         foreach (var group in Groups)
@@ -63,7 +61,7 @@
 
 @if (SelectedGroup == null && _followedTickets.Any())
 {
-    <MudDivider />
+    <MudDivider Class="my-5" />
 
     <MudTable Items="@_followedTickets" T="FullTicket" OnRowClick="@OnTicketClicked" Hover="true">
         <HeaderContent>

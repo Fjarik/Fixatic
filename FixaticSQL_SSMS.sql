@@ -371,11 +371,9 @@ INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The 
 GO
 INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group for the project managers', N'Project managers', 1, 3)
 GO
-INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of the external company developing the software ', N'Developers', 2, 4)
+INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of the external company developing the software ', N'Microsoft Developers', 2, 4)
 GO
-INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of the external company testing the software', N'Testers', 2, 5)
-GO
-INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group for the project managers of the external company', N'Project managers', 2, 6)
+INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of the external company testing the software', N'Microsoft Testers', 2, 5)
 GO
 SET IDENTITY_INSERT [dbo].[Groups] OFF
 GO
