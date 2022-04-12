@@ -411,26 +411,99 @@ SET IDENTITY_INSERT [dbo].[Projects] OFF
 GO
 INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (1, 1)
 GO
-INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (1, 2)
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (2, 1)
 GO
-INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (3, 4)
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (3, 1)
 GO
-INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (4, 2)
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (4, 1)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (5, 1)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (6, 1)
 GO
 INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (7, 1)
 GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (8, 1)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (9, 1)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (10, 1)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (11, 1)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (12, 1)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (13, 1)
+GO
+
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (1, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (2, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (3, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (4, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (5, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (6, 2)
+GO
 INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (7, 2)
 GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (8, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (9, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (10, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (11, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (12, 2)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (13, 2)
+GO
+
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (1, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (2, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (3, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (4, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (5, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (6, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (7, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (8, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (9, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (10, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (11, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (12, 3)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (13, 3)
+GO
+
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (1, 4)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (1, 5)
+GO
+INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (1, 6)
+GO
+
 INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (8, 4)
 GO
 INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (8, 5)
 GO
 INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (11, 5)
 GO
-INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (12, 1)
-GO
-INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (13, 2)
-GO
+
 INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 1)
 GO
 INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 2)
