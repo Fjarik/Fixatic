@@ -19,7 +19,7 @@
         @if (Project != null)
         {
             <MudTable T="FullTicket" Hover="true" Striped="true"
-                  Items="@_tickets" @bind-SelectedItem="_selectedTicket">
+                  Items="@_tickets" OnRowClick="@OnTicketSelect">
                 <HeaderContent>
                     <MudTh>Tickets</MudTh>
                 </HeaderContent>

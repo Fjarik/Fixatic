@@ -26,8 +26,8 @@
     {
         foreach (var group in Groups)
         {
-            <MudItem xs="3">
-                <MudCard>
+            <MudItem xs="3" Class="d-flex">
+                <MudCard Style="width: 100%;">
                     <MudCardContent>
                         <MudText>@group.Name</MudText>
                         <MudText Typo="Typo.body2">@group.Description</MudText>
@@ -51,7 +51,7 @@
                         <MudText Typo="Typo.body2">@project.Shortcut</MudText>
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => ProjectButtonClicked(project))">Project</MudButton>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => ProjectButtonClicked(project))">Tickets</MudButton>
                     </MudCardActions>
                 </MudCard>
             </MudItem>

@@ -24,6 +24,8 @@ public partial class ProjectPage
 
 	[Inject] private ICurrentUserService? CurrentUserService { get; set; }
 
+	[Inject] private NavigationManager? NavigationManager { get; set; }
+
 
 	private FullTicket? _selectedTicket;
 
@@ -52,11 +54,27 @@ public partial class ProjectPage
 		}
 
 		_tickets = ticketsRes.Item!;
-		if (RouteSelectedTicketId != null)
+	}
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (RouteSelectedTicketId == null)
+		{
+			_selectedTicket = null;
+		}
+		else
 		{
 			_selectedTicket = _tickets.FirstOrDefault(t => t.TicketId == RouteSelectedTicketId);
 		}
 
+	}
+
+	private void OnTicketSelect(TableRowClickEventArgs<FullTicket> args)
+	{
+		if (args?.Item == null)
+			return;
+
+		NavigationManager!.NavigateTo($"/project/{RouteProjectId}/{args.Item.TicketId}");
 	}
 
 	private void OnAddTicket()
