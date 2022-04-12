@@ -39,7 +39,7 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAllAsync)}...");
 
 			var mainDo = new TicketsDataObject(_logger, _dbConnector);
-			var res = await mainDo.GetAllAsync();
+			var res = await mainDo.GetAllAsync(_currentUser.UserId);
 
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAllAsync)}... Done");
 			return res;
@@ -56,6 +56,17 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		public async Task<List<FullTicket>> GetFollowedTicketsAsync()
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowedTicketsAsync)}...");
+
+			var mainDo = new TicketsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetFollowedTicketsAsync(_currentUser.UserId);
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowedTicketsAsync)}... Done");
+			return res;
+		}
+
 		public async Task<FullTicket?> GetByIdAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetByIdAsync)}...");
@@ -67,7 +78,7 @@ namespace Fixatic.BO
 			return res;
 		}
 
-		public async Task<Follower> GetFollowerAsync(int ticketId)
+		public async Task<Follower?> GetFollowerAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowerAsync)}...");
 

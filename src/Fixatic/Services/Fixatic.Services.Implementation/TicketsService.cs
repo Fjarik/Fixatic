@@ -87,6 +87,22 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		public async Task<ServiceResponse<List<FullTicket>>> GetFollowedTicketsAsync()
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<List<FullTicket>>();
+			try
+			{
+				response.Item = await _manager!.GetFollowedTicketsAsync();
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
 		public async Task<ServiceResponse<bool>> IsFollowedAsync(int ticketId)
 		{
 			await EnsureManagerAsync();

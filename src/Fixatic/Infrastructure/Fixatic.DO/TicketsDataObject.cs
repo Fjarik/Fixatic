@@ -83,7 +83,7 @@ namespace Fixatic.DO
 			return id;
 		}
 
-		public async Task<List<FullTicket>> GetAllAsync()
+		public async Task<List<FullTicket>> GetAllAsync(int userId)
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAllAsync)}...");
 
@@ -104,10 +104,19 @@ namespace Fixatic.DO
 					Visibility, 
 					Followers,
 					AssigneeName
-				FROM view_tickets;
+				FROM view_tickets
+				WHERE Project_ID IN (
+					SELECT DISTINCT
+						pa.Project_ID
+					FROM ProjectsAccess pa
+					INNER JOIN UsersGroups ug ON ug.Group_ID = pa.Group_ID
+					WHERE ug.User_ID = @userId
+				);
 			";
 
 			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
 
 			var res = new List<FullTicket>();
 
@@ -145,6 +154,73 @@ namespace Fixatic.DO
 			}
 
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAllAsync)}... Done");
+			return res;
+		}
+
+		public async Task<List<FullTicket>> GetFollowedTicketsAsync(int userId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowedTicketsAsync)}...");
+
+			var sql = @"
+				SELECT
+					t.Ticket_ID, 
+					t.Project_ID, 
+					t.AssignedUser_ID, 
+					t.Creator_ID,
+					t.Title, 
+					t.Content, 
+					t.Created, 
+					t.Modified, 
+					t.DateSolved, 
+					t.Priority, 
+					t.Status, 
+					t.Type, 
+					t.Visibility, 
+					t.Followers,
+					t.AssigneeName
+				FROM view_tickets t
+				INNER JOIN Followers f ON f.Ticket_ID = t.Ticket_ID
+				WHERE f.User_ID = @userId
+			";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+
+			var res = new List<FullTicket>();
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new FullTicket
+					{
+						TicketId = (int)r["Ticket_ID"],
+						ProjectId = (int)r["Project_ID"],
+						AssignedUserId = (int)r["AssignedUser_ID"],
+						CreatorId = (int)r["Creator_ID"],
+						Title = (string)r["Title"],
+						Content = (string)r["Content"],
+						Created = (DateTime)r["Created"],
+						Modified = r["Modified"] as DateTime?,
+						DateSolved = r["DateSolved"] as DateTime?,
+						Priority = (TicketPriority)(int)r["Priority"],
+						Status = (TicketStatus)(int)r["Status"],
+						Type = (TicketType)(int)r["Type"],
+						Visibility = (TicketVisibility)(int)r["Visibility"],
+						Followers = (int)r["Followers"],
+						AssigneeName = (string)r["AssigneeName"]
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowedTicketsAsync)}... Done");
 			return res;
 		}
 

@@ -65,6 +65,10 @@ public partial class ProjectPage
 		else
 		{
 			_selectedTicket = _tickets.FirstOrDefault(t => t.TicketId == RouteSelectedTicketId);
+			if (_selectedTicket != null)
+			{
+				_isFollowed = (await TicketsService!.IsFollowedAsync(_selectedTicket.TicketId)).Item == true;
+			}
 		}
 
 	}

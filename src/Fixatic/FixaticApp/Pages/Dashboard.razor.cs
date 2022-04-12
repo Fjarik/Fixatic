@@ -18,8 +18,6 @@ namespace FixaticApp.Pages
 
 		[Inject] private IDialogService? DialogService { get; set; }
 
-		[Inject] private ITicketsService? TicketService { get; set; }
-
 		[Inject] private NavigationManager? NavigationManager { get; set; }
 
 		[Parameter] public List<Project>? Projects { get; set; }
@@ -35,58 +33,34 @@ namespace FixaticApp.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
-			var groups = await GroupsService!.GetUserGroupsAsync();
-
-			switch (groups.IsSuccess)
+			var groupsRes = await GroupsService!.GetUserGroupsAsync();
+			if (!groupsRes.IsSuccess)
 			{
-				case true when groups.Item != null:
-					Groups = groups.Item;
-					break;
-				case false:
-					var options = new DialogOptions { CloseOnEscapeKey = true };
-					DialogService!.Show<ErrorDialog>("DB error", options);
-					break;
+				var options = new DialogOptions { CloseOnEscapeKey = true };
+				DialogService!.Show<ErrorDialog>("DB error", options);
+				return;
 			}
 
-			var tickets = await TicketService!.GetAllAsync();
+			Groups = groupsRes.Item!;
 
-			switch (tickets.IsSuccess)
+			var ticketsRes = await TicketsService!.GetFollowedTicketsAsync();
+			if (!ticketsRes.IsSuccess)
 			{
-				case true when tickets.Item != null:
-					_followedTickets = new List<FullTicket>();
-
-					// Asi není úplně nejlepší dělat DB request pro každej Ticket, ale snad to nebude vadit
-					// pro naše malý množství :DDD
-					foreach (var ticket in tickets.Item)
-					{
-						var isFollowed = await TicketsService!.IsFollowedAsync(ticket.TicketId);
-						if (isFollowed.IsSuccess && isFollowed.Item)
-						{
-							_followedTickets.Add(ticket);
-						}
-					}
-
-					StateHasChanged();
-
-					break;
-				case false:
-					var options = new DialogOptions { CloseOnEscapeKey = true };
-					DialogService!.Show<ErrorDialog>("DB error", options);
-					break;
+				var options = new DialogOptions { CloseOnEscapeKey = true };
+				DialogService!.Show<ErrorDialog>("DB error", options);
+				return;
 			}
+			_followedTickets = ticketsRes.Item!;
 
-			var categories = await CategoriesService!.GetAllAsync();
-
-			switch (categories.IsSuccess)
+			var categoriesRes = await CategoriesService!.GetAllAsync();
+			if (!categoriesRes.IsSuccess)
 			{
-				case true when categories.Item != null:
-					ProjectCategories = categories.Item;
-					break;
-				case false:
-					var options = new DialogOptions { CloseOnEscapeKey = true };
-					DialogService!.Show<ErrorDialog>("DB error", options);
-					break;
+				var options = new DialogOptions { CloseOnEscapeKey = true };
+				DialogService!.Show<ErrorDialog>("DB error", options);
+				return;
 			}
+			ProjectCategories = categoriesRes.Item!;
+
 		}
 
 		private async Task GroupButtonClicked(Group group)
@@ -128,22 +102,19 @@ namespace FixaticApp.Pages
 				var selectedProjects = new List<Project>();
 				foreach (var p in Projects)
 				{
-					var ids = await ProjectsService!.GetCategoryIdsAsync(p.ProjectId);
-
-					switch (ids.IsSuccess)
+					var idsRes = await ProjectsService!.GetCategoryIdsAsync(p.ProjectId);
+					if (!idsRes.IsSuccess)
 					{
-						case true when ids.Item != null:
-							if (ids.Item.Contains(SelectedCategory.CategoryId))
-							{
-								selectedProjects.Add(p);
-							}
-
-							break;
-						case false:
-							var optionz = new DialogOptions { CloseOnEscapeKey = true };
-							DialogService!.Show<ErrorDialog>("DB error", optionz);
-							break;
+						var options = new DialogOptions { CloseOnEscapeKey = true };
+						DialogService!.Show<ErrorDialog>("DB error", options);
+						return;
 					}
+
+					if (idsRes.Item!.Contains(SelectedCategory.CategoryId))
+					{
+						selectedProjects.Add(p);
+					}
+
 				}
 
 				Projects = selectedProjects;
@@ -154,18 +125,14 @@ namespace FixaticApp.Pages
 		{
 			if (SelectedGroup != null)
 			{
-				var projects = (await ProjectsService!.GetGroupProjectsAsync(SelectedGroup.GroupId));
-
-				switch (projects.IsSuccess)
+				var projectRes = (await ProjectsService!.GetGroupProjectsAsync(SelectedGroup.GroupId));
+				if (!projectRes.IsSuccess)
 				{
-					case true when projects.Item != null:
-						Projects = projects.Item.FindAll(p => p.IsEnabled);
-						break;
-					case false:
-						var options = new DialogOptions { CloseOnEscapeKey = true };
-						DialogService!.Show<ErrorDialog>("DB error", options);
-						break;
+					var options = new DialogOptions { CloseOnEscapeKey = true };
+					DialogService!.Show<ErrorDialog>("DB error", options);
+					return;
 				}
+				Projects = projectRes.Item!.FindAll(p => p.IsEnabled);
 			}
 		}
 	}
