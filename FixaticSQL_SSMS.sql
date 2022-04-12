@@ -297,9 +297,9 @@ END
 GO
 SET IDENTITY_INSERT [dbo].[Categories] ON 
 GO
-INSERT [dbo].[Categories] ([Description], [Name], [Category_ID]) VALUES (N'All the services we provide', N'Services', 1)
+INSERT [dbo].[Categories] ([Description], [Name], [Category_ID]) VALUES (N'All games we provide', N'Games', 1)
 GO
-INSERT [dbo].[Categories] ([Description], [Name], [Category_ID]) VALUES (N'Applications that automatically synchronizes data', N'Agents', 2)
+INSERT [dbo].[Categories] ([Description], [Name], [Category_ID]) VALUES (N'Web services or applications', N'Websites', 2)
 GO
 INSERT [dbo].[Categories] ([Description], [Name], [Category_ID]) VALUES (N'The applications', N'Applications', 3)
 GO
@@ -504,32 +504,41 @@ GO
 INSERT [dbo].[ProjectsAccess] ([Project_ID], [Group_ID]) VALUES (11, 5)
 GO
 
-INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 1)
+
+
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (1, 1)
 GO
-INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 2)
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (1, 7)
 GO
-INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 3)
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (1, 8)
 GO
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (1, 9)
+GO
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (1, 10)
+GO
+
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (2, 2)
+GO
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (2, 3)
+GO
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (2, 4)
+GO
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (2, 5)
+GO
+INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (2, 6)
+GO
+
 INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 4)
 GO
-INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 5)
-GO
 INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 6)
-GO
-INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 7)
-GO
-INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 8)
-GO
-INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 9)
-GO
-INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 10)
-GO
-INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 11)
 GO
 INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 12)
 GO
 INSERT [dbo].[ProjectsCategories] ([Category_ID], [Project_ID]) VALUES (3, 13)
 GO
+
+
+
 SET IDENTITY_INSERT [dbo].[Tickets] ON 
 GO
 INSERT [dbo].[Tickets] ([Content], [Created], [DateSolved], [Modified], [Priority], [Status], [Title], [Type], [Visibility], [Ticket_ID], [Project_ID], [AssignedUser_ID], [Creator_ID]) VALUES (N'The rendering is not working properly when walking at night', CAST(N'2019-02-26T05:09:24.0000000' AS DateTime2), NULL, NULL, 54, 0, N'Minecraft rendering bug', 1, 1, 1, 1, 2, 12)
