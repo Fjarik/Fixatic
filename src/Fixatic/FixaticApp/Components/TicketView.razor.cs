@@ -7,10 +7,10 @@ namespace FixaticApp.Components
 	public partial class TicketView
 	{
 		[Parameter] public FullTicket? Model { get; set; }
-		
+
 		[Inject]
 		private ICommentsService? CommentsService { get; set; }
-		
+
 		[Inject]
 		private IAttachementsService? AttachementsService { get; set; }
 
@@ -18,16 +18,6 @@ namespace FixaticApp.Components
 		private List<Attachement> Attachements { get; set; } = new();
 
 		private int PrevId { get; set; } = -1;
-
-		private string GetAssigneeName()
-		{
-			if (string.IsNullOrWhiteSpace(Model?.AssigneeName))
-			{
-				return "None";
-			}
-
-			return Model.AssigneeName;
-		}
 
 		protected override async Task OnParametersSetAsync()
 		{
@@ -56,6 +46,27 @@ namespace FixaticApp.Components
 				Attachements = attachementsRes.Item ?? new List<Attachement>();
 			}
 
+		}
+
+		private string GetAssigneeName()
+		{
+			if (string.IsNullOrWhiteSpace(Model?.AssigneeName))
+			{
+				return "None";
+			}
+
+			return Model.AssigneeName;
+		}
+
+		public string GetFollowersText()
+		{
+			if (Model == null)
+				return "0 followers";
+
+			if (Model.Followers > 1 || Model.Followers < 1)
+				return $"{Model.Followers} followers";
+
+			return "1 follower";
 		}
 
 	}
