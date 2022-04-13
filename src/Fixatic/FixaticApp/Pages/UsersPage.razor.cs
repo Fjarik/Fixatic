@@ -1,0 +1,100 @@
+using Microsoft.AspNetCore.Components;
+using Fixatic.Services;
+using Fixatic.Types;
+using FixaticApp.Components;
+using MudBlazor;
+
+namespace FixaticApp.Pages
+{
+	public partial class UsersPage
+	{
+		[Parameter] public int? UserId { get; set; }
+
+		[Inject] private IUsersService? UsersService { get; set; }
+
+		[Inject] private IDialogService? DialogService { get; set; }
+
+		[Inject] private NavigationManager? NavigationManager { get; set; }
+
+		private List<User> _users = new();
+
+		private User? _selectedUser;
+
+		protected override async Task OnInitializedAsync()
+		{
+			var usersRes = await UsersService!.GetAllAsync();
+			if (!usersRes.IsSuccess || usersRes.Item == null)
+			{
+				var options = new DialogOptions {CloseOnEscapeKey = true};
+				DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database", options);
+				return;
+			}
+
+			_users = usersRes.Item;
+		}
+
+		private async Task UserSelectedAsync()
+		{
+			if (_selectedUser == null)
+			{
+				return;
+			}
+
+			await ShowUserDialog(_selectedUser);
+		}
+
+		private async Task ShowUserDialog(User inputUser)
+		{
+			var parameters = new DialogParameters {{"User", inputUser},};
+
+			var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
+			var dialog = DialogService!.Show<UserEditDialog>("Edit user", parameters, options);
+			var result = await dialog.Result;
+
+			if (!result.Cancelled)
+			{
+				var (user, shouldDelete) = ((User, bool))result.Data;
+				// TODO: Validace
+
+				if (shouldDelete)
+				{
+					user.Password = " ";
+					var updateRes = await UsersService!.DeleteAsync(user.UserId);
+					if (!updateRes.IsSuccess)
+					{
+						var errOptions = new DialogOptions {CloseOnEscapeKey = true};
+						DialogService!.Show<ErrorDialog>("Failed to delete user data", errOptions);
+					}
+				}
+				else
+				{
+					var updateRes = await UsersService!.CreateOrUpdateAsync(user);
+					if (!updateRes.IsSuccess)
+					{
+						var errOptions = new DialogOptions {CloseOnEscapeKey = true};
+						DialogService!.Show<ErrorDialog>("Failed to update user data", errOptions);
+					}
+				}
+			}
+			
+			StateHasChanged();
+		}
+
+		private async Task OnAddClickedAsync()
+		{
+			var newUser = new User
+			{
+				UserId = -1,
+				Created = DateTime.Now,
+				IsEnabled = true,
+				Email = "",
+				Firstname = "",
+				Lastname = "",
+				Password = "",
+				Phone = ""
+			};
+
+			await ShowUserDialog(newUser);
+		}
+	}
+}

@@ -1,0 +1,19 @@
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="@User.Firstname" Label="First name"/>
+        <MudTextField @bind-Value="@User.Lastname" Label="Last name"/>
+        <MudTextField @bind-Value="@User.Email" Label="E-mail"/>
+        <MudTextField @bind-Value="@User.Phone" Label="Phone"/>
+        <MudTextField @bind-Value="@User.Password" Label="Password"/>
+        <MudCheckBox @bind-Checked="@User.IsEnabled" Label="Enabled"/>
+    </DialogContent>
+    <DialogActions>
+        @*Nechcem deletovat právě-vytvářeného usera*@
+        @if (User.UserId != -1)
+        {
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="Delete">Delete</MudButton>
+        }
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>

@@ -1,0 +1,24 @@
+@page "/users"
+@using Fixatic.Types
+
+<MudTable Items="@_users" T="User"
+          Hover="true" Striped="true"
+          Breakpoint="Breakpoint.Sm" @bind-SelectedItem="@_selectedUser"
+          OnRowClick="@UserSelectedAsync"
+          RowsPerPage="50">
+    <ToolBarContent>
+        <MudText Typo="Typo.h5">Users</MudText>
+        <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="OnAddClickedAsync" />
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>#</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Name">@context.GetFullName()</MudTd>
+        <MudTd DataLabel="ID">@context.UserId</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
