@@ -6,6 +6,8 @@ namespace Fixatic.Services
 	public interface IUsersService
 	{
 		Task<ServiceResponse<int>> CreateOrUpdateAsync(User entry);
+		
+		Task<ServiceResponse<int>> UpdateSansPasswordAsync(User entry);
 
 		Task<ServiceResponse<List<User>>> GetAllAsync();
 

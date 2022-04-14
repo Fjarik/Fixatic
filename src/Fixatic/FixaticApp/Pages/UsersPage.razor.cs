@@ -40,44 +40,7 @@ namespace FixaticApp.Pages
 				return;
 			}
 
-			await ShowUserDialog(_selectedUser);
-		}
-
-		private async Task ShowUserDialog(User inputUser)
-		{
-			var parameters = new DialogParameters {{"User", inputUser},};
-
-			var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
-			var dialog = DialogService!.Show<UserEditDialog>("Edit user", parameters, options);
-			var result = await dialog.Result;
-
-			if (!result.Cancelled)
-			{
-				var (user, shouldDelete) = ((User, bool))result.Data;
-				// TODO: Validace
-
-				if (shouldDelete)
-				{
-					user.Password = " ";
-					var updateRes = await UsersService!.DeleteAsync(user.UserId);
-					if (!updateRes.IsSuccess)
-					{
-						var errOptions = new DialogOptions {CloseOnEscapeKey = true};
-						DialogService!.Show<ErrorDialog>("Failed to delete user data", errOptions);
-					}
-				}
-				else
-				{
-					var updateRes = await UsersService!.CreateOrUpdateAsync(user);
-					if (!updateRes.IsSuccess)
-					{
-						var errOptions = new DialogOptions {CloseOnEscapeKey = true};
-						DialogService!.Show<ErrorDialog>("Failed to update user data", errOptions);
-					}
-				}
-			}
-			
-			StateHasChanged();
+			await ShowUserDialogAsync(_selectedUser, false);
 		}
 
 		private async Task OnAddClickedAsync()
@@ -94,7 +57,58 @@ namespace FixaticApp.Pages
 				Phone = ""
 			};
 
-			await ShowUserDialog(newUser);
+			await ShowUserDialogAsync(newUser, true);
+		}
+
+		private async Task ShowUserDialogAsync(User inputUser, bool isCreate)
+		{
+			inputUser.Password = "";
+
+			var parameters = new DialogParameters {{"User", inputUser}, {"IsCreate", isCreate}};
+
+			var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
+			var dialog = DialogService!.Show<UserEditDialog>("Edit user", parameters, options);
+			var result = await dialog.Result;
+
+			if (!result.Cancelled)
+			{
+				await UpdateUserDataAsync(result, isCreate);
+				StateHasChanged();
+			}
+		}
+
+		private async Task UpdateUserDataAsync(DialogResult result, bool isCreate)
+		{
+			var (user, deleteUser, updatePassword) = ((User, bool, bool))result.Data;
+
+			if (deleteUser)
+			{
+				user.Password = " ";
+				var updateRes = await UsersService!.DeleteAsync(user.UserId);
+				if (!updateRes.IsSuccess)
+				{
+					var errOptions = new DialogOptions {CloseOnEscapeKey = true};
+					DialogService!.Show<ErrorDialog>("Failed to delete user data", errOptions);
+				}
+			}
+			else if (isCreate || updatePassword)
+			{
+				var updateRes = await UsersService!.CreateOrUpdateAsync(user);
+				if (!updateRes.IsSuccess)
+				{
+					var errOptions = new DialogOptions {CloseOnEscapeKey = true};
+					DialogService!.Show<ErrorDialog>("Failed to update user data", errOptions);
+				}
+			}
+			else
+			{
+				var updateRes = await UsersService!.UpdateSansPasswordAsync(user);
+				if (!updateRes.IsSuccess)
+				{
+					var errOptions = new DialogOptions {CloseOnEscapeKey = true};
+					DialogService!.Show<ErrorDialog>("Failed to update user data", errOptions);
+				}
+			}
 		}
 	}
 }

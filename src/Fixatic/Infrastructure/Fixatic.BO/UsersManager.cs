@@ -47,6 +47,26 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		public async Task<int> UpdateSansPasswordAsync(User user)
+		{
+			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(UpdateSansPasswordAsync)}...");
+
+			// TODO: Validation
+
+			user.Email = user.Email?.ToLower();
+
+			var hasher = new PasswordHasher<User>();
+
+			if (!string.IsNullOrWhiteSpace(user.Password))
+				user.Password = hasher.HashPassword(user, user.Password);
+
+			var mainDo = new UsersDataObject(_logger, _dbConnector);
+			var res = await mainDo.UpdateSansPasswordAsync(user);
+
+			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(UpdateSansPasswordAsync)}... Done");
+			return res;
+		}
+
 		public async Task<List<User>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetAllAsync)}...");

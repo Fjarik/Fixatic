@@ -80,6 +80,52 @@ namespace Fixatic.DO
 			return id;
 		}
 
+		public async Task<int> UpdateSansPasswordAsync(User user)
+		{
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(UpdateSansPasswordAsync)}...");
+
+			var id = user.UserId;
+
+			string sql = @"
+                    UPDATE Users
+                    SET
+                        firstname = @firstname,
+                        lastname = @lastname,
+                        email = @email,
+                        phone = @phone,
+                        created = @created,
+                        isenabled = @isenabled
+                    WHERE User_ID = @ID;
+                ";
+
+			var cmd = new SqlCommand(sql);
+
+			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
+
+			cmd.Parameters.Add("@firstname", SqlDbType.NVarChar).Value = user.Firstname;
+			cmd.Parameters.Add("@lastname", SqlDbType.NVarChar).Value = user.Lastname;
+			cmd.Parameters.Add("@email", SqlDbType.NVarChar).Value = user.Email;
+			cmd.Parameters.Add("@phone", SqlDbType.VarChar).Value = user.Phone;
+			cmd.Parameters.Add("@created", SqlDbType.DateTime2).Value = user.Created;
+			cmd.Parameters.Add("@isenabled", SqlDbType.Bit).Value = user.IsEnabled;
+
+			try
+			{
+				var objId = await _db.ExecuteScalarAsync(cmd);
+				if (objId != null)
+				{
+					id = (int)objId;
+				}
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(UpdateSansPasswordAsync)}... Done");
+			return id;
+		}
+
 		public async Task<List<User>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetAllAsync)}...");
@@ -118,6 +164,7 @@ namespace Fixatic.DO
 						IsEnabled = (bool)r["IsEnabled"],
 					});
 				}
+
 				await r.CloseAsync();
 			}
 			finally
@@ -169,6 +216,7 @@ namespace Fixatic.DO
 						IsEnabled = (bool)r["IsEnabled"],
 					};
 				}
+
 				await r.CloseAsync();
 			}
 			finally
@@ -221,6 +269,7 @@ namespace Fixatic.DO
 						IsEnabled = (bool)r["IsEnabled"],
 					};
 				}
+
 				await r.CloseAsync();
 			}
 			finally
@@ -272,6 +321,7 @@ namespace Fixatic.DO
 						IsEnabled = (bool)r["IsEnabled"],
 					};
 				}
+
 				await r.CloseAsync();
 			}
 			finally

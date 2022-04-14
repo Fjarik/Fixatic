@@ -1,19 +1,40 @@
 <MudDialog>
     <DialogContent>
-        <MudTextField @bind-Value="@User.Firstname" Label="First name"/>
-        <MudTextField @bind-Value="@User.Lastname" Label="Last name"/>
-        <MudTextField @bind-Value="@User.Email" Label="E-mail"/>
-        <MudTextField @bind-Value="@User.Phone" Label="Phone"/>
-        <MudTextField @bind-Value="@User.Password" Label="Password"/>
-        <MudCheckBox @bind-Checked="@User.IsEnabled" Label="Enabled"/>
+        <MudForm @bind-IsValid="@FormValid">
+            <MudTextField @bind-Value="@User.Firstname" Label="First name" Validation="_nameValidator.Validation"/>
+            <MudTextField @bind-Value="@User.Lastname" Label="Last name" Validation="_nameValidator.Validation"/>
+            <MudTextField @bind-Value="@User.Email" Label="E-mail" Validation="_emailValidator.Validation"/>
+            <MudTextField @bind-Value="@User.Phone" Label="Phone" Validation="_phoneValidator.Validation"/>
+
+            @if (IsCreate)
+            {
+                <MudTextField @bind-Value="@User.Password" Label="Password" Validation="_passwordValidator.Validation"/>
+            }
+            else
+            {
+                <MudCheckBox @bind-Checked="@UpdatePassword" Label="Change password"/>
+
+                // Only perform validation is UpdatePassword == true
+                if (!UpdatePassword)
+                {
+                    <MudTextField @bind-Value="@User.Password" Disabled="true" Label="Password"/>
+                }
+                else
+                {
+                    <MudTextField @bind-Value="@User.Password" Label="Password" Validation="_passwordValidator.Validation"/>
+                }
+            }
+
+            <MudCheckBox @bind-Checked="@User.IsEnabled" Label="Enabled"/>
+        </MudForm>
     </DialogContent>
     <DialogActions>
         @*Nechcem deletovat právě-vytvářeného usera*@
-        @if (User.UserId != -1)
+        @if (!IsCreate)
         {
             <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="Delete">Delete</MudButton>
         }
         <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit" Disabled="!FormValid">Ok</MudButton>
     </DialogActions>
 </MudDialog>

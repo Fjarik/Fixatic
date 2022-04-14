@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="10.4.0" />
         <PackageReference Include="MudBlazor" Version="6.0.9" />
     </ItemGroup>
 

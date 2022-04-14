@@ -38,6 +38,22 @@ namespace Fixatic.Services.Implementation
 			}
 			return response;
 		}
+		
+		public async Task<ServiceResponse<int>> UpdateSansPasswordAsync(User entry)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<int>();
+			try
+			{
+				response.Item = await _manager!.UpdateSansPasswordAsync(entry);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
 
 		public async Task<ServiceResponse<List<User>>> GetAllAsync()
 		{
