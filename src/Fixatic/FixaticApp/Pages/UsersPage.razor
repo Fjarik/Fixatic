@@ -8,7 +8,10 @@
           RowsPerPage="50">
     <ToolBarContent>
         <MudText Typo="Typo.h5">Users</MudText>
-        <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="OnAddClickedAsync" />
+        <MudSpacer />
+        <MudButton StartIcon="@Icons.Material.Outlined.Add" OnClick="OnAddClickedAsync">
+            Add
+        </MudButton>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>Name</MudTh>

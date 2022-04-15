@@ -39,14 +39,14 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
-		public async Task<ServiceResponse<List<CustomPropertyOption>>> GetAllAsync()
+		public async Task<ServiceResponse<List<CustomPropertyOption>>> GetAllAsync(int propertyId)
 		{
 			await EnsureManagerAsync();
 
 			var response = new ServiceResponse<List<CustomPropertyOption>>();
 			try
 			{
-				response.Item = await _manager!.GetAllAsync();
+				response.Item = await _manager!.GetAllAsync(propertyId);
 			}
 			catch (Exception ex)
 			{

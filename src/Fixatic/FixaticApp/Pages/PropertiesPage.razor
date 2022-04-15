@@ -1,0 +1,28 @@
+﻿@page "/properties"
+@using Fixatic.Types
+
+
+<MudTable Items="@_cumProps" T="CustomProperty"
+          Hover="true" Striped="true"
+          Breakpoint="Breakpoint.Sm"
+          OnRowClick="@PropertySelectedAsync"
+          RowsPerPage="50">
+    <ToolBarContent>
+        <MudText Typo="Typo.h5">Custom properties</MudText>
+        <MudSpacer />
+        <MudButton StartIcon="@Icons.Material.Outlined.Add" OnClick="@OnAddClickedAsync">
+            Create new
+        </MudButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>#</MudTh>
+        <MudTh>Name</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="ID">@context.CustomPropertyId</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>

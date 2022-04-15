@@ -8,13 +8,9 @@ namespace FixaticApp.Pages
 {
 	public partial class UsersPage
 	{
-		[Parameter] public int? UserId { get; set; }
-
 		[Inject] private IUsersService? UsersService { get; set; }
 
 		[Inject] private IDialogService? DialogService { get; set; }
-
-		[Inject] private NavigationManager? NavigationManager { get; set; }
 
 		private List<User> _users = new();
 
@@ -23,14 +19,10 @@ namespace FixaticApp.Pages
 		protected override async Task OnInitializedAsync()
 		{
 			var usersRes = await UsersService!.GetAllAsync();
-			if (!usersRes.IsSuccess || usersRes.Item == null)
-			{
-				var options = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database", options);
+			if (!usersRes.IsSuccess)
 				return;
-			}
 
-			_users = usersRes.Item;
+			_users = usersRes.Item!;
 		}
 
 		private async Task UserSelectedAsync()
@@ -64,9 +56,9 @@ namespace FixaticApp.Pages
 		{
 			inputUser.Password = "";
 
-			var parameters = new DialogParameters {{"User", inputUser}, {"IsCreate", isCreate}};
+			var parameters = new DialogParameters { { "User", inputUser }, { "IsCreate", isCreate } };
 
-			var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
+			var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
 			var dialog = DialogService!.Show<UserEditDialog>("Edit user", parameters, options);
 			var result = await dialog.Result;
 
@@ -87,7 +79,7 @@ namespace FixaticApp.Pages
 				var updateRes = await UsersService!.DeleteAsync(user.UserId);
 				if (!updateRes.IsSuccess)
 				{
-					var errOptions = new DialogOptions {CloseOnEscapeKey = true};
+					var errOptions = new DialogOptions { CloseOnEscapeKey = true };
 					DialogService!.Show<ErrorDialog>("Failed to delete user data", errOptions);
 				}
 			}
@@ -96,7 +88,7 @@ namespace FixaticApp.Pages
 				var updateRes = await UsersService!.CreateOrUpdateAsync(user);
 				if (!updateRes.IsSuccess)
 				{
-					var errOptions = new DialogOptions {CloseOnEscapeKey = true};
+					var errOptions = new DialogOptions { CloseOnEscapeKey = true };
 					DialogService!.Show<ErrorDialog>("Failed to update user data", errOptions);
 				}
 			}
@@ -105,7 +97,7 @@ namespace FixaticApp.Pages
 				var updateRes = await UsersService!.UpdateSansPasswordAsync(user);
 				if (!updateRes.IsSuccess)
 				{
-					var errOptions = new DialogOptions {CloseOnEscapeKey = true};
+					var errOptions = new DialogOptions { CloseOnEscapeKey = true };
 					DialogService!.Show<ErrorDialog>("Failed to update user data", errOptions);
 				}
 			}
