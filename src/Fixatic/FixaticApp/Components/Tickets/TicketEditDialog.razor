@@ -1,0 +1,57 @@
+﻿@using Fixatic.Types
+@using Fixatic.Types.Extensions
+<MudDialog>
+    <DialogContent>
+        @if (Ticket != null)
+        {
+            <MudForm @bind-IsValid="@FormValid">
+                <MudTextField @bind-Value="@Ticket.Title" Label="Status" Validation="_titleValidator.Validation" />
+
+                <MudTextField Lines="5" @bind-Value="@Ticket.Content" Label="Content" Validation="_contentValidator.Validation" />
+
+                <MudSelect T="TicketPriority" Label="Priority" @bind-Value="@Ticket.Priority">
+                    @foreach (var value in Enum.GetValues<TicketPriority>())
+                    {
+                        <MudSelectItem T="TicketPriority" Value="@value">
+                            @value.GetName()
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect T="TicketStatus" Label="Status" @bind-Value="@Ticket.Status">
+                    @foreach (var value in Enum.GetValues<TicketStatus>())
+                    {
+                        <MudSelectItem T="TicketStatus" Value="@value">
+                            @value.GetName()
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect T="TicketType" Label="Type" @bind-Value="@Ticket.Type">
+                    @foreach (var value in Enum.GetValues<TicketType>())
+                    {
+                        <MudSelectItem T="TicketType" Value="@value">
+                            @value.GetName()
+                        </MudSelectItem>
+                    }
+                </MudSelect>
+
+                @if (IsCreate)
+                {
+                    <MudSelect T="TicketVisibility" Label="Visibility" @bind-Value="@Ticket.Visibility">
+                        @foreach (var value in Enum.GetValues<TicketVisibility>())
+                        {
+                            <MudSelectItem T="TicketVisibility" Value="@value">
+                                @value.GetName()
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
+                }
+            </MudForm>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@Submit" Disabled="!FormValid">Ok</MudButton>
+    </DialogActions>
+</MudDialog>

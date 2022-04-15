@@ -71,6 +71,29 @@ namespace Fixatic.BO
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetByIdAsync)}...");
 
+			if (id == DB.IgnoredID)
+			{
+				return new FullTicket
+				{
+					TicketId = DB.IgnoredID,
+					ProjectId = DB.IgnoredID,
+					AssignedUserId = null,
+					CreatorId = _currentUser.UserId,
+					Content = string.Empty,
+					Created = DateTime.Now,
+					DateSolved = null,
+					Modified = null,
+					Priority = TicketPriority.Low,
+					Status = TicketStatus.Created,
+					Title = string.Empty,
+					Type = TicketType.Bug,
+					Visibility = TicketVisibility.Normal,
+					Followers = 0,
+					AssigneeName = string.Empty
+				};
+			}
+
+
 			var mainDo = new TicketsDataObject(_logger, _dbConnector);
 			var res = await mainDo.GetByIdAsync(id);
 

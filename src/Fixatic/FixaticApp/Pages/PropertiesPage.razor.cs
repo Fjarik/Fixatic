@@ -63,7 +63,6 @@ namespace FixaticApp.Pages
 			await ShowPropertyDialogAsync(item);
 		}
 
-
 		private async Task ShowPropertyDialogAsync(CustomProperty item)
 		{
 			var parameters = new DialogParameters

@@ -1,32 +1,35 @@
 <MudDialog>
     <DialogContent>
-        <MudForm @bind-IsValid="@FormValid">
-            <MudTextField @bind-Value="@User.Firstname" Label="First name" Validation="_nameValidator.Validation"/>
-            <MudTextField @bind-Value="@User.Lastname" Label="Last name" Validation="_nameValidator.Validation"/>
-            <MudTextField @bind-Value="@User.Email" Label="E-mail" Validation="_emailValidator.Validation"/>
-            <MudTextField @bind-Value="@User.Phone" Label="Phone" Validation="_phoneValidator.Validation"/>
+        @if (User != null)
+        {
+            <MudForm @bind-IsValid="@FormValid">
+                <MudTextField @bind-Value="@User.Firstname" Label="First name" Validation="_nameValidator.Validation" />
+                <MudTextField @bind-Value="@User.Lastname" Label="Last name" Validation="_nameValidator.Validation" />
+                <MudTextField @bind-Value="@User.Email" Label="E-mail" Validation="_emailValidator.Validation" />
+                <MudTextField @bind-Value="@User.Phone" Label="Phone" Validation="_phoneValidator.Validation" />
 
-            @if (IsCreate)
-            {
-                <MudTextField @bind-Value="@User.Password" Label="Password" Validation="_passwordValidator.Validation"/>
-            }
-            else
-            {
-                <MudCheckBox @bind-Checked="@UpdatePassword" Label="Change password"/>
-
-                // Only perform validation is UpdatePassword == true
-                if (!UpdatePassword)
+                @if (IsCreate)
                 {
-                    <MudTextField @bind-Value="@User.Password" Disabled="true" Label="Password"/>
+                    <MudTextField @bind-Value="@User.Password" Label="Password" Validation="_passwordValidator.Validation" />
                 }
                 else
                 {
-                    <MudTextField @bind-Value="@User.Password" Label="Password" Validation="_passwordValidator.Validation"/>
-                }
-            }
+                    <MudCheckBox @bind-Checked="@UpdatePassword" Label="Change password" />
 
-            <MudCheckBox @bind-Checked="@User.IsEnabled" Label="Enabled"/>
-        </MudForm>
+                    // Only perform validation is UpdatePassword == true
+                    if (!UpdatePassword)
+                    {
+                        <MudTextField @bind-Value="@User.Password" Disabled="true" Label="Password" />
+                    }
+                    else
+                    {
+                        <MudTextField @bind-Value="@User.Password" Label="Password" Validation="_passwordValidator.Validation" />
+                    }
+                }
+
+                <MudCheckBox @bind-Checked="@User.IsEnabled" Label="Enabled" />
+            </MudForm>
+        }
     </DialogContent>
     <DialogActions>
         @*Nechcem deletovat právě-vytvářeného usera*@

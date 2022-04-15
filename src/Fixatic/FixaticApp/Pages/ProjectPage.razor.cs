@@ -1,6 +1,8 @@
+using Fixatic.DO.Types;
 using Fixatic.Services;
 using Fixatic.Types;
 using FixaticApp.Components;
+using FixaticApp.Components.Tickets;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -45,6 +47,11 @@ public partial class ProjectPage
 
 		Project = projectRes.Item;
 
+		await LoadTicketsAsync();
+	}
+
+	private async Task LoadTicketsAsync()
+	{
 		var ticketsRes = await TicketsService!.GetByProjectAsync(this.RouteProjectId);
 		if (!ticketsRes.IsSuccess)
 		{
@@ -81,9 +88,40 @@ public partial class ProjectPage
 		NavigationManager!.NavigateTo($"/project/{RouteProjectId}/{args.Item.TicketId}");
 	}
 
-	private void OnAddTicket()
+	private async Task OnAddTicket()
 	{
-		// TODO: add Ticket
+		var ticketRes = await TicketsService!.GetByIdAsync(DB.IgnoredID);
+		if (!ticketRes.IsSuccess || ticketRes.Item == null)
+			return;
+
+		var ticket = ticketRes.Item;
+		ticket.ProjectId = RouteProjectId;
+
+		await EditTicketAsync(ticket);
+	}
+
+	private async Task OnEditClick()
+	{
+		if (_selectedTicket == null)
+			return;
+
+		await EditTicketAsync(_selectedTicket);
+	}
+
+	private async Task EditTicketAsync(FullTicket ticket)
+	{
+		var parameters = new DialogParameters
+		{
+			{ "Ticket", ticket }
+		};
+		var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+		var dialog = DialogService!.Show<TicketEditDialog>("Ticket", parameters, options);
+		var result = await dialog.Result;
+		if (!result.Cancelled)
+		{
+			await LoadTicketsAsync();
+			StateHasChanged();
+		}
 	}
 
 	private async Task OnRemoveTicketAsync()
@@ -91,8 +129,7 @@ public partial class ProjectPage
 		if (_selectedTicket == null)
 			return;
 
-		// TODO: check result
-		var result = await TicketsService!.DeleteAsync(_selectedTicket.TicketId);
+		await TicketsService!.DeleteAsync(_selectedTicket.TicketId);
 
 		_tickets.Remove(_selectedTicket);
 		_selectedTicket = null;

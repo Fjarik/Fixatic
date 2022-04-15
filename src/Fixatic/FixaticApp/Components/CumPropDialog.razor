@@ -1,15 +1,18 @@
 ﻿<MudDialog>
     <DialogContent>
-        <MudForm @bind-IsValid="@_formValid">
-            <MudTextField @bind-Value="@Property.Name" Label="Name" />
-            <MudTextField @bind-Value="@Property.Description" Label="Description" />
+        @if (Property != null)
+        {
+            <MudForm @bind-IsValid="@_formValid">
+                <MudTextField @bind-Value="@Property.Name" Label="Name" />
+                <MudTextField @bind-Value="@Property.Description" Label="Description" />
 
-            <MudText Typo="Typo.body1">Values:</MudText>
-            @foreach (var opt in _options)
-            {
-                <MudChip Color="Color.Primary" Disabled="@(!opt.IsEnabled)">@opt.Content</MudChip>
-            }
-        </MudForm>
+                <MudText Typo="Typo.body1">Values:</MudText>
+                @foreach (var opt in _options)
+                {
+                    <MudChip Color="Color.Primary" Disabled="@(!opt.IsEnabled)">@opt.Content</MudChip>
+                }
+            </MudForm>
+        }
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@Cancel">Cancel</MudButton>
