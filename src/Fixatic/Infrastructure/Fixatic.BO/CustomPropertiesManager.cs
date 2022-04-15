@@ -45,6 +45,47 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		public async Task<List<FullProperty>> GetByTicketAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(CustomPropertiesManager)}.{nameof(GetByTicketAsync)}...");
+
+			var mainDo = new CustomPropertiesDataObject(_logger, _dbConnector);
+			var rows = await mainDo.GetByTicketAsync(ticketId);
+
+			var res = new List<FullProperty>();
+			foreach (var group in rows.GroupBy(x => x.CustomPropertyId))
+			{
+				var first = group.FirstOrDefault();
+				if (first == null)
+					continue;
+
+				var prop = new FullProperty
+				{
+					CustomPropertyId = group.Key,
+					Name = first.Name,
+					Description = first.Description,
+					Options = new List<CustomPropertyOption>(),
+				};
+
+				foreach (var option in group)
+				{
+					prop.Options.Add(new CustomPropertyOption
+					{
+						CustomPropertyId = prop.CustomPropertyId,
+						CustomPropertyOptionId = option.CustomPropertyOptionId,
+						Content = option.Content,
+						IsEnabled = option.IsEnabled,
+						Sequence = option.Sequence,
+					});
+				}
+				
+				res.Add(prop);
+			}
+
+			_logger.LogInformation($"{nameof(CustomPropertiesManager)}.{nameof(GetByTicketAsync)}... Done");
+			return res;
+		}
+
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(CustomPropertiesManager)}.{nameof(DeleteAsync)}...");
@@ -55,5 +96,6 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(CustomPropertiesManager)}.{nameof(DeleteAsync)}... Done");
 			return res;
 		}
+
 	}
 }

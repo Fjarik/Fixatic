@@ -8,6 +8,8 @@ namespace Fixatic.Services
 		Task<ServiceResponse<int>> CreateOrUpdateAsync(CustomProperty entry);
 
 		Task<ServiceResponse<List<CustomProperty>>> GetAllAsync();
+		
+		Task<ServiceResponse<List<FullProperty>>> GetByTicketAsync(int ticketId);
 
 		Task<ServiceResponse<bool>> DeleteAsync(int id);
 	}

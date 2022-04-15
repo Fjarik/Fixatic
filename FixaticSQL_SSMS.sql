@@ -317,9 +317,9 @@ INSERT [dbo].[Comments] ([Content], [Created], [IsInternal], [Comment_ID], [Tick
 GO
 SET IDENTITY_INSERT [dbo].[Comments] OFF
 GO
-INSERT [dbo].[CustomProperties] ([Description], [Name], [CustomProperty_ID]) VALUES (N'The label', N'Label', 1)
+INSERT [dbo].[CustomProperties] ([Description], [Name], [CustomProperty_ID]) VALUES (N'Label for project', N'Label', 1)
 GO
-INSERT [dbo].[CustomProperties] ([Description], [Name], [CustomProperty_ID]) VALUES (N'The version', N'Version', 2)
+INSERT [dbo].[CustomProperties] ([Description], [Name], [CustomProperty_ID]) VALUES (N'Affected version', N'Version', 2)
 GO
 SET IDENTITY_INSERT [dbo].[CustomPropertyOptions] ON 
 GO
@@ -341,7 +341,15 @@ INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [Custo
 GO
 SET IDENTITY_INSERT [dbo].[CustomPropertyOptions] OFF
 GO
+INSERT [dbo].[CustomPropertyValues] ([Created], [CustomPropertyOption_ID], [Ticket_ID]) VALUES (CAST(N'2018-08-30T17:17:22.0000000' AS DateTime2), 1, 4)
+GO
 INSERT [dbo].[CustomPropertyValues] ([Created], [CustomPropertyOption_ID], [Ticket_ID]) VALUES (CAST(N'2018-08-30T17:17:22.0000000' AS DateTime2), 2, 4)
+GO
+INSERT [dbo].[CustomPropertyValues] ([Created], [CustomPropertyOption_ID], [Ticket_ID]) VALUES (CAST(N'2018-08-30T17:17:22.0000000' AS DateTime2), 5, 4)
+GO
+INSERT [dbo].[CustomPropertyValues] ([Created], [CustomPropertyOption_ID], [Ticket_ID]) VALUES (CAST(N'2018-08-30T17:17:22.0000000' AS DateTime2), 6, 4)
+GO
+INSERT [dbo].[CustomPropertyValues] ([Created], [CustomPropertyOption_ID], [Ticket_ID]) VALUES (CAST(N'2018-08-30T17:17:22.0000000' AS DateTime2), 7, 4)
 GO
 INSERT [dbo].[CustomPropertyValues] ([Created], [CustomPropertyOption_ID], [Ticket_ID]) VALUES (CAST(N'2019-04-18T08:01:45.0000000' AS DateTime2), 4, 10)
 GO

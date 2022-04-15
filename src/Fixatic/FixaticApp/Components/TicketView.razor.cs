@@ -14,8 +14,12 @@ namespace FixaticApp.Components
 		[Inject]
 		private IAttachementsService? AttachementsService { get; set; }
 
+		[Inject]
+		private ICustomPropertiesService? CustomPropertiesService { get; set; }
+
 		private List<Comment> Comments { get; set; } = new();
 		private List<Attachement> Attachements { get; set; } = new();
+		private List<FullProperty> Properties { get; set; } = new();
 
 		private int PrevId { get; set; } = -1;
 
@@ -46,6 +50,11 @@ namespace FixaticApp.Components
 				Attachements = attachementsRes.Item ?? new List<Attachement>();
 			}
 
+			var propsRes = await CustomPropertiesService!.GetByTicketAsync(Model.TicketId);
+			if (propsRes.IsSuccess)
+			{
+				Properties = propsRes.Item ?? new List<FullProperty>();
+			}
 		}
 
 		private string GetAssigneeName()

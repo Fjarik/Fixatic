@@ -41,7 +41,7 @@ namespace Fixatic.DO
 			var cmd = new SqlCommand(sql);
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
-			
+
 			cmd.Parameters.Add("@description", SqlDbType.NVarChar).Value = customProperty.Description;
 			cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = customProperty.Name;
 
@@ -91,6 +91,59 @@ namespace Fixatic.DO
 			}
 
 			_logger.LogInformation($"{nameof(CustomPropertiesDataObject)}.{nameof(GetAllAsync)}... Done");
+			return res;
+		}
+
+		public async Task<List<FullPropertyRow>> GetByTicketAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(CustomPropertiesDataObject)}.{nameof(GetByTicketAsync)}...");
+
+			var sql = @"
+				SELECT 
+					cp.Name,
+					cp.Description,
+					co.CustomPropertyOption_ID, 
+					co.Content,
+					co.IsEnabled, 
+					co.Sequence, 
+					co.CustomProperty_ID 
+				FROM CustomPropertyOptions co
+				INNER JOIN CustomPropertyValues cv ON co.CustomPropertyOption_ID = cv.CustomPropertyOption_ID
+				INNER JOIN CustomProperties cp ON cp.CustomProperty_ID = co.CustomProperty_ID
+				WHERE cv.Ticket_ID = @ticketId;
+			";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@ticketId", SqlDbType.Int).Value = ticketId;
+
+			var res = new List<FullPropertyRow>();
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new FullPropertyRow
+					{
+						Name = (string)r["Name"],
+						Description = (string)r["Description"],
+						CustomPropertyOptionId = (int)r["CustomPropertyOption_ID"],
+						Content = (string)r["Content"],
+						IsEnabled = (bool)r["IsEnabled"],
+						Sequence = (int)r["Sequence"],
+						CustomPropertyId = (int)r["CustomProperty_ID"],
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(CustomPropertiesDataObject)}.{nameof(GetByTicketAsync)}... Done");
 			return res;
 		}
 
