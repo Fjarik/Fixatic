@@ -935,3 +935,19 @@ AS
 		AssigneeName = dbo.fn_user_fullName(AssignedUser_ID)
 	FROM Tickets
 GO
+
+CREATE OR ALTER VIEW view_properties
+AS 
+	SELECT
+		cp.Name,
+		cp.Description,
+		co.CustomPropertyOption_ID, 
+		co.Content,
+		co.IsEnabled, 
+		co.Sequence, 
+		co.CustomProperty_ID,
+		cv.Ticket_ID
+	FROM CustomPropertyOptions co
+	INNER JOIN CustomPropertyValues cv ON co.CustomPropertyOption_ID = cv.CustomPropertyOption_ID
+	INNER JOIN CustomProperties cp ON cp.CustomProperty_ID = co.CustomProperty_ID
+GO

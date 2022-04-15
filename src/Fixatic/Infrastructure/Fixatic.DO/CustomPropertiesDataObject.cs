@@ -100,17 +100,15 @@ namespace Fixatic.DO
 
 			var sql = @"
 				SELECT 
-					cp.Name,
-					cp.Description,
-					co.CustomPropertyOption_ID, 
-					co.Content,
-					co.IsEnabled, 
-					co.Sequence, 
-					co.CustomProperty_ID 
-				FROM CustomPropertyOptions co
-				INNER JOIN CustomPropertyValues cv ON co.CustomPropertyOption_ID = cv.CustomPropertyOption_ID
-				INNER JOIN CustomProperties cp ON cp.CustomProperty_ID = co.CustomProperty_ID
-				WHERE cv.Ticket_ID = @ticketId;
+					Name,
+					Description,
+					CustomPropertyOption_ID, 
+					Content,
+					IsEnabled, 
+					Sequence, 
+					CustomProperty_ID 
+				FROM view_properties 
+				WHERE Ticket_ID = @ticketId;
 			";
 
 			var cmd = new SqlCommand(sql);
