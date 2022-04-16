@@ -1,6 +1,7 @@
 @page "/project/{RouteProjectId:int}/{RouteSelectedTicketId:int?}"
 @layout AppLayout
 @using Fixatic.Types
+@using FixaticApp.Components.Tickets
 
 <MudGrid>
     <MudItem xs="12">
@@ -31,28 +32,6 @@
         }
     </MudItem>
     <MudItem xs="10">
-        @if (_selectedTicket != null)
-        {
-            <MudToolBar Class="pl-0">
-                <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="OnAddTicket" />
-                <MudIconButton Icon="@Icons.Material.Outlined.Edit" OnClick="OnEditClick" />
-                <MudIconButton Icon="@Icons.Material.Outlined.Comment" OnClick="OnCommentTicketAsync" />
-
-                <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" OnClick="OnRemoveTicketAsync" />
-
-                @if (_isFollowed)
-                {
-                    <MudIconButton Title="Followed" Icon="@Icons.Filled.Star" OnClick="OnFollowTicketClick" />
-                }
-                else
-                {
-                    <MudIconButton Title="Follow" Icon="@Icons.Filled.StarBorder" OnClick="OnFollowTicketClick" />
-                }
-            </MudToolBar>
-
-            <MudDivider />
-
-            <TicketView Model="_selectedTicket" />
-        }
+        <FullTicketView TicketId="@_selectedTicketId" OnRemoved="@OnTicketRemoved" ProjectID="@RouteProjectId" />
     </MudItem>
 </MudGrid>

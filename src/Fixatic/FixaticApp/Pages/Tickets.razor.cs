@@ -30,25 +30,22 @@ namespace FixaticApp.Pages
 
 		private List<FullTicket> _tickets = new();
 		private List<Ticket> BaseTickets => _tickets.Cast<Ticket>().ToList();
-		private FullTicket? _selectedTicket;
 
 		protected override async Task OnParametersSetAsync()
 		{
 			if (TicketId.HasValue)
-			{
-				var ticketRes = await TicketsService!.GetByIdAsync(TicketId.Value);
-				if (ticketRes.IsSuccess && ticketRes.Item != null)
-				{
-					_selectedTicket = ticketRes.Item;
-					return;
-				}
-			}
-			_selectedTicket = null;
+				return;
+
 			var ticketsRes = await TicketsService!.GetAllAsync();
 			if (ticketsRes.IsSuccess)
 			{
 				_tickets = ticketsRes.Item!;
 			}
+		}
+
+		private void OnTicketRemoved()
+		{
+			NavigationManager!.NavigateTo("/tickets");
 		}
 
 		private void TicketSelected(Ticket ticket)

@@ -1,0 +1,27 @@
+﻿@if (Model != null)
+{
+    <MudToolBar Class="pl-0">
+        @if (ProjectID > 0)
+        {
+            <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="OnAddTicket" />
+        }
+        <MudIconButton Icon="@Icons.Material.Outlined.Edit" OnClick="OnEditClick" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Comment" OnClick="OnCommentTicketAsync" />
+
+        <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" OnClick="OnRemoveTicketAsync" />
+
+        @if (_isFollowed)
+        {
+            <MudIconButton Title="Followed" Icon="@Icons.Filled.Star" OnClick="OnFollowTicketClick" />
+        }
+        else
+        {
+            <MudIconButton Title="Follow" Icon="@Icons.Filled.StarBorder" OnClick="OnFollowTicketClick" />
+        }
+    </MudToolBar>
+
+    <MudDivider />
+
+    <TicketView Model="Model" />
+}
+

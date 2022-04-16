@@ -30,6 +30,11 @@ namespace Fixatic.BO
 			var mainDo = new TicketsDataObject(_logger, _dbConnector);
 			var res = await mainDo.CreateOrUpdateAsync(entry);
 
+			if (entry.TicketId != DB.IgnoredID && entry.Status == TicketStatus.Done)
+			{
+				//	await mainDo.FinishTicketAsync(entry.TicketId);
+			}
+
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(CreateOrUpdateAsync)}... Done");
 			return res;
 		}

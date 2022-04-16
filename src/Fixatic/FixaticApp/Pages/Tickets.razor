@@ -2,11 +2,11 @@
 @page "/tickets/{TicketId:int}"
 @using FixaticApp.Components.Tickets
 
-@if (_selectedTicket == null)
+@if (TicketId == null)
 {
     <TicketsTable Tickets="@BaseTickets" OnTicketSelect="@TicketSelected" />
 }
 else
 {
-    <TicketView Model="@_selectedTicket" />
+    <FullTicketView TicketId="@((int)TicketId)" OnRemoved="@OnTicketRemoved" />
 }

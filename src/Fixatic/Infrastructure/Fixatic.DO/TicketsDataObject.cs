@@ -446,6 +446,31 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(DeleteAsync)}... Done");
 			return res != 0;
 		}
+		
+		public async Task<bool> FinishTicketAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(FinishTicketAsync)}...");
+
+			var sql = @"
+				EXECUTE proc_finish_ticket @ticketId;
+			";
+
+			var cmd = new SqlCommand(sql);
+
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = ticketId;
+			int res;
+			try
+			{
+				res = await _db.ExecuteNonQueryAsync(cmd);
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(FinishTicketAsync)}... Done");
+			return res != 0;
+		}
 
 		public async Task<List<Follower>> GetFollowerByUserAsync(int userId)
 		{
