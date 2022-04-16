@@ -373,17 +373,17 @@ INSERT [dbo].[Followers] ([Since], [Type], [User_ID], [Ticket_ID]) VALUES (CAST(
 GO
 SET IDENTITY_INSERT [dbo].[Groups] ON 
 GO
-INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group developing the software', N'Developers', 1, 1)
+INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group developing the software', N'Developers', 2, 1)
 GO
-INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group testing the software', N'Testers', 1, 2)
+INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group testing the software', N'Testers', 2, 2)
 GO
-INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group for the project managers', N'Project managers', 1, 3)
+INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group for the project managers', N'Project managers', 2, 3)
 GO
-INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of the external company developing the software ', N'Microsoft Developers', 2, 4)
+INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of the external company developing the software ', N'Microsoft Developers', 4, 4)
 GO
-INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of the external company testing the software', N'Microsoft Testers', 2, 5)
+INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of the external company testing the software', N'Microsoft Testers', 4, 5)
 GO
-INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of administrators', N'Admins', 3, 6)
+INSERT [dbo].[Groups] ([Description], [Name], [Type], [Group_ID]) VALUES (N'The group of administrators', N'Admins', 8, 6)
 GO
 SET IDENTITY_INSERT [dbo].[Groups] OFF
 GO
@@ -856,6 +856,28 @@ BEGIN
 END;
 GO
 
+CREATE OR ALTER FUNCTION fn_user_type (@UserId INT)
+RETURNS INT
+AS 
+BEGIN
+	DECLARE @Type INT;
+
+	SELECT 
+		@Type = SUM(sub.Type)
+	FROM (
+		SELECT DISTINCT
+			g.Type
+		FROM Groups g
+		INNER JOIN UsersGroups ug ON ug.Group_ID = g.Group_ID
+		WHERE
+			ug.User_ID = @UserId
+	) sub;
+
+	RETURN (@Type);
+END;
+GO
+
+
 CREATE OR ALTER PROCEDURE proc_anonymize_user @UserId INT
 AS
 	UPDATE Users
@@ -950,4 +972,18 @@ AS
 	FROM CustomPropertyOptions co
 	INNER JOIN CustomPropertyValues cv ON co.CustomPropertyOption_ID = cv.CustomPropertyOption_ID
 	INNER JOIN CustomProperties cp ON cp.CustomProperty_ID = co.CustomProperty_ID
+GO
+
+CREATE OR ALTER VIEW view_full_users
+AS 
+	SELECT
+		u.User_ID,
+		u.Firstname,
+		u.Lastname,
+		u.Email,
+		u.Phone,
+		u.Created,
+		u.IsEnabled,
+		Type = dbo.fn_user_type(u.User_ID)
+	FROM Users u
 GO

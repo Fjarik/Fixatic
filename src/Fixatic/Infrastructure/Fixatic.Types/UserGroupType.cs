@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Fixatic.Types
 {
+	[Flags]
 	public enum UserGroupType
 	{
-		Internal = 1,
-		External = 2,
-		Admin = 3,
+		Internal = 2,
+		External = 4,
+		Admin = 8,
 	}
 }

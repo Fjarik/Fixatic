@@ -1,8 +1,11 @@
 ﻿<MudNavMenu>
     <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
     <MudNavLink Href="/tickets" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.List">Tickets</MudNavLink>
-    <MudNavGroup Title="Administration" Icon="@Icons.Filled.Settings" Expanded="true">
-        <MudNavLink Href="/users" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AccountCircle">Users</MudNavLink>
-        <MudNavLink Href="/properties" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Api">Properties</MudNavLink>
-    </MudNavGroup>
+    @if (CurrentUser!.IsInGroup(UserGroupType.Admin))
+    {
+        <MudNavGroup Title="Administration" Icon="@Icons.Filled.Settings" Expanded="true">
+            <MudNavLink Href="/users" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AccountCircle">Users</MudNavLink>
+            <MudNavLink Href="/properties" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Api">Properties</MudNavLink>
+        </MudNavGroup>
+    }
 </MudNavMenu>

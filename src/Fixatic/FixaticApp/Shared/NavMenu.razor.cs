@@ -15,26 +15,16 @@ using MudBlazor;
 using FixaticApp;
 using FixaticApp.Shared;
 using Fixatic.Types;
-using Fixatic.Services;
+using Fixatic.Types.Extensions;
+using FixaticApp.Components;
+using FixaticApp.Types;
 
 namespace FixaticApp.Shared
 {
-	public partial class MainLayout
+	public partial class NavMenu
 	{
-		[Inject]
-		private ICurrentUserService? CurrentUserService { get; set; }
+		[CascadingParameter(Name = "CurrentUser")]
+		public CurrentUser CurrentUser { get; set; }
 
-		private CurrentUser? _currentUser;
-		private bool _isDarkMode = false;
-		private void SwitchMode()
-		{
-			_isDarkMode = !_isDarkMode;
-		}
-
-		protected override async Task OnInitializedAsync()
-		{
-			_currentUser = await CurrentUserService!.GetUserInfoAsync();
-			await base.OnInitializedAsync();
-		}
 	}
 }

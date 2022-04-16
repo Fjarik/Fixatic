@@ -293,8 +293,9 @@ namespace Fixatic.DO
                     Email,
                     Phone,
                     Created,
-                    IsEnabled
-                FROM Users
+                    IsEnabled,
+					Type
+                FROM view_full_users
 				WHERE Email = @email;
             ";
 
@@ -319,6 +320,7 @@ namespace Fixatic.DO
 						Phone = (string)r["Phone"],
 						Created = (DateTime)r["Created"],
 						IsEnabled = (bool)r["IsEnabled"],
+						GroupType = (UserGroupType)(int)r["Type"],
 					};
 				}
 

@@ -36,6 +36,9 @@ namespace Fixatic.BO
 			if (hashRes == PasswordVerificationResult.Failed)
 				return null;
 
+			if (!user.IsEnabled)
+				return null;
+
 			var res = GenerateClaims(user);
 
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(LoginAsync)}... Done");
@@ -53,6 +56,9 @@ namespace Fixatic.BO
 			var user = await mainDo.GetCurrentUserAsync(email);
 			if (user == null)
 				throw new UnauthorizedAccessException("User not found");
+
+			if (!user.IsEnabled)
+				throw new UnauthorizedAccessException("User is disabled");
 
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(LoadUserInfoAsync)}... Done");
 			return user;
