@@ -1,7 +1,6 @@
 @using Fixatic.Services
 @using Fixatic.Types
 
-@page "/ticket"
 @layout AppLayout
 <PageTitle>Ticket View</PageTitle>
 
@@ -82,17 +81,17 @@ else
                             {
                                 <MudTreeViewItem Value="@("Properties")" Icon="@Icons.Filled.Settings" IconColor="Color.Primary">
                                     @foreach (var property in Properties)
-                                    {
-                                        <MudTreeViewItem Value="@property.Name" Icon="@Icons.Filled.Settings" 
-                                                         IconColor="Color.Primary" title="@property.Description">
-                                            @foreach (var option in property.Options)
-                                            {
-                                                <MudTreeViewItem Value="@option.Content" Icon="@Icons.Filled.Settings"
-                                                                 IconColor="Color.Primary" Disabled="@(!option.IsEnabled)" />
-                                            }
-                                        </MudTreeViewItem>
-                                    }
-                                </MudTreeViewItem>
+                            {
+                                <MudTreeViewItem Value="@property.Name" Icon="@Icons.Filled.Settings"
+                                             IconColor="Color.Primary" title="@property.Description">
+                                    @foreach (var option in property.Options)
+                                {
+                                    <MudTreeViewItem Value="@option.Content" Icon="@Icons.Filled.Settings"
+                                                 IconColor="Color.Primary" Disabled="@(!option.IsEnabled)" />
+                                }
+                            </MudTreeViewItem>
+                            }
+                        </MudTreeViewItem>
                             }
 
                             <MudTreeViewItem Value="@("Dates")" Icon="@Icons.Filled.CalendarMonth" ExpandedIcon="@Icons.Filled.ArrowRight">

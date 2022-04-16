@@ -167,5 +167,13 @@ namespace FixaticApp.Components.Tickets
 				_isFollowed = result.Item;
 			}
 		}
+
+		private async Task OnCumPropsClick()
+		{
+			// TODO: Show dialog
+			
+			await LoadModelAsync();
+		}
+
 	}
 }

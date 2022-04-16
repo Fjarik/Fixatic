@@ -1,6 +1,9 @@
 ﻿<MudNavMenu>
     <MudNavLink Href="/dashboard" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
-    <MudNavLink Href="/tickets" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.List">Tickets</MudNavLink>
+    @if (CurrentUser!.IsInGroup(UserGroupType.Internal | UserGroupType.Admin))
+    {
+        <MudNavLink Href="/tickets" Match="NavLinkMatch.Prefix" Icon="@Icons.Filled.List">Tickets</MudNavLink>
+    }
     @if (CurrentUser!.IsInGroup(UserGroupType.Admin))
     {
         <MudNavGroup Title="Administration" Icon="@Icons.Filled.Settings" Expanded="true">
