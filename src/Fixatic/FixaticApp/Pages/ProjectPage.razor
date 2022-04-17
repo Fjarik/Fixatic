@@ -16,8 +16,13 @@
     <MudItem xs="2">
         @if (Project != null)
         {
+            <MudToolBar Class="pl-0">
+                <MudButton StartIcon="@Icons.Material.Outlined.Add" OnClick="OnAddTicket">
+                    Add new ticket
+                </MudButton>
+            </MudToolBar>
             <MudTable T="FullTicket" Hover="true" Striped="true"
-                      Items="@_tickets" OnRowClick="@OnTicketSelect">
+                  Items="@_tickets" OnRowClick="@OnTicketSelect">
                 <HeaderContent>
                     <MudTh>Tickets</MudTh>
                 </HeaderContent>
@@ -31,6 +36,6 @@
         }
     </MudItem>
     <MudItem xs="10">
-        <FullTicketView TicketId="@_selectedTicketId" OnRemoved="@OnTicketRemoved" ProjectID="@RouteProjectId" />
+        <FullTicketView TicketId="@_selectedTicketId" OnRemoved="@OnTicketRemoved" />
     </MudItem>
 </MudGrid>

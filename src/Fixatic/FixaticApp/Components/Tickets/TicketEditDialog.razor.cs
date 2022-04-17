@@ -18,6 +18,7 @@ using FixaticApp.Components;
 using Fixatic.Types;
 using FixaticApp.Types;
 using FluentValidation;
+using Fixatic.Services;
 
 namespace FixaticApp.Components.Tickets
 {
@@ -28,6 +29,9 @@ namespace FixaticApp.Components.Tickets
 
 		[Parameter]
 		public FullTicket? Ticket { get; set; }
+
+		[Inject]
+		private ITicketsService? TicketsService { get; set; }
 
 		private bool FormValid;
 		private bool IsCreate => Ticket?.TicketId < 1;
@@ -47,10 +51,10 @@ namespace FixaticApp.Components.Tickets
 
 		private async Task Submit()
 		{
-			if (!FormValid)
+			if (!FormValid || Ticket == null)
 				return;
 
-			await Task.CompletedTask;
+			var res = await TicketsService!.CreateOrUpdateAsync(Ticket);
 			MudDialog!.Close(DialogResult.Ok(Ticket));
 		}
 	}

@@ -52,6 +52,11 @@ namespace Fixatic.BO
 			var mainDo = new CommentsDataObject(_logger, _dbConnector);
 			var res = await mainDo.GetByTicketAsync(ticketId);
 
+			if (!_currentUser.IsInternal())
+			{
+				res = res.FindAll(c => !c.IsInternal);
+			}
+
 			_logger.LogInformation($"{nameof(CommentsManager)}.{nameof(GetByTicketAsync)}... Done");
 			return res;
 		}

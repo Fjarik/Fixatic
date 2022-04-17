@@ -5,7 +5,7 @@
         @if (Ticket != null)
         {
             <MudForm @bind-IsValid="@FormValid">
-                <MudTextField @bind-Value="@Ticket.Title" Label="Status" Validation="_titleValidator.Validation" />
+                <MudTextField @bind-Value="@Ticket.Title" Label="Title" Validation="_titleValidator.Validation" />
 
                 <MudTextField Lines="5" @bind-Value="@Ticket.Content" Label="Content" Validation="_contentValidator.Validation" />
 

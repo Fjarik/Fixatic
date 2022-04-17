@@ -83,12 +83,6 @@ namespace Fixatic.Services.Implementation
 			try
 			{
 				response.Item = await _manager!.GetByTicketAsync(ticketId);
-
-				var currentUser = await _currentUserService.GetUserInfoAsync();
-				if (!currentUser.IsInternal())
-				{
-					response.Item = response.Item.FindAll(c => !c.IsInternal);
-				}
 			}
 			catch (Exception ex)
 			{

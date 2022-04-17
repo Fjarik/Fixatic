@@ -27,8 +27,6 @@ namespace FixaticApp.Components.Tickets
 	{
 		[Parameter] public int TicketId { get; set; } = -1;
 
-		[Parameter] public int ProjectID { get; set; } = -1;
-
 		[Parameter] public EventCallback OnRemoved { get; set; }
 
 
@@ -66,21 +64,6 @@ namespace FixaticApp.Components.Tickets
 			Model = ticketRes.Item;
 
 			_isFollowed = (await TicketsService!.IsFollowedAsync(Model.TicketId)).Item == true;
-		}
-
-		private async Task OnAddTicket()
-		{
-			if (ProjectID < 1)
-				return;
-
-			var ticketRes = await TicketsService!.GetByIdAsync(DB.IgnoredID);
-			if (!ticketRes.IsSuccess || ticketRes.Item == null)
-				return;
-
-			var ticket = ticketRes.Item;
-			ticket.ProjectId = ProjectID;
-
-			await EditTicketAsync(ticket);
 		}
 
 		private async Task OnEditClick()

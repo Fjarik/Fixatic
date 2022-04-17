@@ -47,6 +47,7 @@ namespace Fixatic.BO
 
 			var mainDo = new TicketsDataObject(_logger, _dbConnector);
 			var res = await mainDo.GetAllAsync(_currentUser.UserId);
+			res = FilerInternalTickets(res);
 
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAllAsync)}... Done");
 			return res;
@@ -58,6 +59,7 @@ namespace Fixatic.BO
 
 			var mainDo = new TicketsDataObject(_logger, _dbConnector);
 			var res = await mainDo.GetByProjectAsync(projectId);
+			res = FilerInternalTickets(res);
 
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetByProjectAsync)}... Done");
 			return res;
@@ -69,8 +71,18 @@ namespace Fixatic.BO
 
 			var mainDo = new TicketsDataObject(_logger, _dbConnector);
 			var res = await mainDo.GetFollowedTicketsAsync(_currentUser.UserId);
+			res = FilerInternalTickets(res);
 
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowedTicketsAsync)}... Done");
+			return res;
+		}
+
+		private List<FullTicket> FilerInternalTickets(List<FullTicket> res)
+		{
+			if (!_currentUser.IsInternal())
+			{
+				res = res.FindAll(x => x.Visibility != TicketVisibility.Internal);
+			}
 			return res;
 		}
 

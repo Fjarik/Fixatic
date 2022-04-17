@@ -1,10 +1,6 @@
 ﻿@if (Model != null)
 {
     <MudToolBar Class="pl-0">
-        @if (ProjectID > 0)
-        {
-            <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="OnAddTicket" />
-        }
         <MudIconButton Icon="@Icons.Material.Outlined.Edit" OnClick="OnEditClick" />
         <MudIconButton Icon="@Icons.Material.Outlined.Comment" OnClick="OnCommentTicketAsync" />
 

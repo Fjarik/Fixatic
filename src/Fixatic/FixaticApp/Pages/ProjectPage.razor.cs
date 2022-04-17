@@ -30,7 +30,7 @@ public partial class ProjectPage
 		var projectRes = await ProjectsService!.GetByIdAsync(this.RouteProjectId);
 		if (!projectRes.IsSuccess || projectRes.Item == null)
 		{
-			var options = new DialogOptions {CloseOnEscapeKey = true};
+			var options = new DialogOptions { CloseOnEscapeKey = true };
 			DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database", options);
 			return;
 		}
@@ -45,7 +45,7 @@ public partial class ProjectPage
 		var ticketsRes = await TicketsService!.GetByProjectAsync(this.RouteProjectId);
 		if (!ticketsRes.IsSuccess)
 		{
-			var options = new DialogOptions {CloseOnEscapeKey = true};
+			var options = new DialogOptions { CloseOnEscapeKey = true };
 			DialogService!.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
 			return;
 		}
@@ -81,5 +81,33 @@ public partial class ProjectPage
 		_selectedTicketId = -1;
 		await LoadTicketsAsync();
 		StateHasChanged();
+	}
+
+	private async Task OnAddTicket()
+	{
+		if (Project == null)
+			return;
+
+		var ticketRes = await TicketsService!.GetByIdAsync(DB.IgnoredID);
+		if (!ticketRes.IsSuccess || ticketRes.Item == null)
+			return;
+
+		var ticket = ticketRes.Item;
+		ticket.ProjectId = Project.ProjectId;
+
+		await EditTicketAsync(ticket);
+	}
+
+	private async Task EditTicketAsync(FullTicket ticket)
+	{
+		var parameters = new DialogParameters { { "Ticket", ticket } };
+		var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+		var dialog = DialogService!.Show<TicketEditDialog>("Ticket", parameters, options);
+		var result = await dialog.Result;
+		if (!result.Cancelled)
+		{
+			await LoadTicketsAsync();
+			StateHasChanged();
+		}
 	}
 }

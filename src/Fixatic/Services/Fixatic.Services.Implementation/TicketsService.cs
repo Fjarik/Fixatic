@@ -48,7 +48,6 @@ namespace Fixatic.Services.Implementation
 			try
 			{
 				response.Item = await _manager!.GetAllAsync();
-				response.Item = await FilterInternalAsync(response.Item);
 			}
 			catch (Exception ex)
 			{
@@ -83,7 +82,6 @@ namespace Fixatic.Services.Implementation
 			try
 			{
 				response.Item = await _manager!.GetByProjectAsync(projectId);
-				response.Item = await FilterInternalAsync(response.Item);
 			}
 			catch (Exception ex)
 			{
@@ -101,7 +99,6 @@ namespace Fixatic.Services.Implementation
 			try
 			{
 				response.Item = await _manager!.GetFollowedTicketsAsync();
-				response.Item = await FilterInternalAsync(response.Item);
 			}
 			catch (Exception ex)
 			{
@@ -109,14 +106,6 @@ namespace Fixatic.Services.Implementation
 			}
 
 			return response;
-		}
-
-		private async Task<List<FullTicket>> FilterInternalAsync(List<FullTicket> tickets)
-		{
-			var currentUser = await _currentUserService.GetUserInfoAsync();
-			return !currentUser.IsInternal()
-				? tickets.FindAll(ft => ft.Visibility != TicketVisibility.Internal)
-				: tickets;
 		}
 
 		public async Task<ServiceResponse<bool>> IsFollowedAsync(int ticketId)
