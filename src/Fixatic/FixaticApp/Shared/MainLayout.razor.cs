@@ -21,20 +21,10 @@ namespace FixaticApp.Shared
 {
 	public partial class MainLayout
 	{
-		[Inject]
-		private ICurrentUserService? CurrentUserService { get; set; }
-
-		private CurrentUser? _currentUser;
 		private bool _isDarkMode = false;
 		private void SwitchMode()
 		{
 			_isDarkMode = !_isDarkMode;
-		}
-
-		protected override async Task OnInitializedAsync()
-		{
-			_currentUser = await CurrentUserService!.GetUserInfoAsync();
-			await base.OnInitializedAsync();
 		}
 	}
 }

@@ -7,12 +7,7 @@
 <MudLayout>
     <CascadingValue Value="@_isDarkMode" Name="DarkMode">
         <CascadingValue Value="@SwitchMode" Name="ToggleDarkMode">
-            @if (_currentUser != null)
-            {
-                <CascadingValue Value="@_currentUser" Name="CurrentUser">
-                    @Body
-                </CascadingValue>
-            }
+            @Body
         </CascadingValue>
     </CascadingValue>
 </MudLayout>
