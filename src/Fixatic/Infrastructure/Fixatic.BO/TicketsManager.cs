@@ -142,16 +142,32 @@ namespace Fixatic.BO
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetCustomPropertiesAsync)}...");
 
+			var propMgr = new CustomPropertiesManager(_logger, _applicationSettings, _currentUser);
+			var properties = await propMgr.GetAllAsync();
+
 			var optMgr = new CustomPropertyOptionsManager(_logger, _applicationSettings, _currentUser);
 			var options = await optMgr.GetAllAsync();
 
 			var activeIds = await GetCustomPropertyOptionIdsAsync(ticketId);
 
-			var res = options.Select(x =>
+			var res = new List<FullTicketProperty>();
+			foreach (var group in options.GroupBy(x => x.CustomPropertyId))
 			{
-				var active = activeIds.Contains(x.CustomPropertyOptionId);
-				return new FullTicketProperty(x, active);
-			}).ToList();
+				var propertyId = group.Key;
+				var property = properties.FirstOrDefault(x => x.CustomPropertyId == propertyId);
+				if (property == null)
+					continue;
+
+				var fullOptions = new List<FullTicketPropertyOption>();
+				foreach (var option in group)
+				{
+					var active = activeIds.Contains(option.CustomPropertyOptionId);
+					var fullOption = new FullTicketPropertyOption(option, active);
+					fullOptions.Add(fullOption);
+				}
+				var prop = new FullTicketProperty(property, fullOptions);
+				res.Add(prop);
+			}
 
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetCustomPropertiesAsync)}... Done");
 			return res;

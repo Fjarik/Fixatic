@@ -26,7 +26,10 @@ namespace FixaticApp.Components.Tickets
 		protected override async Task OnParametersSetAsync()
 		{
 			if (Model == null)
+			{
+				PrevId = -1;
 				return;
+			}
 
 			if (PrevId == Model.TicketId)
 				return;

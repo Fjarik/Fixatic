@@ -52,12 +52,16 @@ namespace FixaticApp.Components.Tickets
 				return;
 			if (_prevId == TicketId)
 				return;
+			_prevId = TicketId;
 
 			await LoadModelAsync();
 		}
 
 		private async Task LoadModelAsync()
 		{
+			Model = null;
+			StateHasChanged();
+
 			var ticketRes = await TicketsService!.GetByIdAsync(TicketId);
 			if (!ticketRes.IsSuccess || ticketRes.Item == null)
 				return;
@@ -65,7 +69,6 @@ namespace FixaticApp.Components.Tickets
 			Model = ticketRes.Item;
 
 			_isFollowed = (await TicketsService!.IsFollowedAsync(Model.TicketId)).Item == true;
-			_prevId = TicketId;
 		}
 
 		private async Task OnAddTicket()
@@ -170,8 +173,13 @@ namespace FixaticApp.Components.Tickets
 
 		private async Task OnCumPropsClick()
 		{
-			// TODO: Show dialog
-			
+			var parameters = new DialogParameters
+			{
+				{ "TicketID", TicketId }
+			};
+			var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+			var dialog = DialogService!.Show<TicketPropertiesDialog>("Ticket properties", parameters, options);
+			await dialog.Result;
 			await LoadModelAsync();
 		}
 

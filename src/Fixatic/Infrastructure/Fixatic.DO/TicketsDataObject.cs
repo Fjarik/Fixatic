@@ -704,7 +704,7 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(RemovePropertyOptionAsync)}...");
 
 			var sql = @"
-				DELETE FROM CustomPropertyValues WHERE Ticket_ID = @ticket_id AND CustomPropertyOption_ID = @custompropertyoption_id);
+				DELETE FROM CustomPropertyValues WHERE Ticket_ID = @ticket_id AND CustomPropertyOption_ID = @custompropertyoption_id;
 			";
 
 

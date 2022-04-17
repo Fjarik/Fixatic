@@ -8,14 +8,28 @@ namespace Fixatic.Types
 {
 	public class FullTicketProperty
 	{
-		public CustomPropertyOption PropertyOption { get; set; }
+		public CustomProperty Value { get; set; }
+
+		public List<FullTicketPropertyOption> Options { get; set; } = new();
+
+		public FullTicketProperty(CustomProperty value, List<FullTicketPropertyOption> options)
+		{
+			Value = value;
+			Options = options;
+		}
+	}
+
+	public class FullTicketPropertyOption
+	{
+		public CustomPropertyOption Value { get; set; }
 
 		public bool IsSelected { get; set; }
 
-		public FullTicketProperty(CustomPropertyOption propertyOption, bool isSelected)
+		public FullTicketPropertyOption(CustomPropertyOption propertyOption, bool isSelected)
 		{
-			PropertyOption = propertyOption;
+			Value = propertyOption;
 			IsSelected = isSelected;
 		}
 	}
+
 }
