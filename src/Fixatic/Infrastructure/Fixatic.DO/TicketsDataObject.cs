@@ -23,6 +23,8 @@ namespace Fixatic.DO
 
 			var id = ticket.TicketId;
 
+			var isClosed = ticket.Status == TicketStatus.Closed || ticket.Status == TicketStatus.Done;
+
 			string sql;
 			if (id == DB.IgnoredID)
 			{
@@ -38,7 +40,6 @@ namespace Fixatic.DO
 				sql = @"UPDATE Tickets
 						SET
 							content = @content,
-						    created = @created,
 							datesolved = @datesolved,
 							modified = @modified,
 							priority = @priority,
@@ -47,8 +48,7 @@ namespace Fixatic.DO
 							type = @type,
 							visibility = @visibility,
 							project_id = @project_id,
-							assigneduser_id = @assigneduser_id,
-						    creator_id = @creator_id
+							assigneduser_id = @assigneduser_id
 						WHERE ticket_id = @ID;";
 			}
 
@@ -58,15 +58,15 @@ namespace Fixatic.DO
 
 			cmd.Parameters.Add("@content", SqlDbType.NText).Value = ticket.Content;
 			cmd.Parameters.Add("@created", SqlDbType.DateTime2).Value = ticket.Created;
-			cmd.Parameters.Add("@datesolved", SqlDbType.DateTime2).Value = ticket.DateSolved;
-			cmd.Parameters.Add("@modified", SqlDbType.DateTime2).Value = ticket.Modified;
+			cmd.Parameters.Add("@datesolved", SqlDbType.DateTime2).Value = (isClosed && ticket.DateSolved == null) ? DateTime.Now : (ticket.DateSolved ?? (object)DBNull.Value);
+			cmd.Parameters.Add("@modified", SqlDbType.DateTime2).Value = DateTime.Now;
 			cmd.Parameters.Add("@priority", SqlDbType.Int).Value = (int)ticket.Priority;
 			cmd.Parameters.Add("@status", SqlDbType.Int).Value = (int)ticket.Status;
 			cmd.Parameters.Add("@title", SqlDbType.NVarChar).Value = ticket.Title;
 			cmd.Parameters.Add("@type", SqlDbType.Int).Value = (int)ticket.Type;
 			cmd.Parameters.Add("@visibility", SqlDbType.Int).Value = (int)ticket.Visibility;
 			cmd.Parameters.Add("@project_id", SqlDbType.Int).Value = ticket.ProjectId;
-			cmd.Parameters.Add("@assigneduser_id", SqlDbType.Int).Value = ticket.AssignedUserId;
+			cmd.Parameters.Add("@assigneduser_id", SqlDbType.Int).Value = ticket.AssignedUserId ?? (object)DBNull.Value;
 			cmd.Parameters.Add("@creator_id", SqlDbType.Int).Value = ticket.CreatorId;
 
 			try
@@ -130,7 +130,7 @@ namespace Fixatic.DO
 					{
 						TicketId = (int)r["Ticket_ID"],
 						ProjectId = (int)r["Project_ID"],
-						AssignedUserId = (int)r["AssignedUser_ID"],
+						AssignedUserId = r["AssignedUser_ID"] as int?,
 						CreatorId = (int)r["Creator_ID"],
 						Title = (string)r["Title"],
 						Content = (string)r["Content"],
@@ -142,7 +142,7 @@ namespace Fixatic.DO
 						Type = (TicketType)(int)r["Type"],
 						Visibility = (TicketVisibility)(int)r["Visibility"],
 						Followers = (int)r["Followers"],
-						AssigneeName = (string)r["AssigneeName"]
+						AssigneeName = (r["AssigneeName"] as string) ?? string.Empty
 					});
 				}
 
@@ -197,7 +197,7 @@ namespace Fixatic.DO
 					{
 						TicketId = (int)r["Ticket_ID"],
 						ProjectId = (int)r["Project_ID"],
-						AssignedUserId = (int)r["AssignedUser_ID"],
+						AssignedUserId = r["AssignedUser_ID"] as int?,
 						CreatorId = (int)r["Creator_ID"],
 						Title = (string)r["Title"],
 						Content = (string)r["Content"],
@@ -209,7 +209,7 @@ namespace Fixatic.DO
 						Type = (TicketType)(int)r["Type"],
 						Visibility = (TicketVisibility)(int)r["Visibility"],
 						Followers = (int)r["Followers"],
-						AssigneeName = (string)r["AssigneeName"]
+						AssigneeName = (r["AssigneeName"] as string) ?? string.Empty
 					});
 				}
 
@@ -264,7 +264,7 @@ namespace Fixatic.DO
 					{
 						TicketId = (int)r["Ticket_ID"],
 						ProjectId = (int)r["Project_ID"],
-						AssignedUserId = (int)r["AssignedUser_ID"],
+						AssignedUserId = r["AssignedUser_ID"] as int?,
 						CreatorId = (int)r["Creator_ID"],
 						Title = (string)r["Title"],
 						Content = (string)r["Content"],
@@ -276,7 +276,7 @@ namespace Fixatic.DO
 						Type = (TicketType)(int)r["Type"],
 						Visibility = (TicketVisibility)(int)r["Visibility"],
 						Followers = (int)r["Followers"],
-						AssigneeName = (string)r["AssigneeName"]
+						AssigneeName = (r["AssigneeName"] as string) ?? string.Empty
 					};
 				}
 
@@ -331,7 +331,7 @@ namespace Fixatic.DO
 					{
 						TicketId = (int)r["Ticket_ID"],
 						ProjectId = (int)r["Project_ID"],
-						AssignedUserId = (int)r["AssignedUser_ID"],
+						AssignedUserId = r["AssignedUser_ID"] as int?,
 						CreatorId = (int)r["Creator_ID"],
 						Title = (string)r["Title"],
 						Content = (string)r["Content"],
@@ -343,7 +343,7 @@ namespace Fixatic.DO
 						Type = (TicketType)(int)r["Type"],
 						Visibility = (TicketVisibility)(int)r["Visibility"],
 						Followers = (int)r["Followers"],
-						AssigneeName = (string)r["AssigneeName"]
+						AssigneeName = (r["AssigneeName"] as string) ?? string.Empty
 					});
 				}
 
@@ -393,7 +393,7 @@ namespace Fixatic.DO
 					{
 						TicketId = (int)r["Ticket_ID"],
 						ProjectId = (int)r["Project_ID"],
-						AssignedUserId = (int)r["AssignedUser_ID"],
+						AssignedUserId = r["AssignedUser_ID"] as int?,
 						CreatorId = (int)r["Creator_ID"],
 						Content = (string)r["Content"],
 						Created = (DateTime)r["Created"],
@@ -446,7 +446,7 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(DeleteAsync)}... Done");
 			return res != 0;
 		}
-		
+
 		public async Task<bool> FinishTicketAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(FinishTicketAsync)}...");
