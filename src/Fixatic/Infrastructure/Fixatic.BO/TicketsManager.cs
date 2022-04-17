@@ -13,14 +13,16 @@ namespace Fixatic.BO
 	public class TicketsManager
 	{
 		private readonly ILogger _logger;
+		private readonly ApplicationSettings _applicationSettings;
 		private readonly CurrentUser _currentUser;
 		private readonly IDBConnector _dbConnector;
 
 		public TicketsManager(ILogger logger, ApplicationSettings applicationSettings, CurrentUser currentUser)
 		{
 			_logger = logger;
+			_applicationSettings = applicationSettings;
 			_currentUser = currentUser;
-			_dbConnector = new DBConnector(applicationSettings);
+			_dbConnector = new DBConnector(_applicationSettings);
 		}
 
 		public async Task<int> CreateOrUpdateAsync(Ticket entry)
@@ -134,6 +136,58 @@ namespace Fixatic.BO
 
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(SetFollowTicketAsync)}... Done");
 			return success && shouldFollow;
+		}
+
+		public async Task<List<FullTicketProperty>> GetCustomPropertiesAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetCustomPropertiesAsync)}...");
+
+			var optMgr = new CustomPropertyOptionsManager(_logger, _applicationSettings, _currentUser);
+			var options = await optMgr.GetAllAsync();
+
+			var activeIds = await GetCustomPropertyOptionIdsAsync(ticketId);
+
+			var res = options.Select(x =>
+			{
+				var active = activeIds.Contains(x.CustomPropertyOptionId);
+				return new FullTicketProperty(x, active);
+			}).ToList();
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetCustomPropertiesAsync)}... Done");
+			return res;
+		}
+
+		public async Task<List<int>> GetCustomPropertyOptionIdsAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetCustomPropertyOptionIdsAsync)}...");
+
+			var mainDo = new TicketsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetCustomPropertyOptionIdsAsync(ticketId);
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetCustomPropertyOptionIdsAsync)}... Done");
+			return res;
+		}
+
+		public async Task<bool> AddPropertyOptionAsync(int ticketId, int propertyOptionId)
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(AddPropertyOptionAsync)}...");
+
+			var mainDo = new TicketsDataObject(_logger, _dbConnector);
+			var res = await mainDo.AddPropertyOptionAsync(ticketId, propertyOptionId);
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(AddPropertyOptionAsync)}... Done");
+			return res;
+		}
+
+		public async Task<bool> RemovePropertyOptionAsync(int ticketId, int propertyOptionId)
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(RemovePropertyOptionAsync)}...");
+
+			var mainDo = new TicketsDataObject(_logger, _dbConnector);
+			var res = await mainDo.RemovePropertyOptionAsync(ticketId, propertyOptionId);
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(RemovePropertyOptionAsync)}... Done");
+			return res;
 		}
 
 		public async Task<bool> DeleteAsync(int id)

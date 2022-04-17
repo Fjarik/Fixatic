@@ -152,6 +152,54 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		public async Task<ServiceResponse<List<FullTicketProperty>>> GetCustomPropertiesAsync(int ticketId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<List<FullTicketProperty>>();
+			try
+			{
+				response.Item = await _manager!.GetCustomPropertiesAsync(ticketId);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
+		public async Task<ServiceResponse<bool>> AddPropertyOptionAsync(int ticketId, int propertyOptionId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<bool>();
+			try
+			{
+				response.Item = await _manager!.AddPropertyOptionAsync(ticketId, propertyOptionId);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
+		public async Task<ServiceResponse<bool>> RemovePropertyOptionAsync(int ticketId, int propertyOptionId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<bool>();
+			try
+			{
+				response.Item = await _manager!.RemovePropertyOptionAsync(ticketId, propertyOptionId);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
 		private async Task EnsureManagerAsync()
 		{
 			if (_manager == null)
@@ -160,6 +208,5 @@ namespace Fixatic.Services.Implementation
 				_manager = new TicketsManager(_logger, _applicationSettings, currentUser);
 			}
 		}
-
 	}
 }

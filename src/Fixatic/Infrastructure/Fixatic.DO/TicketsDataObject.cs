@@ -640,9 +640,9 @@ namespace Fixatic.DO
 			return res != 0;
 		}
 
-		public async Task<List<int>> GetCustomPropertyIdsAsync(int ticketId)
+		public async Task<List<int>> GetCustomPropertyOptionIdsAsync(int ticketId)
 		{
-			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetCustomPropertyIdsAsync)}...");
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetCustomPropertyOptionIdsAsync)}...");
 
 			var sql = @"SELECT CustomPropertyOption_ID FROM CustomPropertyValues WHERE Ticket_ID = @ticket_id;";
 
@@ -667,11 +667,11 @@ namespace Fixatic.DO
 				await cmd.Connection.CloseAsync();
 			}
 
-			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetCustomPropertyIdsAsync)}... Done");
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetCustomPropertyOptionIdsAsync)}... Done");
 			return res;
 		}
 
-		public async Task<bool> AddPropertyOptionAsync(int tickedId, int propertyOptionId)
+		public async Task<bool> AddPropertyOptionAsync(int ticketId, int propertyOptionId)
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(AddPropertyOptionAsync)}...");
 
@@ -682,7 +682,7 @@ namespace Fixatic.DO
 
 			var cmd = new SqlCommand(sql);
 
-			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = tickedId;
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = ticketId;
 			cmd.Parameters.Add("@custompropertyoption_id", SqlDbType.Int).Value = propertyOptionId;
 			cmd.Parameters.Add("@created", SqlDbType.DateTime2).Value = DateTime.UtcNow;
 

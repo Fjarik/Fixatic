@@ -20,5 +20,12 @@ namespace Fixatic.Services
 		Task<ServiceResponse<bool>> SetFollowTicketAsync(int ticketId, bool shouldFollow);
 
 		Task<ServiceResponse<bool>> IsFollowedAsync(int ticketId);
+
+		Task<ServiceResponse<List<FullTicketProperty>>> GetCustomPropertiesAsync(int ticketId);
+
+		Task<ServiceResponse<bool>> AddPropertyOptionAsync(int ticketId, int propertyOptionId);
+
+		Task<ServiceResponse<bool>> RemovePropertyOptionAsync(int ticketId, int propertyOptionId);
+
 	}
 }

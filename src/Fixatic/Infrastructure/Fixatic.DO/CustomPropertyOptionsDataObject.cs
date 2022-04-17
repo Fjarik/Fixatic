@@ -62,9 +62,51 @@ namespace Fixatic.DO
 			return id;
 		}
 
-		public async Task<List<CustomPropertyOption>> GetAllAsync(int propertyId)
+		public async Task<List<CustomPropertyOption>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(GetAllAsync)}...");
+
+			var sql = @"SELECT 
+							CustomPropertyOption_ID, 
+							Content,
+							IsEnabled, 
+							Sequence, 
+							CustomProperty_ID 
+						FROM CustomPropertyOptions;";
+
+			var cmd = new SqlCommand(sql);
+
+			var res = new List<CustomPropertyOption>();
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new CustomPropertyOption
+					{
+						CustomPropertyOptionId = (int)r["CustomPropertyOption_ID"],
+						CustomPropertyId = (int)r["CustomProperty_ID"],
+						Content = (string)r["Content"],
+						IsEnabled = (bool)r["IsEnabled"],
+						Sequence = (int)r["Sequence"]
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(GetAllAsync)}... Done");
+			return res;
+		}
+
+		public async Task<List<CustomPropertyOption>> GetByPropertyAsync(int propertyId)
+		{
+			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(GetByPropertyAsync)}...");
 
 			var sql = @"SELECT 
 							CustomPropertyOption_ID, 
@@ -103,7 +145,7 @@ namespace Fixatic.DO
 				await cmd.Connection.CloseAsync();
 			}
 
-			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(GetAllAsync)}... Done");
+			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(GetByPropertyAsync)}... Done");
 			return res;
 		}
 

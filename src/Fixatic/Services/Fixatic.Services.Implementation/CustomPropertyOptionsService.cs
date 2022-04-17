@@ -46,7 +46,7 @@ namespace Fixatic.Services.Implementation
 			var response = new ServiceResponse<List<CustomPropertyOption>>();
 			try
 			{
-				response.Item = await _manager!.GetAllAsync(propertyId);
+				response.Item = await _manager!.GetByPropertyAsync(propertyId);
 			}
 			catch (Exception ex)
 			{

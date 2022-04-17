@@ -34,15 +34,26 @@ namespace Fixatic.BO
 			return res;
 		}
 
-		public async Task<List<CustomPropertyOption>> GetAllAsync(int propertyId)
+		public async Task<List<CustomPropertyOption>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsManager)}.{nameof(GetAllAsync)}...");
 
 			var mainDo = new CustomPropertyOptionsDataObject(_logger, _dbConnector);
-			var res = await mainDo.GetAllAsync(propertyId);
+			var res = await mainDo.GetAllAsync();
 
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsManager)}.{nameof(GetAllAsync)}... Done");
-			return res.OrderBy(x=>x.Sequence).ToList();
+			return res.OrderBy(x => x.Sequence).ToList();
+		}
+
+		public async Task<List<CustomPropertyOption>> GetByPropertyAsync(int propertyId)
+		{
+			_logger.LogInformation($"{nameof(CustomPropertyOptionsManager)}.{nameof(GetByPropertyAsync)}...");
+
+			var mainDo = new CustomPropertyOptionsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetByPropertyAsync(propertyId);
+
+			_logger.LogInformation($"{nameof(CustomPropertyOptionsManager)}.{nameof(GetByPropertyAsync)}... Done");
+			return res.OrderBy(x => x.Sequence).ToList();
 		}
 
 		public async Task<bool> DeleteAsync(int id)
