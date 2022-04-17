@@ -9,6 +9,12 @@
     {
         <MudStack Row="true" Class="pb-2">
             <MudAvatar Color="Color.Tertiary" Variant="Variant.Outlined" Size="Size.Small">@Author.GetFullName()[0]</MudAvatar>
+
+            @if (Comment!.IsInternal)
+            {
+                <MudIcon Icon="@Icons.Material.Filled.PrivacyTip" Title="Internal" />
+            }
+
             <MudText Typo="Typo.body1" Class="rounded-lg">@Author.GetFullName()</MudText>
         </MudStack>
     }

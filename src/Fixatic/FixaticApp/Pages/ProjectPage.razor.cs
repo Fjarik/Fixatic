@@ -20,7 +20,7 @@ public partial class ProjectPage
 	[Inject] private IDialogService? DialogService { get; set; }
 	[Inject] private ITicketsService? TicketsService { get; set; }
 	[Inject] private NavigationManager? NavigationManager { get; set; }
-
+	[Inject] private ICurrentUserService? CurrentUserService { get; set; }
 
 	private int _selectedTicketId = -1;
 	private List<FullTicket> _tickets = new();
@@ -30,7 +30,7 @@ public partial class ProjectPage
 		var projectRes = await ProjectsService!.GetByIdAsync(this.RouteProjectId);
 		if (!projectRes.IsSuccess || projectRes.Item == null)
 		{
-			var options = new DialogOptions { CloseOnEscapeKey = true };
+			var options = new DialogOptions {CloseOnEscapeKey = true};
 			DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database", options);
 			return;
 		}
@@ -45,7 +45,7 @@ public partial class ProjectPage
 		var ticketsRes = await TicketsService!.GetByProjectAsync(this.RouteProjectId);
 		if (!ticketsRes.IsSuccess)
 		{
-			var options = new DialogOptions { CloseOnEscapeKey = true };
+			var options = new DialogOptions {CloseOnEscapeKey = true};
 			DialogService!.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
 			return;
 		}
@@ -61,7 +61,10 @@ public partial class ProjectPage
 		}
 		else
 		{
-			_selectedTicketId = _tickets.Any(t => t.TicketId == RouteSelectedTicketId) ? ((int)RouteSelectedTicketId) : -1; ;
+			_selectedTicketId = _tickets.Any(t => t.TicketId == RouteSelectedTicketId)
+				? ((int)RouteSelectedTicketId)
+				: -1;
+			;
 		}
 	}
 
@@ -79,5 +82,4 @@ public partial class ProjectPage
 		await LoadTicketsAsync();
 		StateHasChanged();
 	}
-
 }

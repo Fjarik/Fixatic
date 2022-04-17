@@ -25,14 +25,11 @@ namespace FixaticApp.Components.Tickets
 {
 	public partial class FullTicketView
 	{
-		[Parameter]
-		public int TicketId { get; set; } = -1;
+		[Parameter] public int TicketId { get; set; } = -1;
 
-		[Parameter]
-		public int ProjectID { get; set; } = -1;
+		[Parameter] public int ProjectID { get; set; } = -1;
 
-		[Parameter]
-		public EventCallback OnRemoved { get; set; }
+		[Parameter] public EventCallback OnRemoved { get; set; }
 
 
 		[CascadingParameter(Name = "CurrentUser")]
@@ -96,11 +93,8 @@ namespace FixaticApp.Components.Tickets
 
 		private async Task EditTicketAsync(FullTicket ticket)
 		{
-			var parameters = new DialogParameters
-			{
-				{ "Ticket", ticket }
-			};
-			var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+			var parameters = new DialogParameters {{"Ticket", ticket}};
+			var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
 			var dialog = DialogService!.Show<TicketEditDialog>("Ticket", parameters, options);
 			var result = await dialog.Result;
 			if (!result.Cancelled)
@@ -113,6 +107,13 @@ namespace FixaticApp.Components.Tickets
 		{
 			if (Model == null)
 				return;
+
+			if (CurrentUser.UserId != Model.CreatorId && !CurrentUser.IsInGroup(UserGroupType.Admin))
+			{
+				var errOptions = new DialogOptions {CloseOnEscapeKey = true};
+				DialogService!.Show<ErrorDialog>("Only the creator can delete the ticket", errOptions);
+				return;
+			}
 
 			await TicketsService!.DeleteAsync(Model.TicketId);
 
@@ -130,13 +131,15 @@ namespace FixaticApp.Components.Tickets
 			var original = Model;
 
 			Model = null;
-			var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
-			var dialog = DialogService!.Show<TextInputDialog>("Add comment", options);
+			var parameters = new DialogParameters {{"AllowInternal", CurrentUser!.IsInternal()}};
+			var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
+			var dialog = DialogService!.Show<CommentDialog>("Add comment", parameters, options);
 			var result = await dialog.Result;
 
 			if (!result.Cancelled)
 			{
 				var (textContent, isInternal) = ((string, bool))result.Data;
+
 				if (string.IsNullOrEmpty(textContent))
 				{
 					Model = original;
@@ -173,15 +176,11 @@ namespace FixaticApp.Components.Tickets
 
 		private async Task OnCumPropsClick()
 		{
-			var parameters = new DialogParameters
-			{
-				{ "TicketID", TicketId }
-			};
-			var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+			var parameters = new DialogParameters {{"TicketID", TicketId}};
+			var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
 			var dialog = DialogService!.Show<TicketPropertiesDialog>("Ticket properties", parameters, options);
 			await dialog.Result;
 			await LoadModelAsync();
 		}
-
 	}
 }

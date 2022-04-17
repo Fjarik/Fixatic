@@ -36,6 +36,7 @@ namespace Fixatic.Services.Implementation
 			{
 				response.Fail(ex);
 			}
+
 			return response;
 		}
 
@@ -52,6 +53,7 @@ namespace Fixatic.Services.Implementation
 			{
 				response.Fail(ex);
 			}
+
 			return response;
 		}
 
@@ -69,6 +71,30 @@ namespace Fixatic.Services.Implementation
 			{
 				response.Fail(ex);
 			}
+
+			return response;
+		}
+
+		public async Task<ServiceResponse<List<Comment>>> GetByTicketUserVisibleAsync(int ticketId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<List<Comment>>();
+			try
+			{
+				response.Item = await _manager!.GetByTicketAsync(ticketId);
+
+				var currentUser = await _currentUserService.GetUserInfoAsync();
+				if (!currentUser.IsInternal())
+				{
+					response.Item = response.Item.FindAll(c => !c.IsInternal);
+				}
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+
 			return response;
 		}
 
@@ -85,6 +111,7 @@ namespace Fixatic.Services.Implementation
 			{
 				response.Fail(ex);
 			}
+
 			return response;
 		}
 
@@ -96,6 +123,5 @@ namespace Fixatic.Services.Implementation
 				_manager = new CommentsManager(_logger, _applicationSettings, currentComment);
 			}
 		}
-
 	}
 }

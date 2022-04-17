@@ -3,7 +3,11 @@
         <MudTextField @bind-Value="@TextContent" Label="Comment" Lines="5"/>
     </DialogContent>
     <DialogActions>
-        <MudCheckBox @bind-Checked="@IsInternal" Label="Internal"></MudCheckBox>
+        @if (AllowInternal)
+        {
+            <MudCheckBox @bind-Checked="@IsInternal" Label="Internal"></MudCheckBox>
+        }
+
         <MudButton OnClick="Cancel">Cancel</MudButton>
         <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
     </DialogActions>
@@ -16,6 +20,9 @@
 
     [Parameter]
     public string TextContent { get; set; } = "";
+
+    [Parameter]
+    public bool AllowInternal { get; set; } = false;
 
     [Parameter]
     public bool IsInternal { get; set; } = false;

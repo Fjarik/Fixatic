@@ -8,14 +8,13 @@ namespace FixaticApp.Components.Tickets
 	{
 		[Parameter] public FullTicket? Model { get; set; }
 
-		[Inject]
-		private ICommentsService? CommentsService { get; set; }
+		[Inject] private ICommentsService? CommentsService { get; set; }
 
-		[Inject]
-		private IAttachementsService? AttachementsService { get; set; }
+		[Inject] private IAttachementsService? AttachementsService { get; set; }
 
-		[Inject]
-		private ICustomPropertiesService? CustomPropertiesService { get; set; }
+		[Inject] private ICustomPropertiesService? CustomPropertiesService { get; set; }
+
+		[Inject] private ICurrentUserService? CurrentUserService { get; set; }
 
 		private List<Comment> Comments { get; set; } = new();
 		private List<Attachement> Attachements { get; set; } = new();
@@ -41,7 +40,7 @@ namespace FixaticApp.Components.Tickets
 
 		private async Task LoadInfoAsync()
 		{
-			var commentsRes = await CommentsService!.GetByTicketAsync(Model!.TicketId);
+			var commentsRes = await CommentsService!.GetByTicketUserVisibleAsync(Model!.TicketId);
 			if (commentsRes.IsSuccess)
 			{
 				Comments = commentsRes.Item ?? new List<Comment>();
@@ -80,6 +79,5 @@ namespace FixaticApp.Components.Tickets
 
 			return "1 follower";
 		}
-
 	}
 }

@@ -1,6 +1,5 @@
 @page "/project/{RouteProjectId:int}/{RouteSelectedTicketId:int?}"
 @layout AppLayout
-@using Fixatic.Types
 @using FixaticApp.Components.Tickets
 
 <MudGrid>
@@ -18,7 +17,7 @@
         @if (Project != null)
         {
             <MudTable T="FullTicket" Hover="true" Striped="true"
-                  Items="@_tickets" OnRowClick="@OnTicketSelect">
+                      Items="@_tickets" OnRowClick="@OnTicketSelect">
                 <HeaderContent>
                     <MudTh>Tickets</MudTh>
                 </HeaderContent>
