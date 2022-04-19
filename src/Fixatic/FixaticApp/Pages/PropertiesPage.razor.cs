@@ -26,12 +26,22 @@ namespace FixaticApp.Pages
 		[Inject] private ICustomPropertiesService? CustomPropertiesService { get; set; }
 
 		[Inject] private IDialogService? DialogService { get; set; }
+		
+		[Inject] private ICurrentUserService? CurrentUserService { get; set; }
+
+		[Inject] private NavigationManager? NavigationManager { get; set; }
 
 
 		private List<CustomProperty> _cumProps = new();
 
 		protected override async Task OnInitializedAsync()
 		{
+			var user = await CurrentUserService!.GetUserInfoAsync();
+			if (!user.IsInGroup(UserGroupType.Admin))
+			{
+				NavigationManager!.NavigateTo("/");
+				return;
+			}
 			await LoadDataAsync();
 		}
 

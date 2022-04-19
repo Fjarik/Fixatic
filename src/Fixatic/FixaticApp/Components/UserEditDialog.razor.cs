@@ -1,3 +1,5 @@
+using Fixatic.DO.Types;
+using Fixatic.Services;
 using Fixatic.Types;
 using FixaticApp.Types;
 using FluentValidation;
@@ -8,41 +10,22 @@ namespace FixaticApp.Components
 {
 	public partial class UserEditDialog
 	{
-		[CascadingParameter] private MudDialogInstance? MudDialog { get; set; }
-
-		[Parameter]
-		// Is this dialog for creating a new user or just for editing ?
-		public bool IsCreate { get; set; }
-
-		[Parameter] public bool UpdatePassword { get; set; } = false;
-
 		[Parameter] public User? User { get; set; }
 
-		[Parameter] public bool FormValid { get; set; }
+		[CascadingParameter]
+		private MudDialogInstance? MudDialog { get; set; }
 
-		/// <returns>
-		/// Tuple (User user, bool deleteUser, bool updateUserPassword)  
-		/// </returns>
-		private void Submit()
-		{
-			if (FormValid)
-			{
-				MudDialog!.Close(DialogResult.Ok((User, false, UpdatePassword)));
-			}
-		}
+		[Inject] private ICurrentUserService? CurrentUserService { get; set; }
+		[Inject] private IUsersService? UsersService { get; set; }
+		[Inject] private IDialogService? DialogService { get; set; }
 
-		private void Delete()
-		{
-			if (!IsCreate)
-			{
-				MudDialog!.Close(DialogResult.Ok((User, true, UpdatePassword)));
-			}
-		}
+		private CurrentUser? CurrentUser;
+		private bool FormValid { get; set; }
+		private bool UpdatePassword { get; set; } = false;
 
-		private void Cancel()
-		{
-			MudDialog!.Cancel();
-		}
+		// Is this dialog for creating a new user or just for editing ?
+		private bool IsCreate => User?.UserId == DB.IgnoredID;
+		private bool CanDelete => CurrentUser != null && !IsCreate && CurrentUser?.UserId != User?.UserId;
 
 		// The validation rules (overkill, I know, but very fluent):
 		private readonly FluentValueValidator<string> _emailValidator = new(x => x
@@ -65,5 +48,62 @@ namespace FixaticApp.Components
 			.Must(phone => phone.StartsWith("+"))
 			.Must(phone => phone.ToCharArray()[1..].All(char.IsDigit))
 			.WithMessage("Phone must start with '+' and then only contain digits"));
+
+		protected override async Task OnInitializedAsync()
+		{
+			CurrentUser = await CurrentUserService!.GetUserInfoAsync();
+			await base.OnInitializedAsync();
+		}
+
+		private void Cancel()
+		{
+			MudDialog!.Cancel();
+		}
+
+		private void Close()
+		{
+			MudDialog!.Close(DialogResult.Ok(true));
+		}
+
+		/// <returns>
+		/// Tuple (User user, bool deleteUser, bool updateUserPassword)  
+		/// </returns>
+		private async Task SubmitAsync()
+		{
+			if (User == null || !FormValid)
+				return;
+
+			if (IsCreate || UpdatePassword)
+			{
+				var updateRes = await UsersService!.CreateOrUpdateAsync(User);
+				if (!updateRes.IsSuccess)
+				{
+					DialogService!.Show<ErrorDialog>("Failed to update user data");
+				}
+				Close();
+				return;
+			}
+
+			var res = await UsersService!.UpdateSansPasswordAsync(User);
+			if (!res.IsSuccess)
+			{
+				DialogService!.Show<ErrorDialog>("Failed to update user data");
+			}
+			Close();
+		}
+
+		private async Task DeleteAsync()
+		{
+			if (User == null || !CanDelete)
+				return;
+
+			var updateRes = await UsersService!.DeleteAsync(User.UserId);
+			if (!updateRes.IsSuccess)
+			{
+				DialogService!.Show<ErrorDialog>("Failed to delete user data");
+			}
+			Close();
+		}
+
 	}
 }

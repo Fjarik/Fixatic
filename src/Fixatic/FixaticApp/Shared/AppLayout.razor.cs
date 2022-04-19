@@ -35,7 +35,7 @@ namespace FixaticApp.Shared
 
 		private CurrentUser? _currentUser;
 
-		bool _drawerOpen = true;
+		private bool _drawerOpen = true;
 
 		protected override async Task OnInitializedAsync()
 		{

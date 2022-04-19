@@ -87,7 +87,7 @@ namespace FixaticApp.Components.Tickets
 
 		private async Task OnRemoveTicketAsync()
 		{
-			if (Model == null)
+			if (Model == null || CurrentUser == null)
 				return;
 
 			if (CurrentUser.UserId != Model.CreatorId && !CurrentUser.IsInGroup(UserGroupType.Admin))
