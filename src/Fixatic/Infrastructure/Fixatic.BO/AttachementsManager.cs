@@ -23,9 +23,18 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
-		public async Task<int> CreateOrUpdateAsync(Attachement entry)
+		public async Task<int> CreateOrUpdateAsync(Attachement? entry)
 		{
 			_logger.LogInformation($"{nameof(AttachementsManager)}.{nameof(CreateOrUpdateAsync)}...");
+
+			if(entry == null)
+				return -1;
+			
+			if (entry.AttachementId == DB.IgnoredID)
+			{
+				entry.UserId = _currentUser.UserId;
+				entry.Uploaded = DateTime.Now;
+			}
 
 			var mainDo = new AttachementsDataObject(_logger, _dbConnector);
 			var res = await mainDo.CreateOrUpdateAsync(entry);

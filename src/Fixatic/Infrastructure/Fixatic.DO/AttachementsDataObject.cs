@@ -27,7 +27,7 @@ namespace Fixatic.DO
 			if (id == DB.IgnoredID)
 			{
 				sql = @"INSERT INTO Attachements (content, name, size, type, uploaded, alternativetext, ticket_id, user_id, comment_id)
-				VALUES (@content, @name, @size, @type, @uploaded, @alternativetext, @ticket_id, @user_id, @comment_id);
+				VALUES (@content, @name, @size, @type, SYSDATETIME(), @alternativetext, @ticket_id, @user_id, @comment_id);
 
 				SET @ID = SCOPE_IDENTITY();
 
@@ -48,10 +48,10 @@ namespace Fixatic.DO
 			cmd.Parameters.Add("@size", SqlDbType.Int).Value = attachement.Size;
 			cmd.Parameters.Add("@type", SqlDbType.VarChar).Value = attachement.Type;
 			cmd.Parameters.Add("@uploaded", SqlDbType.DateTime2).Value = attachement.Uploaded;
-			cmd.Parameters.Add("@alternativetext", SqlDbType.NVarChar).Value = attachement.AlternativeText;
-			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = attachement.TicketId;
+			cmd.Parameters.Add("@alternativetext", SqlDbType.NVarChar).Value = attachement.AlternativeText ?? (object)DBNull.Value;
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = attachement.TicketId ?? (object)DBNull.Value;
 			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = attachement.UserId;
-			cmd.Parameters.Add("@comment_id", SqlDbType.Int).Value = attachement.CommentId;
+			cmd.Parameters.Add("@comment_id", SqlDbType.Int).Value = attachement.CommentId ?? (object)DBNull.Value;
 
 			try
 			{

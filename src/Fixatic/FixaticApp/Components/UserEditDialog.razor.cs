@@ -65,9 +65,6 @@ namespace FixaticApp.Components
 			MudDialog!.Close(DialogResult.Ok(true));
 		}
 
-		/// <returns>
-		/// Tuple (User user, bool deleteUser, bool updateUserPassword)  
-		/// </returns>
 		private async Task SubmitAsync()
 		{
 			if (User == null || !FormValid)

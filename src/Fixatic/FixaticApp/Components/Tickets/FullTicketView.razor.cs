@@ -170,5 +170,14 @@ namespace FixaticApp.Components.Tickets
 			await dialog.Result;
 			await LoadModelAsync();
 		}
+
+		private async Task OnAddAttachmentsClick()
+		{
+			var parameters = new DialogParameters { { "TicketID", TicketId } };
+			var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+			var dialog = DialogService!.Show<TicketAttachmentDialog>("Ticket attachment", parameters, options);
+			await dialog.Result;
+			await LoadModelAsync();
+		}
 	}
 }
