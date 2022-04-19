@@ -26,7 +26,7 @@ namespace Fixatic.Types
 
         public DateTime Uploaded { get; set; }
 
-        public string AlternativeText { get; set; }
+        public string? AlternativeText { get; set; }
 
     }
 }

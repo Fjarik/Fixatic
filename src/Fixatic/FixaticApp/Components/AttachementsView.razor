@@ -1,0 +1,21 @@
+﻿@if (TicketID > 0)
+{
+    <MudGrid>
+        @foreach (var attachement in _attachements)
+        {
+            <MudItem xs="2">
+                <MudGrid Spacing="1">
+                    <MudPaper Elevation="1" Class="pa-4">
+                        <MudItem xs="12">
+                            <MudImage Fluid="true" Alt="@attachement.AlternativeText"
+                              Src="@GetSrc(attachement)" />
+                        </MudItem>
+                        <MudItem>
+                            <MudText Typo="Typo.subtitle1">@attachement.AlternativeText</MudText>
+                        </MudItem>
+                    </MudPaper>
+                </MudGrid>
+            </MudItem>
+        }
+    </MudGrid>
+}

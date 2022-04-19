@@ -10,14 +10,11 @@ namespace FixaticApp.Components.Tickets
 
 		[Inject] private ICommentsService? CommentsService { get; set; }
 
-		[Inject] private IAttachementsService? AttachementsService { get; set; }
-
 		[Inject] private ICustomPropertiesService? CustomPropertiesService { get; set; }
 
 		[Inject] private ICurrentUserService? CurrentUserService { get; set; }
 
 		private List<Comment> Comments { get; set; } = new();
-		private List<Attachement> Attachements { get; set; } = new();
 		private List<FullProperty> Properties { get; set; } = new();
 
 		private int PrevId { get; set; } = -1;
@@ -44,12 +41,6 @@ namespace FixaticApp.Components.Tickets
 			if (commentsRes.IsSuccess)
 			{
 				Comments = commentsRes.Item ?? new List<Comment>();
-			}
-
-			var attachementsRes = await AttachementsService!.GetByTicketAsync(Model.TicketId);
-			if (attachementsRes.IsSuccess)
-			{
-				Attachements = attachementsRes.Item ?? new List<Attachement>();
 			}
 
 			var propsRes = await CustomPropertiesService!.GetByTicketAsync(Model.TicketId);

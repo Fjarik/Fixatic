@@ -133,14 +133,14 @@ namespace Fixatic.DO
 					{
 						AttachementId = (int)r["Attachement_ID"],
 						UserId = (int)r["User_ID"],
-						TicketId = (int)r["Ticket_ID"],
-						CommentId = (int)r["Comment_ID"],
+						TicketId = r["Ticket_ID"] as int?,
+						CommentId = r["Comment_ID"] as int?,
 						Content = (byte[])r["Content"],
 						Name = (string)r["Name"],
 						Size = (int)r["Size"],
 						Type = (string)r["Type"],
 						Uploaded = (DateTime)r["Uploaded"],
-						AlternativeText = (string)r["AlternativeText"],
+						AlternativeText = r["AlternativeText"] as string,
 					});
 				}
 

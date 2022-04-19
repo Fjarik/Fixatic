@@ -21,29 +21,16 @@ else
                     </MudItem>
                 </MudGrid>
             </MudItem>
-            <MudItem xs="12">
+            <MudItem xs="12" Class="pb-0">
                 <MudGrid Justify="Justify.SpaceBetween">
-                    <MudItem xs="7">
-                        <MudGrid>
+                    <MudItem xs="7" Class="pb-0">
+                        <MudGrid Justify="Justify.SpaceBetween" Class="align-content-space-between" Style="height:100%;">
                             <MudItem xs="12">
                                 <MudText Typo="Typo.body1">@Model.Content</MudText>
                             </MudItem>
-                            @foreach (var attachement in Attachements)
-                            {
-                                <MudItem xs="2">
-                                    <MudGrid Spacing="1">
-                                        <MudPaper Elevation="1" Class="pa-4">
-                                            <MudItem xs="12">
-                                                @*Tady by šel udělat náhled, ale to bych asi dělal jen když zbyde čas (copium)*@
-                                                <MudImage Fluid="true" Src="/img/attachement_skeleton.png"></MudImage>
-                                            </MudItem>
-                                            <MudItem>
-                                                <MudText Typo="Typo.subtitle1">@attachement.Name</MudText>
-                                            </MudItem>
-                                        </MudPaper>
-                                    </MudGrid>
-                                </MudItem>
-                            }
+                            <MudItem xs="12">
+                                <AttachementsView TicketID="Model.TicketId" />
+                            </MudItem>
                         </MudGrid>
                     </MudItem>
                     <MudItem xs="3">
