@@ -29,7 +29,6 @@ namespace FixaticApp.Components.Tickets
 
 		[Parameter] public EventCallback OnRemoved { get; set; }
 
-
 		[CascadingParameter(Name = "CurrentUser")]
 		public CurrentUser? CurrentUser { get; set; }
 
@@ -95,6 +94,13 @@ namespace FixaticApp.Components.Tickets
 			{
 				var errOptions = new DialogOptions {CloseOnEscapeKey = true};
 				DialogService!.Show<ErrorDialog>("Only the creator can delete the ticket", errOptions);
+				return;
+			}
+
+			var confirmDialog = DialogService!.Show<ErrorDialog>("Delete the ticket ?");
+			var confirmRes = await confirmDialog.Result;
+			if (confirmRes.Cancelled)
+			{
 				return;
 			}
 

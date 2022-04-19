@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 # Appsettings (local DB passwords...)
 src/Fixatic/FixaticApp/appsettings\.Development.json
+.vscode/*
+src/Fixatic/.idea/*
