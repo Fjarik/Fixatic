@@ -92,8 +92,7 @@ namespace FixaticApp.Components.Tickets
 
 			if (CurrentUser.UserId != Model.CreatorId && !CurrentUser.IsInGroup(UserGroupType.Admin))
 			{
-				var errOptions = new DialogOptions {CloseOnEscapeKey = true};
-				DialogService!.Show<ErrorDialog>("Only the creator can delete the ticket", errOptions);
+				DialogService!.Show<ErrorDialog>("Only the creator can delete the ticket");
 				return;
 			}
 

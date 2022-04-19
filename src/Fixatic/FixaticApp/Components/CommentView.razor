@@ -43,8 +43,7 @@
                 Author = users.Item.Find(u => u.UserId == Comment!.UserId);
                 break;
             case false:
-                var options = new DialogOptions {CloseOnEscapeKey = true};
-                _dialogService.Show<ErrorDialog>("Failed to fetch comment author from database", options);
+                _dialogService.Show<ErrorDialog>("Failed to fetch comment author from database");
                 break;
         }
     }

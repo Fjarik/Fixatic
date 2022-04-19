@@ -30,8 +30,7 @@ public partial class ProjectPage
 		var projectRes = await ProjectsService!.GetByIdAsync(this.RouteProjectId);
 		if (!projectRes.IsSuccess || projectRes.Item == null)
 		{
-			var options = new DialogOptions { CloseOnEscapeKey = true };
-			DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database", options);
+			DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database");
 			return;
 		}
 
@@ -45,8 +44,7 @@ public partial class ProjectPage
 		var ticketsRes = await TicketsService!.GetByProjectAsync(this.RouteProjectId);
 		if (!ticketsRes.IsSuccess)
 		{
-			var options = new DialogOptions { CloseOnEscapeKey = true };
-			DialogService!.Show<ErrorDialog>("Failed to fetch Ticket data from database", options);
+			DialogService!.Show<ErrorDialog>("Failed to fetch Ticket data from database");
 			return;
 		}
 

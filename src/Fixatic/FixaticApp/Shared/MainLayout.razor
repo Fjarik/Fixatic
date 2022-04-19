@@ -1,8 +1,12 @@
 ﻿@inherits LayoutComponentBase
 
 <MudThemeProvider IsDarkMode="@_isDarkMode" />
-<MudDialogProvider />
 <MudSnackbarProvider />
+
+<MudDialogProvider
+    Position="DialogPosition.Center"
+    CloseOnEscapeKey="true"
+/>
 
 <MudLayout>
     <CascadingValue Value="@_isDarkMode" Name="DarkMode">

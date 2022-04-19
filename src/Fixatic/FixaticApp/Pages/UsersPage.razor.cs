@@ -79,8 +79,7 @@ namespace FixaticApp.Pages
 				var updateRes = await UsersService!.DeleteAsync(user.UserId);
 				if (!updateRes.IsSuccess)
 				{
-					var errOptions = new DialogOptions { CloseOnEscapeKey = true };
-					DialogService!.Show<ErrorDialog>("Failed to delete user data", errOptions);
+					DialogService!.Show<ErrorDialog>("Failed to delete user data");
 				}
 			}
 			else if (isCreate || updatePassword)
@@ -88,8 +87,7 @@ namespace FixaticApp.Pages
 				var updateRes = await UsersService!.CreateOrUpdateAsync(user);
 				if (!updateRes.IsSuccess)
 				{
-					var errOptions = new DialogOptions { CloseOnEscapeKey = true };
-					DialogService!.Show<ErrorDialog>("Failed to update user data", errOptions);
+					DialogService!.Show<ErrorDialog>("Failed to update user data");
 				}
 			}
 			else
@@ -97,8 +95,7 @@ namespace FixaticApp.Pages
 				var updateRes = await UsersService!.UpdateSansPasswordAsync(user);
 				if (!updateRes.IsSuccess)
 				{
-					var errOptions = new DialogOptions { CloseOnEscapeKey = true };
-					DialogService!.Show<ErrorDialog>("Failed to update user data", errOptions);
+					DialogService!.Show<ErrorDialog>("Failed to update user data");
 				}
 			}
 		}

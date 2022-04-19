@@ -36,8 +36,7 @@ namespace FixaticApp.Pages
 			var groupsRes = await GroupsService!.GetUserGroupsAsync();
 			if (!groupsRes.IsSuccess)
 			{
-				var options = new DialogOptions { CloseOnEscapeKey = true };
-				DialogService!.Show<ErrorDialog>("DB error", options);
+				DialogService!.Show<ErrorDialog>("DB error");
 				return;
 			}
 
@@ -46,8 +45,7 @@ namespace FixaticApp.Pages
 			var ticketsRes = await TicketsService!.GetFollowedTicketsAsync();
 			if (!ticketsRes.IsSuccess)
 			{
-				var options = new DialogOptions { CloseOnEscapeKey = true };
-				DialogService!.Show<ErrorDialog>("DB error", options);
+				DialogService!.Show<ErrorDialog>("DB error");
 				return;
 			}
 			_followedTickets = ticketsRes.Item!;
@@ -55,8 +53,7 @@ namespace FixaticApp.Pages
 			var categoriesRes = await CategoriesService!.GetAllAsync();
 			if (!categoriesRes.IsSuccess)
 			{
-				var options = new DialogOptions { CloseOnEscapeKey = true };
-				DialogService!.Show<ErrorDialog>("DB error", options);
+				DialogService!.Show<ErrorDialog>("DB error");
 				return;
 			}
 			ProjectCategories = categoriesRes.Item!;
@@ -105,8 +102,7 @@ namespace FixaticApp.Pages
 					var idsRes = await ProjectsService!.GetCategoryIdsAsync(p.ProjectId);
 					if (!idsRes.IsSuccess)
 					{
-						var options = new DialogOptions { CloseOnEscapeKey = true };
-						DialogService!.Show<ErrorDialog>("DB error", options);
+						DialogService!.Show<ErrorDialog>("DB error");
 						return;
 					}
 
@@ -128,8 +124,7 @@ namespace FixaticApp.Pages
 				var projectRes = (await ProjectsService!.GetGroupProjectsAsync(SelectedGroup.GroupId));
 				if (!projectRes.IsSuccess)
 				{
-					var options = new DialogOptions { CloseOnEscapeKey = true };
-					DialogService!.Show<ErrorDialog>("DB error", options);
+					DialogService!.Show<ErrorDialog>("DB error");
 					return;
 				}
 				Projects = projectRes.Item!.FindAll(p => p.IsEnabled);
