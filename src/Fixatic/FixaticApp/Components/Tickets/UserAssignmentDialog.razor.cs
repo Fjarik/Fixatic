@@ -9,11 +9,8 @@ namespace FixaticApp.Components.Tickets
 	{
 		[CascadingParameter] private MudDialogInstance? MudDialog { get; set; }
 
-		[Parameter] public int TicketID { get; set; } = -1;
-
-		[Parameter] public List<User>? Users { get; set; }
-
-		[Parameter] public User? SelectedUser { get; set; }
+		[Parameter]
+		public int TicketID { get; set; } = -1;
 
 		[Inject] private IUsersService? UsersService { get; set; }
 
@@ -21,12 +18,16 @@ namespace FixaticApp.Components.Tickets
 
 		[Inject] private IDialogService? DialogService { get; set; }
 
+		private List<BasicUserInfo> Users { get; set; } = new();
+		private int SelectedUserId { get; set; } = -1;
+
 		protected override async Task OnInitializedAsync()
 		{
-			if (TicketID == -1)
+			if (TicketID < 1)
 			{
 				DialogService!.Show<ErrorDialog>("Error");
 				Cancel();
+				return;
 			}
 
 			var usersRes = await UsersService!.GetPossibleTicketAssigneesAsync(TicketID);
@@ -34,14 +35,12 @@ namespace FixaticApp.Components.Tickets
 			{
 				DialogService!.Show<ErrorDialog>("Couldn't fetch users from DB");
 				Cancel();
+				return;
 			}
 
-			Users = usersRes.Item;
+			Users = usersRes.Item ?? new List<BasicUserInfo>();
 
-			if (Users!.Count > 0)
-			{
-				SelectedUser = Users[0];
-			}
+			SelectedUserId = Users.FirstOrDefault()?.UserId ?? -1;
 		}
 
 		private void Cancel()
@@ -51,7 +50,10 @@ namespace FixaticApp.Components.Tickets
 
 		private async Task SubmitAsync()
 		{
-			var res = await TicketsService!.SetAssigneeAsync(TicketID, SelectedUser!.UserId);
+			if (SelectedUserId < 1)
+				return;
+
+			var res = await TicketsService!.SetAssigneeAsync(TicketID, SelectedUserId);
 
 			MudDialog!.Close(DialogResult.Ok(true));
 		}

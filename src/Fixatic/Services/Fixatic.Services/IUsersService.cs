@@ -11,7 +11,7 @@ namespace Fixatic.Services
 
 		Task<ServiceResponse<List<User>>> GetAllAsync();
 		
-		Task<ServiceResponse<List<User>>> GetPossibleTicketAssigneesAsync(int ticketId);
+		Task<ServiceResponse<List<BasicUserInfo>>> GetPossibleTicketAssigneesAsync(int ticketId);
 
 		Task<ServiceResponse<User>> GetByIdAsync(int userId);
 

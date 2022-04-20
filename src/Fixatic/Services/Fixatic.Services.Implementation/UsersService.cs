@@ -71,11 +71,11 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
-		public async Task<ServiceResponse<List<User>>> GetPossibleTicketAssigneesAsync(int ticketId)
+		public async Task<ServiceResponse<List<BasicUserInfo>>> GetPossibleTicketAssigneesAsync(int ticketId)
 		{
 			await EnsureManagerAsync();
 
-			var response = new ServiceResponse<List<User>>();
+			var response = new ServiceResponse<List<BasicUserInfo>>();
 			try
 			{
 				response.Item = await _manager!.GetPossibleTicketAssigneesAsync(ticketId);

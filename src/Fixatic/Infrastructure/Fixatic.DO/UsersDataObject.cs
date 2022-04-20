@@ -176,7 +176,7 @@ namespace Fixatic.DO
 			return res;
 		}
 
-		public async Task<List<User>?> GetPossibleTicketAssigneesAsync(int ticketId)
+		public async Task<List<BasicUserInfo>> GetPossibleTicketAssigneesAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetPossibleTicketAssigneesAsync)}...");
 
@@ -192,7 +192,7 @@ namespace Fixatic.DO
 			
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ticketId;
 
-			var res = new List<User>();
+			var res = new List<BasicUserInfo>();
 
 			try
 			{
@@ -200,7 +200,7 @@ namespace Fixatic.DO
 
 				while (await r.ReadAsync())
 				{
-					res.Add(new User
+					res.Add(new BasicUserInfo
 					{
 						UserId = (int)r["User_ID"],
 						Firstname = (string)r["Firstname"],

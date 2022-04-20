@@ -78,7 +78,7 @@ namespace Fixatic.BO
 			return res;
 		}
 		
-		public async Task<List<User>?> GetPossibleTicketAssigneesAsync(int ticketId)
+		public async Task<List<BasicUserInfo>> GetPossibleTicketAssigneesAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetPossibleTicketAssigneesAsync)}...");
 

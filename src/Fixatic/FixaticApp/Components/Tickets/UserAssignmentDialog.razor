@@ -1,20 +1,21 @@
 <MudDialog>
     <DialogContent>
-        <MudSelect @bind-Value="SelectedUser">
-            @*Ten if je tu potřeba. Z nějakého důvodu je Users null, i když to nastavuju v OnInitializedAsync()...*@
-            @if (Users != null)
-            {
+        @if (SelectedUserId > 0)
+        {
+            <MudSelect @bind-Value="SelectedUserId">
                 @foreach (var user in Users)
                 {
-                    <MudSelectItem Value="@user"></MudSelectItem>
+                    <MudSelectItem Value="@user.UserId">
+                        @user.Firstname @user.Lastname
+                    </MudSelectItem>
                 }
-            }
-        </MudSelect>
+            </MudSelect>
+        }
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@Cancel">Cancel</MudButton>
 
-        @if (SelectedUser != null)
+        @if (SelectedUserId > 0)
         {
             <MudButton Color="Color.Primary" OnClick="@SubmitAsync">Ok</MudButton>
         }
