@@ -27,10 +27,7 @@ namespace Fixatic.DO
 			if (id == DB.IgnoredID)
 			{
 				sql = @"
-                    INSERT INTO Users (firstname, lastname, email, password, phone, created, isenabled)
-                    VALUES (@firstname, @lastname, @email, @password, @phone, @created, @isenabled);
-
-                    SET @ID = SCOPE_IDENTITY();
+					EXEC dbo.proc_create_user @Email = @email, @fname= @firstname , @lname = @lastname, @pwdHash = @password, @phone = @phone, @NewID = @ID OUTPUT;
 
                     SELECT @ID;
                 ";

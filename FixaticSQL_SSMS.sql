@@ -833,29 +833,6 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER FUNCTION fn_attach_size (@TicketId INT)
-RETURNS INT
-AS
-BEGIN
-	DECLARE @Size INT;
-	
-	SELECT 
-		@Size = SUM(att.Size) 
-	FROM Attachements att
-	WHERE 
-		att.Ticket_ID = @TicketId OR
-		att.Attachement_ID IN (
-			SELECT 
-				Attachement_ID
-			FROM Attachements a
-			INNER JOIN Comments c ON a.Comment_ID = c.Comment_ID
-			WHERE c.Ticket_ID = @TicketId
-		);
-
-	RETURN (@Size);
-END;
-GO
-
 CREATE OR ALTER FUNCTION fn_user_type (@UserId INT)
 RETURNS INT
 AS 
@@ -900,10 +877,16 @@ AS
 	WHERE Ticket_ID = @TicketId
 GO
 
-CREATE OR ALTER PROCEDURE proc_create_user (@email NVARCHAR(100), @name NVARCHAR(50), @lname NVARCHAR(50), @pwdHash NVARCHAR(250), @phone NVARCHAR(50))
+CREATE OR ALTER PROCEDURE proc_create_user (@email NVARCHAR(100), @fname NVARCHAR(50), @lname NVARCHAR(50), @pwdHash NVARCHAR(250), @phone NVARCHAR(50), @NewID INT OUTPUT)
 AS
+	SET NOCOUNT ON;
+	
 	INSERT INTO Users (Created, IsEnabled, Email, Firstname, Lastname, Password, Phone) 
-	VALUES (SYSDATETIME(), 1, @email, @name, @lname, @pwdHash, @phone)
+	VALUES (SYSDATETIME(), 1, @email, @fname, @lname, @pwdHash, @phone);
+
+	SET @NewID = SCOPE_IDENTITY();
+
+	RETURN;
 GO
 
 CREATE OR ALTER TRIGGER Projects_delete_trigger
