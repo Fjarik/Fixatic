@@ -126,6 +126,23 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		public async Task<ServiceResponse<bool>> SetAssigneeAsync(int ticketId, int userId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<bool>();
+			try
+			{
+				response.Item = await _manager!.SetAssigneeAsync(ticketId, userId);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+
+			return response;
+		}
+
 		public async Task<ServiceResponse<bool>> SetFollowTicketAsync(int ticketId, bool shouldFollow)
 		{
 			await EnsureManagerAsync();

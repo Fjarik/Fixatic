@@ -71,6 +71,22 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		public async Task<ServiceResponse<List<User>>> GetPossibleTicketAssigneesAsync(int ticketId)
+		{
+			await EnsureManagerAsync();
+
+			var response = new ServiceResponse<List<User>>();
+			try
+			{
+				response.Item = await _manager!.GetPossibleTicketAssigneesAsync(ticketId);
+			}
+			catch (Exception ex)
+			{
+				response.Fail(ex);
+			}
+			return response;
+		}
+
 		public async Task<ServiceResponse<User>> GetByIdAsync(int userId)
 		{
 			await EnsureManagerAsync();

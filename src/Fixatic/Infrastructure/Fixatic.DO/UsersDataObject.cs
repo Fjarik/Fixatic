@@ -176,6 +176,49 @@ namespace Fixatic.DO
 			return res;
 		}
 
+		public async Task<List<User>?> GetPossibleTicketAssigneesAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetPossibleTicketAssigneesAsync)}...");
+
+			var sql = @"
+                SELECT DISTINCT U.User_ID, U.Firstname, U.Lastname FROM Tickets T
+					INNER JOIN ProjectsAccess Pa ON T.Project_ID = Pa.Project_ID
+					INNER JOIN UsersGroups Ug ON Pa.Group_ID = Ug.Group_ID
+					INNER JOIN Users U ON Ug.User_ID = U.User_ID
+					WHERE T.Ticket_ID = @ID AND U.IsEnabled = 1 AND dbo.fn_user_type(u.User_ID) = 2;
+            ";
+
+			var cmd = new SqlCommand(sql);
+			
+			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ticketId;
+
+			var res = new List<User>();
+
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new User
+					{
+						UserId = (int)r["User_ID"],
+						Firstname = (string)r["Firstname"],
+						Lastname = (string)r["Lastname"],
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetPossibleTicketAssigneesAsync)}... Done");
+			return res;
+		}
+
 		public async Task<User?> GetByIdAsync(int userId)
 		{
 			_logger.LogInformation($"{nameof(UsersDataObject)}.{nameof(GetByIdAsync)}...");

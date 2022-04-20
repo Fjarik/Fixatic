@@ -10,6 +10,8 @@ namespace Fixatic.Services
 		Task<ServiceResponse<int>> UpdateSansPasswordAsync(User entry);
 
 		Task<ServiceResponse<List<User>>> GetAllAsync();
+		
+		Task<ServiceResponse<List<User>>> GetPossibleTicketAssigneesAsync(int ticketId);
 
 		Task<ServiceResponse<User>> GetByIdAsync(int userId);
 

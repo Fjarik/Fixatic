@@ -28,7 +28,8 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				sql = @"INSERT INTO Tickets (content, created, datesolved, modified, priority, status, title, type, visibility, project_id, assigneduser_id, creator_id)
+				sql =
+					@"INSERT INTO Tickets (content, created, datesolved, modified, priority, status, title, type, visibility, project_id, assigneduser_id, creator_id)
 									VALUES (@content, @created, @datesolved, @modified, @priority, @status, @title, @type, @visibility, @project_id, @assigneduser_id, @creator_id);
 
 				SET @ID = SCOPE_IDENTITY();
@@ -58,7 +59,9 @@ namespace Fixatic.DO
 
 			cmd.Parameters.Add("@content", SqlDbType.NText).Value = ticket.Content;
 			cmd.Parameters.Add("@created", SqlDbType.DateTime2).Value = ticket.Created;
-			cmd.Parameters.Add("@datesolved", SqlDbType.DateTime2).Value = (isClosed && ticket.DateSolved == null) ? DateTime.Now : (ticket.DateSolved ?? (object)DBNull.Value);
+			cmd.Parameters.Add("@datesolved", SqlDbType.DateTime2).Value = (isClosed && ticket.DateSolved == null)
+				? DateTime.Now
+				: (ticket.DateSolved ?? (object)DBNull.Value);
 			cmd.Parameters.Add("@modified", SqlDbType.DateTime2).Value = DateTime.Now;
 			cmd.Parameters.Add("@priority", SqlDbType.Int).Value = (int)ticket.Priority;
 			cmd.Parameters.Add("@status", SqlDbType.Int).Value = (int)ticket.Status;
@@ -550,7 +553,8 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowerAsync)}...");
 
-			var sql = @"SELECT Ticket_ID, User_ID, Type, Since FROM Followers WHERE Ticket_ID = @ticket_id AND User_ID = @user_id;";
+			var sql =
+				@"SELECT Ticket_ID, User_ID, Type, Since FROM Followers WHERE Ticket_ID = @ticket_id AND User_ID = @user_id;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = ticketId;
@@ -640,6 +644,34 @@ namespace Fixatic.DO
 			return res != 0;
 		}
 
+		public async Task<bool> SetAssigneeAsync(int ticketId, int userId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(SetAssigneeAsync)}...");
+
+			var sql = @"UPDATE Tickets
+						SET
+							assigneduser_id = @assigneduser_id
+						WHERE ticket_id = @ID;";
+
+			var cmd = new SqlCommand(sql);
+
+			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = ticketId;
+			cmd.Parameters.Add("@assigneduser_id", SqlDbType.Int).Value = userId;
+
+			int res;
+			try
+			{
+				res = await _db.ExecuteNonQueryAsync(cmd);
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(SetAssigneeAsync)}... Done");
+			return res != 0;
+		}
+
 		public async Task<List<int>> GetCustomPropertyOptionIdsAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetCustomPropertyOptionIdsAsync)}...");
@@ -726,6 +758,5 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(RemovePropertyOptionAsync)}... Done");
 			return res != 0;
 		}
-
 	}
 }

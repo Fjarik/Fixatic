@@ -77,6 +77,17 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetAllAsync)}... Done");
 			return res;
 		}
+		
+		public async Task<List<User>?> GetPossibleTicketAssigneesAsync(int ticketId)
+		{
+			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetPossibleTicketAssigneesAsync)}...");
+
+			var mainDo = new UsersDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetPossibleTicketAssigneesAsync(ticketId);
+
+			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetPossibleTicketAssigneesAsync)}... Done");
+			return res;
+		}
 
 		public async Task<User?> GetByIdAsync(int userId)
 		{

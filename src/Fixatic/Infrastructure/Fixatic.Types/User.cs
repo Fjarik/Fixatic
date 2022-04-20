@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fixatic.Types
+﻿namespace Fixatic.Types
 {
     public class User
     {
@@ -34,6 +28,24 @@ namespace Fixatic.Types
 	        {
 		        return " ";
 	        }
+        }
+        
+        // Note: this is important so the MudSelect can compare pizzas
+        public override bool Equals(object o) {
+	        var other = o as User;
+	        return other?.UserId == UserId;
+        }
+
+        // Note: this is important too!
+        public override int GetHashCode()
+        {
+	        return GetFullName().GetHashCode();
+        }
+
+        // Implement this for the Pizza to display correctly in MudSelect
+        public override string ToString()
+        {
+	        return GetFullName();
         }
     }
 }

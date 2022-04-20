@@ -149,6 +149,17 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(SetFollowTicketAsync)}... Done");
 			return success && shouldFollow;
 		}
+		
+		public async Task<bool> SetAssigneeAsync(int ticketId, int userId)
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(SetAssigneeAsync)}...");
+
+			var mainDo = new TicketsDataObject(_logger, _dbConnector);
+			var res = await mainDo.SetAssigneeAsync(ticketId, userId);
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(SetAssigneeAsync)}... Done");
+			return res;
+		}
 
 		public async Task<List<FullTicketProperty>> GetCustomPropertiesAsync(int ticketId)
 		{
@@ -228,6 +239,5 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(DeleteAsync)}... Done");
 			return res;
 		}
-
 	}
 }

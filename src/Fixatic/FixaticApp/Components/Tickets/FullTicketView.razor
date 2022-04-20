@@ -4,8 +4,6 @@
         <MudIconButton Icon="@Icons.Material.Outlined.Edit" OnClick="OnEditClick" />
         <MudIconButton Icon="@Icons.Material.Outlined.Comment" OnClick="OnCommentTicketAsync" />
 
-        <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" OnClick="OnRemoveTicketAsync" />
-
         @if (_isFollowed)
         {
             <MudIconButton Title="Followed" Icon="@Icons.Filled.Star" OnClick="OnFollowTicketClick" />
@@ -15,9 +13,15 @@
             <MudIconButton Title="Follow" Icon="@Icons.Filled.StarBorder" OnClick="OnFollowTicketClick" />
         }
         
+        <MudIconButton Title="Assign user" Icon="@Icons.Material.Outlined.AssignmentInd" OnClick="OnAssigneeClickAsync"></MudIconButton>
+        
         <MudIconButton Title="Properties" Icon="@Icons.Material.Outlined.Settings" OnClick="OnCumPropsClick" />
         
         <MudIconButton Title="Add Attachments" Icon="@Icons.Material.Outlined.CloudUpload" OnClick="OnAddAttachmentsClick" />
+        
+        <MudSpacer></MudSpacer>
+        
+        <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" Color="Color.Warning" OnClick="OnRemoveTicketAsync" />
     </MudToolBar>
 
     <MudDivider />

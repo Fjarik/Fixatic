@@ -20,6 +20,8 @@ namespace Fixatic.Services
 		Task<ServiceResponse<bool>> SetFollowTicketAsync(int ticketId, bool shouldFollow);
 
 		Task<ServiceResponse<bool>> IsFollowedAsync(int ticketId);
+		
+		Task<ServiceResponse<bool>> SetAssigneeAsync(int ticketId, int userId);
 
 		Task<ServiceResponse<List<FullTicketProperty>>> GetCustomPropertiesAsync(int ticketId);
 
