@@ -317,9 +317,13 @@ INSERT [dbo].[Comments] ([Content], [Created], [IsInternal], [Comment_ID], [Tick
 GO
 SET IDENTITY_INSERT [dbo].[Comments] OFF
 GO
+SET IDENTITY_INSERT [dbo].[CustomProperties] ON 
+GO
 INSERT [dbo].[CustomProperties] ([Description], [Name], [CustomProperty_ID]) VALUES (N'Label for project', N'Label', 1)
 GO
 INSERT [dbo].[CustomProperties] ([Description], [Name], [CustomProperty_ID]) VALUES (N'Affected version', N'Version', 2)
+GO
+SET IDENTITY_INSERT [dbo].[CustomProperties] OFF
 GO
 SET IDENTITY_INSERT [dbo].[CustomPropertyOptions] ON 
 GO
