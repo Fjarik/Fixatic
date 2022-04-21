@@ -36,13 +36,13 @@ namespace FixaticApp.Components
 		private ICustomPropertyOptionsService? CustomPropertyOptionsService { get; set; }
 
 		private bool IsCreate => Property?.CustomPropertyId > 0;
+		private bool MainFormValid => !string.IsNullOrWhiteSpace(Property?.Name);
+		private bool OptionFormValid => !string.IsNullOrWhiteSpace(_optionValue);
 
 		private List<CustomPropertyOption> _options = new();
 		private int _prevId = 0;
-		private bool _formValid;
 
 		private string _optionValue = string.Empty;
-		private bool OptionFormValid => !string.IsNullOrWhiteSpace(_optionValue);
 
 		protected override async Task OnParametersSetAsync()
 		{
@@ -70,7 +70,7 @@ namespace FixaticApp.Components
 
 		private async Task Submit()
 		{
-			if (!_formValid || Property == null)
+			if (!MainFormValid || Property == null)
 				return;
 
 			await CustomPropertiesService!.CreateOrUpdateAsync(Property);

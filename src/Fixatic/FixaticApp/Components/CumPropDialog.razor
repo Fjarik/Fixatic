@@ -2,10 +2,11 @@
     <DialogContent>
         @if (Property != null)
         {
-            <MudForm @bind-IsValid="@_formValid">
+            <MudForm IsValid="@MainFormValid">
                 <MudTextField @bind-Value="@Property.Name" Label="Name" />
                 <MudTextField @bind-Value="@Property.Description" Label="Description" />
 
+                <br />
                 <MudText Typo="Typo.body1">Values:</MudText>
                 @foreach (var opt in _options)
                 {
@@ -19,14 +20,21 @@
                     }
                 }
             </MudForm>
+            <br />
             <MudForm IsValid="@OptionFormValid">
-                <MudTextField @bind-Value="@_optionValue" Label="New option value" />
-                <MudButton OnClick="@AddOption" Disabled="@(!OptionFormValid)" >Add</MudButton>
+                <MudGrid>
+                    <MudItem xs="11">
+                        <MudTextField @bind-Value="@_optionValue" Label="New option value" />
+                    </MudItem>
+                    <MudItem xs="1">
+                        <MudButton OnClick="@AddOption" Disabled="@(!OptionFormValid)">Add</MudButton>
+                    </MudItem>
+                </MudGrid>
             </MudForm>
         }
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@Cancel">Cancel</MudButton>
-        <MudButton Color="Color.Primary" OnClick="@Submit" Disabled="!_formValid">Ok</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@Submit" Disabled="@(!MainFormValid)">Ok</MudButton>
     </DialogActions>
 </MudDialog>
