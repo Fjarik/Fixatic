@@ -67,12 +67,13 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(GetAllAsync)}...");
 
 			var sql = @"SELECT 
-							CustomPropertyOption_ID, 
-							Content,
-							IsEnabled, 
-							Sequence, 
-							CustomProperty_ID 
-						FROM CustomPropertyOptions;";
+							cpo.CustomPropertyOption_ID, 
+							cpo.Content,
+							cpo.IsEnabled, 
+							cpo.Sequence, 
+							cpo.CustomProperty_ID,
+							CanDelete = IIF(EXISTS(SELECT DISTINCT 1 FROM CustomPropertyValues cpv WHERE cpv.CustomPropertyOption_ID = cpo.CustomPropertyOption_ID),0,1)
+						FROM CustomPropertyOptions cpo;";
 
 			var cmd = new SqlCommand(sql);
 
@@ -89,7 +90,8 @@ namespace Fixatic.DO
 						CustomPropertyId = (int)r["CustomProperty_ID"],
 						Content = (string)r["Content"],
 						IsEnabled = (bool)r["IsEnabled"],
-						Sequence = (int)r["Sequence"]
+						Sequence = (int)r["Sequence"],
+						CanDelete = (int)r["CanDelete"] == 1,
 					});
 				}
 
@@ -109,13 +111,14 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsDataObject)}.{nameof(GetByPropertyAsync)}...");
 
 			var sql = @"SELECT 
-							CustomPropertyOption_ID, 
-							Content,
-							IsEnabled, 
-							Sequence, 
-							CustomProperty_ID 
-						FROM CustomPropertyOptions
-						WHERE CustomProperty_ID = @propertyId;";
+							cpo.CustomPropertyOption_ID, 
+							cpo.Content,
+							cpo.IsEnabled, 
+							cpo.Sequence, 
+							cpo.CustomProperty_ID,
+							CanDelete = IIF(EXISTS(SELECT DISTINCT 1 FROM CustomPropertyValues cpv WHERE cpv.CustomPropertyOption_ID = cpo.CustomPropertyOption_ID),0,1)
+						FROM CustomPropertyOptions cpo
+						WHERE cpo.CustomProperty_ID = @propertyId;";
 
 			var cmd = new SqlCommand(sql);
 			cmd.Parameters.Add("@propertyId", SqlDbType.Int).Value = propertyId;
@@ -134,7 +137,8 @@ namespace Fixatic.DO
 						CustomPropertyId = (int)r["CustomProperty_ID"],
 						Content = (string)r["Content"],
 						IsEnabled = (bool)r["IsEnabled"],
-						Sequence = (int)r["Sequence"]
+						Sequence = (int)r["Sequence"],
+						CanDelete = (int)r["CanDelete"] == 1,
 					});
 				}
 

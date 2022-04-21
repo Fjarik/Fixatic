@@ -81,7 +81,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CustomProperties]') AND type in (N'U'))
 BEGIN
 CREATE TABLE [dbo].[CustomProperties](
-	[CustomProperty_ID] [int] NOT NULL,
+	[CustomProperty_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Description] [nvarchar](250) NULL,
 	[Name] [nvarchar](50) NOT NULL,
  CONSTRAINT [PK_CustomProperties] PRIMARY KEY CLUSTERED 

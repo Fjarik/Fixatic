@@ -17,6 +17,7 @@ namespace Fixatic.Types
         public bool IsEnabled { get; set; }
 
         public int Sequence { get; set; }
-
-    }
+		
+		public bool CanDelete { get; set; } = false;
+	}
 }

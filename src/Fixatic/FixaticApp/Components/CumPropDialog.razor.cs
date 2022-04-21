@@ -17,6 +17,7 @@ using FixaticApp.Shared;
 using FixaticApp.Components;
 using Fixatic.Types;
 using Fixatic.Services;
+using Fixatic.DO.Types;
 
 namespace FixaticApp.Components
 {
@@ -40,6 +41,9 @@ namespace FixaticApp.Components
 		private int _prevId = 0;
 		private bool _formValid;
 
+		private string _optionValue = string.Empty;
+		private bool OptionFormValid => !string.IsNullOrWhiteSpace(_optionValue);
+
 		protected override async Task OnParametersSetAsync()
 		{
 			if (Property == null)
@@ -49,22 +53,57 @@ namespace FixaticApp.Components
 				return;
 
 			_prevId = Property.CustomPropertyId;
+			await LoadOptions();
+		}
+
+		private async Task LoadOptions()
+		{
+			if (Property == null)
+				return;
+
 			var res = await CustomPropertyOptionsService!.GetAllAsync(Property.CustomPropertyId);
 			if (res.IsSuccess)
 			{
 				_options = res.Item!;
 			}
-
 		}
 
 		private async Task Submit()
 		{
-			if (!_formValid)
+			if (!_formValid || Property == null)
 				return;
 
-			var res = await CustomPropertiesService!.CreateOrUpdateAsync(Property!);
+			await CustomPropertiesService!.CreateOrUpdateAsync(Property);
 
 			MudDialog!.Close(DialogResult.Ok(string.Empty));
+		}
+
+		private async Task DeleteOption(CustomPropertyOption option)
+		{
+			if (!option.CanDelete)
+				return;
+
+			await CustomPropertyOptionsService!.DeleteAsync(option.CustomPropertyOptionId);
+			_options.Remove(option);
+		}
+
+		private async Task AddOption()
+		{
+			if (!OptionFormValid || string.IsNullOrWhiteSpace(_optionValue))
+				return;
+
+			var newSeq = _options.Count > 0 ? _options.Max(x => x.Sequence) + 1 : 1;
+			var opt = new CustomPropertyOption
+			{
+				CustomPropertyOptionId = DB.IgnoredID,
+				CustomPropertyId = Property!.CustomPropertyId,
+				Content = _optionValue,
+				IsEnabled = true,
+				Sequence = newSeq
+			};
+			await CustomPropertyOptionsService!.CreateOrUpdateAsync(opt);
+			_optionValue = string.Empty;
+			await LoadOptions();
 		}
 
 		private void Cancel()

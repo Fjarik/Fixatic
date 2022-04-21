@@ -26,7 +26,7 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				sql = @"INSERT INTO CustomProperties (description, name)
+				sql = @"INSERT INTO CustomProperties (Description, Name)
 											  VALUES (@description, @name);
 
 						SET @ID = SCOPE_IDENTITY();
@@ -42,8 +42,8 @@ namespace Fixatic.DO
 
 			cmd.Parameters.Add("@ID", SqlDbType.Int).Value = id;
 
-			cmd.Parameters.Add("@description", SqlDbType.NVarChar).Value = customProperty.Description;
-			cmd.Parameters.Add("@name", SqlDbType.NVarChar).Value = customProperty.Name;
+			cmd.Parameters.Add("@name", SqlDbType.NVarChar, 50).Value = customProperty.Name ?? string.Empty;
+			cmd.Parameters.Add("@description", SqlDbType.NVarChar, 250).Value = customProperty.Description ?? string.Empty;
 
 			try
 			{

@@ -9,8 +9,19 @@
                 <MudText Typo="Typo.body1">Values:</MudText>
                 @foreach (var opt in _options)
                 {
-                    <MudChip Color="Color.Primary" Disabled="@(!opt.IsEnabled)">@opt.Content</MudChip>
+                    @if (opt.CanDelete)
+                    {
+                        <MudChip Color="Color.Primary" Disabled="@(!opt.IsEnabled)" OnClose="@(() => DeleteOption(opt))">@opt.Content</MudChip>
+                    }
+                    else
+                    {
+                        <MudChip Color="Color.Primary" Disabled="@(!opt.IsEnabled)">@opt.Content</MudChip>
+                    }
                 }
+            </MudForm>
+            <MudForm IsValid="@OptionFormValid">
+                <MudTextField @bind-Value="@_optionValue" Label="New option value" />
+                <MudButton OnClick="@AddOption" Disabled="@(!OptionFormValid)" >Add</MudButton>
             </MudForm>
         }
     </DialogContent>
