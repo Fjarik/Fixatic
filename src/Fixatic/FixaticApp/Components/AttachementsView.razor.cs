@@ -24,6 +24,9 @@ namespace FixaticApp.Components
 {
 	public partial class AttachementsView
 	{
+		[CascadingParameter(Name = "CurrentUser")]
+		public CurrentUser CurrentUser { get; set; }
+
 		[Parameter]
 		public int TicketID { get; set; } = -1;
 
@@ -31,6 +34,7 @@ namespace FixaticApp.Components
 
 
 		private List<Attachement> _attachements = new();
+		private bool CanDelete => CurrentUser != null && CurrentUser.IsInternal();
 
 		private int _prevId = 0;
 		protected override async Task OnParametersSetAsync()
@@ -52,10 +56,21 @@ namespace FixaticApp.Components
 			_attachements = res.Item ?? new List<Attachement>();
 		}
 
+		private async Task DeleteAsync(int attachmentId)
+		{
+			if (!CanDelete)
+				return;
+
+			await AttachementsService!.DeleteAsync(attachmentId);
+			_attachements = _attachements.Where(x => x.AttachementId != attachmentId).ToList();
+		}
+
+
 		private static string GetSrc(Attachement attachement)
 		{
 			var base64 = Convert.ToBase64String(attachement.Content);
 			return string.Format("data:{0};base64,{1}", attachement.Type, base64);
 		}
+
 	}
 }

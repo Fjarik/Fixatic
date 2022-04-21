@@ -83,7 +83,7 @@ namespace Fixatic.DO
 
 			var id = user.UserId;
 
-			string sql = @"
+			var sql = @"
                     UPDATE Users
                     SET
                         firstname = @firstname,

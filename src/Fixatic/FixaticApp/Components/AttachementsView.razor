@@ -12,6 +12,14 @@
                         </MudItem>
                         <MudItem>
                             <MudText Typo="Typo.subtitle1">@attachement.AlternativeText</MudText>
+                            @if (CanDelete)
+                            {
+                                <MudButton Variant="Variant.Outlined"
+                                           Size="Size.Small" Color="Color.Error"
+                                           OnClick="@(()=> DeleteAsync(attachement.AttachementId))">
+                                    Delete
+                                </MudButton>
+                            }
                         </MudItem>
                     </MudPaper>
                 </MudGrid>
