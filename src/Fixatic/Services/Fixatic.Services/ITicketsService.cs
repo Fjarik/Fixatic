@@ -12,6 +12,8 @@ namespace Fixatic.Services
 		Task<ServiceResponse<List<FullTicket>>> GetByProjectAsync(int projectId);
 
 		Task<ServiceResponse<List<FullTicket>>> GetFollowedTicketsAsync();
+		
+		Task<ServiceResponse<List<FullTicket>>> GetAssignedTicketsAsync();
 
 		Task<ServiceResponse<FullTicket?>> GetByIdAsync(int id);
 

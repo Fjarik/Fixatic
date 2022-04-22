@@ -226,6 +226,72 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetFollowedTicketsAsync)}... Done");
 			return res;
 		}
+		
+		public async Task<List<FullTicket>> GetAssignedTicketsAsync(int currentUserUserId)
+		{
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAssignedTicketsAsync)}...");
+
+			var sql = @"
+				SELECT
+					t.Ticket_ID, 
+					t.Project_ID, 
+					t.AssignedUser_ID, 
+					t.Creator_ID,
+					t.Title, 
+					t.Content, 
+					t.Created, 
+					t.Modified, 
+					t.DateSolved, 
+					t.Priority, 
+					t.Status, 
+					t.Type, 
+					t.Visibility, 
+					t.Followers,
+					t.AssigneeName
+				FROM view_tickets t
+				WHERE t.AssignedUser_ID = @userId
+			";
+
+			var cmd = new SqlCommand(sql);
+			cmd.Parameters.Add("@userId", SqlDbType.Int).Value = currentUserUserId;
+
+			var res = new List<FullTicket>();
+			try
+			{
+				var r = await _db.ExecuteReaderAsync(cmd);
+
+				while (await r.ReadAsync())
+				{
+					res.Add(new FullTicket
+					{
+						TicketId = (int)r["Ticket_ID"],
+						ProjectId = (int)r["Project_ID"],
+						AssignedUserId = r["AssignedUser_ID"] as int?,
+						CreatorId = (int)r["Creator_ID"],
+						Title = (string)r["Title"],
+						Content = (string)r["Content"],
+						Created = (DateTime)r["Created"],
+						Modified = r["Modified"] as DateTime?,
+						DateSolved = r["DateSolved"] as DateTime?,
+						Priority = (TicketPriority)(int)r["Priority"],
+						Status = (TicketStatus)(int)r["Status"],
+						Type = (TicketType)(int)r["Type"],
+						Visibility = (TicketVisibility)(int)r["Visibility"],
+						Followers = (int)r["Followers"],
+						AssigneeName = (r["AssigneeName"] as string) ?? string.Empty
+					});
+				}
+
+				await r.CloseAsync();
+			}
+			finally
+			{
+				await cmd.Connection.CloseAsync();
+			}
+
+			_logger.LogInformation($"{nameof(TicketsDataObject)}.{nameof(GetAssignedTicketsAsync)}... Done");
+			return res;
+		}
 
 		public async Task<FullTicket?> GetByIdAsync(int id)
 		{

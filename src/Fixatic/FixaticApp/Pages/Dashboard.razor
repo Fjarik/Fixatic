@@ -11,11 +11,11 @@
     <MudToolBar>
         <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="@ReturnButtonClicked"></MudIconButton>
         <MudSelect SelectedValuesChanged="@CategoryFilterClickedAsync" @bind-Value="@SelectedCategory" T="ProjectCategory"
-               Margin="Margin.Dense" Variant="Variant.Outlined" Style="max-width: 300px"
-               Placeholder="Category Filter">
+                   Margin="Margin.Dense" Variant="Variant.Outlined" Style="max-width: 300px"
+                   Placeholder="Category Filter">
             @foreach (var category in ProjectCategories)
             {
-                <MudSelectItem T="ProjectCategory" Value="category" />
+                <MudSelectItem T="ProjectCategory" Value="category"/>
             }
         </MudSelect>
     </MudToolBar>
@@ -61,13 +61,33 @@
 
 @if (SelectedGroup == null && _followedTickets.Any())
 {
-    <MudDivider Class="my-5" />
+    <MudDivider Class="my-5"/>
 
     <MudTable Items="@_followedTickets" T="FullTicket" OnRowClick="@OnTicketClicked" Hover="true">
         <HeaderContent>
             <MudTh>
                 <MudText Typo="Typo.h5">
                     Followed Tickets
+                </MudText>
+            </MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nr">
+                @context.Title
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@if (SelectedGroup == null && _assignedTickets.Any())
+{
+    <MudDivider Class="my-5"/>
+
+    <MudTable Items="@_assignedTickets" T="FullTicket" OnRowClick="@OnTicketClicked" Hover="true">
+        <HeaderContent>
+            <MudTh>
+                <MudText Typo="Typo.h5">
+                    Assigned Tickets
                 </MudText>
             </MudTh>
         </HeaderContent>

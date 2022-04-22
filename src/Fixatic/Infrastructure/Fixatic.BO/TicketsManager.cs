@@ -76,6 +76,18 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowedTicketsAsync)}... Done");
 			return res;
 		}
+		
+		public async Task<List<FullTicket>?> GetAssignedTicketsAsync()
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAssignedTicketsAsync)}...");
+
+			var mainDo = new TicketsDataObject(_logger, _dbConnector);
+			var res = await mainDo.GetAssignedTicketsAsync(_currentUser.UserId);
+			res = FilerInternalTickets(res);
+
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAssignedTicketsAsync)}... Done");
+			return res;
+		}
 
 		private List<FullTicket> FilerInternalTickets(List<FullTicket> res)
 		{

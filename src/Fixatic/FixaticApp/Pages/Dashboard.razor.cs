@@ -31,6 +31,8 @@ namespace FixaticApp.Pages
 
 		private List<FullTicket> _followedTickets = new();
 
+		private List<FullTicket> _assignedTickets = new();
+
 		protected override async Task OnInitializedAsync()
 		{
 			var groupsRes = await GroupsService!.GetUserGroupsAsync();
@@ -42,13 +44,21 @@ namespace FixaticApp.Pages
 
 			Groups = groupsRes.Item!;
 
-			var ticketsRes = await TicketsService!.GetFollowedTicketsAsync();
-			if (!ticketsRes.IsSuccess)
+			var followedTicketsRes = await TicketsService!.GetFollowedTicketsAsync();
+			if (!followedTicketsRes.IsSuccess)
 			{
 				DialogService!.Show<ErrorDialog>("DB error");
 				return;
 			}
-			_followedTickets = ticketsRes.Item!;
+			_followedTickets = followedTicketsRes.Item!;
+			
+			var assignedTicketsRes = await TicketsService!.GetAssignedTicketsAsync();
+			if (!assignedTicketsRes.IsSuccess)
+			{
+				DialogService!.Show<ErrorDialog>("DB error");
+				return;
+			}
+			_assignedTickets = assignedTicketsRes.Item!;
 
 			var categoriesRes = await CategoriesService!.GetAllAsync();
 			if (!categoriesRes.IsSuccess)
