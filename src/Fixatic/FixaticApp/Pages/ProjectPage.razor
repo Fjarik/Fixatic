@@ -22,31 +22,32 @@
                 </MudButton>
             </MudToolBar>
             <MudTable T="FullTicket" Hover="true" Striped="true"
-                      Items="@_tickets" OnRowClick="@OnTicketSelect">
+                  Items="@_tickets" OnRowClick="@OnTicketSelect">
                 <HeaderContent>
-                    <MudTh>Tickets</MudTh>
+                    <MudTh colspan="2">Tickets</MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Nr">
                         @context.Title
-
-                        @if (context.Status is TicketStatus.Closed or TicketStatus.Done)
+                    </MudTd>
+                    <MudTd>
+                        @if (context.Status == TicketStatus.Closed || context.Status == TicketStatus.Done)
                         {
-                            <MudIcon Icon="@Icons.Filled.CheckBox" Color="Color.Success"></MudIcon>
+                            <MudIcon Icon="@Icons.Filled.CheckBox" Color="Color.Success" />
                         }
                         else
                         {
-                            <MudIcon Icon="@Icons.Filled.CheckBoxOutlineBlank"></MudIcon>
+                            <MudIcon Icon="@Icons.Filled.CheckBoxOutlineBlank" />
                         }
                     </MudTd>
                 </RowTemplate>
                 <PagerContent>
-                    <MudTablePager HorizontalAlignment="HorizontalAlignment.Left" HidePageNumber="true" HideRowsPerPage="true"/>
+                    <MudTablePager HorizontalAlignment="HorizontalAlignment.Left" HidePageNumber="true" HideRowsPerPage="true" />
                 </PagerContent>
             </MudTable>
         }
     </MudItem>
     <MudItem xs="10">
-        <FullTicketView TicketId="@_selectedTicketId" OnRemoved="@OnTicketRemoved"/>
+        <FullTicketView TicketId="@_selectedTicketId" OnRemoved="@OnTicketRemoved" />
     </MudItem>
 </MudGrid>
