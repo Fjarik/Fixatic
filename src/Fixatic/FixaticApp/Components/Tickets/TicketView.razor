@@ -37,13 +37,13 @@ else
                         <MudTreeView T="string">
                             <MudTreeViewItem Value="@Model.PriorityString" Icon="@Icons.Filled.PriorityHigh" IconColor="Color.Warning" />
 
-                            @if (Model.DateSolved == null)
+                            @if (Model.Status is TicketStatus.Done or TicketStatus.Closed)
                             {
-                                <MudTreeViewItem Value="@("Unsolved")" Icon="@Icons.Filled.CheckBoxOutlineBlank" IconColor="Color.Error" />
+                                <MudTreeViewItem Value="@("Solved")" Icon="@Icons.Filled.CheckBox" IconColor="Color.Success" />
                             }
                             else
                             {
-                                <MudTreeViewItem Value="@("Solved")" Icon="@Icons.Filled.CheckBox" IconColor="Color.Success" />
+                                <MudTreeViewItem Value="@("Unsolved")" Icon="@Icons.Filled.CheckBoxOutlineBlank" IconColor="Color.Error" />
                             }
 
                             @switch (Model.Type)

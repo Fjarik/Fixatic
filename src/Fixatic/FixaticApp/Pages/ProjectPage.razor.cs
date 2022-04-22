@@ -48,6 +48,7 @@ namespace FixaticApp.Pages
 			}
 
 			_tickets = ticketsRes.Item!;
+			_tickets = _tickets.OrderBy(t => t.Status).ToList();
 		}
 
 		protected override void OnParametersSet()
@@ -97,8 +98,8 @@ namespace FixaticApp.Pages
 
 		private async Task EditTicketAsync(FullTicket ticket)
 		{
-			var parameters = new DialogParameters { { "Ticket", ticket } };
-			var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true };
+			var parameters = new DialogParameters {{"Ticket", ticket}};
+			var options = new DialogOptions {CloseOnEscapeKey = true, MaxWidth = MaxWidth.Medium, FullWidth = true};
 			var dialog = DialogService!.Show<TicketEditDialog>("Ticket", parameters, options);
 			var result = await dialog.Result;
 			if (!result.Cancelled)
