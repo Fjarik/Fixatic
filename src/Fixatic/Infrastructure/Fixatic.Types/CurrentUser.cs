@@ -17,7 +17,7 @@ namespace Fixatic.Types
 
 		public bool IsInternal()
 		{
-			return IsInGroup(UserGroupType.Admin | UserGroupType.Internal);
+			return GroupType.HasFlag(UserGroupType.Admin) || GroupType.HasFlag(UserGroupType.Internal);
 		}
 	}
 }
