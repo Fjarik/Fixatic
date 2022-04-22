@@ -11,18 +11,18 @@
     <MudToolBar>
         <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="@ReturnButtonClicked"></MudIconButton>
         <MudSelect SelectedValuesChanged="@CategoryFilterClickedAsync" @bind-Value="@SelectedCategory" T="ProjectCategory"
-                   Margin="Margin.Dense" Variant="Variant.Outlined" Style="max-width: 300px"
-                   Placeholder="Category Filter">
+               Margin="Margin.Dense" Variant="Variant.Outlined" Style="max-width: 300px"
+               Placeholder="Category Filter">
             @foreach (var category in ProjectCategories)
             {
-                <MudSelectItem T="ProjectCategory" Value="category"/>
+                <MudSelectItem T="ProjectCategory" Value="category" />
             }
         </MudSelect>
     </MudToolBar>
 }
 
 <MudGrid>
-    @if (Groups != null && SelectedGroup == null)
+    @if (SelectedGroup == null)
     {
         foreach (var group in Groups)
         {
@@ -40,7 +40,7 @@
         }
     }
 
-    @if (SelectedGroup != null && Projects != null)
+    @if (SelectedGroup != null)
     {
         foreach (var project in Projects)
         {
@@ -59,42 +59,47 @@
     }
 </MudGrid>
 
-@if (SelectedGroup == null && _followedTickets.Any())
+@if (SelectedGroup == null)
 {
-    <MudDivider Class="my-5"/>
+    <MudGrid>
+        @if (_followedTickets.Any())
+        {
+            <MudItem xs="12" md="@(_assignedTickets.Any() ? 6 : 12)">
+                <MudTable Items="@_followedTickets" T="FullTicket" OnRowClick="@OnTicketClicked" Hover="true">
+                    <HeaderContent>
+                        <MudTh>
+                            <MudText Typo="Typo.h5">
+                                Followed Tickets
+                            </MudText>
+                        </MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Nr">
+                            @context.Title
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudItem>
+        }
 
-    <MudTable Items="@_followedTickets" T="FullTicket" OnRowClick="@OnTicketClicked" Hover="true">
-        <HeaderContent>
-            <MudTh>
-                <MudText Typo="Typo.h5">
-                    Followed Tickets
-                </MudText>
-            </MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Nr">
-                @context.Title
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-}
-
-@if (SelectedGroup == null && _assignedTickets.Any())
-{
-    <MudDivider Class="my-5"/>
-
-    <MudTable Items="@_assignedTickets" T="FullTicket" OnRowClick="@OnTicketClicked" Hover="true">
-        <HeaderContent>
-            <MudTh>
-                <MudText Typo="Typo.h5">
-                    Assigned Tickets
-                </MudText>
-            </MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Nr">
-                @context.Title
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
+        @if (_assignedTickets.Any())
+        {
+            <MudItem xs="12" md="@(_followedTickets.Any() ? 6 : 12)">
+                <MudTable Items="@_assignedTickets" T="FullTicket" OnRowClick="@OnTicketClicked" Hover="true">
+                    <HeaderContent>
+                        <MudTh>
+                            <MudText Typo="Typo.h5">
+                                Assigned Tickets
+                            </MudText>
+                        </MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Nr">
+                            @context.Title
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudItem>
+        }
+    </MudGrid>
 }

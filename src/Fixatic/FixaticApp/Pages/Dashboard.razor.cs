@@ -20,14 +20,11 @@ namespace FixaticApp.Pages
 
 		[Inject] private NavigationManager? NavigationManager { get; set; }
 
-		[Parameter] public List<Project>? Projects { get; set; }
-
-		[Parameter] public List<Group>? Groups { get; set; }
-
-		[Parameter] public List<ProjectCategory>? ProjectCategories { get; set; }
-
-		[Parameter] public Group? SelectedGroup { get; set; }
-		[Parameter] public ProjectCategory? SelectedCategory { get; set; }
+		private List<Project> Projects { get; set; } = new();
+		private List<Group> Groups { get; set; } = new();
+		private List<ProjectCategory> ProjectCategories { get; set; } = new();
+		private Group? SelectedGroup { get; set; }
+		private ProjectCategory? SelectedCategory { get; set; }
 
 		private List<FullTicket> _followedTickets = new();
 
@@ -51,7 +48,7 @@ namespace FixaticApp.Pages
 				return;
 			}
 			_followedTickets = followedTicketsRes.Item!;
-			
+
 			var assignedTicketsRes = await TicketsService!.GetAssignedTicketsAsync();
 			if (!assignedTicketsRes.IsSuccess)
 			{
