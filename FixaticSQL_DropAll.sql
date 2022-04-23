@@ -34,8 +34,6 @@ ALTER TABLE [dbo].[Attachements] DROP CONSTRAINT [FK_Attachements_Tickets]
 GO
 ALTER TABLE [dbo].[Attachements] DROP CONSTRAINT [FK_Attachements_Creator]
 GO
-ALTER TABLE [dbo].[Attachements] DROP CONSTRAINT [FK_Attachements_Comments]
-GO
 /****** Object:  Table [dbo].[UsersGroups]    Script Date: 20.03.2022 12:21:45 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UsersGroups]') AND type in (N'U'))
 DROP TABLE [dbo].[UsersGroups]

@@ -26,8 +26,8 @@ namespace Fixatic.DO
 			string sql;
 			if (id == DB.IgnoredID)
 			{
-				sql = @"INSERT INTO Attachements (content, name, size, type, uploaded, alternativetext, ticket_id, user_id, comment_id)
-				VALUES (@content, @name, @size, @type, SYSDATETIME(), @alternativetext, @ticket_id, @user_id, @comment_id);
+				sql = @"INSERT INTO Attachements (content, name, size, type, uploaded, alternativetext, ticket_id, user_id)
+				VALUES (@content, @name, @size, @type, SYSDATETIME(), @alternativetext, @ticket_id, @user_id);
 
 				SET @ID = SCOPE_IDENTITY();
 
@@ -49,9 +49,8 @@ namespace Fixatic.DO
 			cmd.Parameters.Add("@type", SqlDbType.VarChar).Value = attachement.Type;
 			cmd.Parameters.Add("@uploaded", SqlDbType.DateTime2).Value = attachement.Uploaded;
 			cmd.Parameters.Add("@alternativetext", SqlDbType.NVarChar).Value = attachement.AlternativeText ?? (object)DBNull.Value;
-			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = attachement.TicketId ?? (object)DBNull.Value;
+			cmd.Parameters.Add("@ticket_id", SqlDbType.Int).Value = attachement.TicketId;
 			cmd.Parameters.Add("@user_id", SqlDbType.Int).Value = attachement.UserId;
-			cmd.Parameters.Add("@comment_id", SqlDbType.Int).Value = attachement.CommentId ?? (object)DBNull.Value;
 
 			try
 			{
@@ -71,7 +70,7 @@ namespace Fixatic.DO
 		{
 			_logger.LogInformation($"{nameof(AttachementsDataObject)}.{nameof(GetAllAsync)}...");
 
-			var sql = @"SELECT Attachement_ID, Content, Name, Size, Type, Uploaded, AlternativeText, Ticket_ID, User_ID, Comment_ID FROM Attachements;";
+			var sql = @"SELECT Attachement_ID, Content, Name, Size, Type, Uploaded, AlternativeText, Ticket_ID, User_ID FROM Attachements;";
 
 			var cmd = new SqlCommand(sql);
 
@@ -88,7 +87,6 @@ namespace Fixatic.DO
 						AttachementId = (int)r["Attachement_ID"],
 						UserId = (int)r["User_ID"],
 						TicketId = (int)r["Ticket_ID"],
-						CommentId = (int)r["Comment_ID"],
 						Content = (byte[])r["Content"],
 						Name = (string)r["Name"],
 						Size = (int)r["Size"],
@@ -114,7 +112,7 @@ namespace Fixatic.DO
 			_logger.LogInformation($"{nameof(AttachementsDataObject)}.{nameof(GetByTicketAsync)}...");
 
 			var sql = @"
-				SELECT Attachement_ID, Content, Name, Size, Type, Uploaded, AlternativeText, Ticket_ID, User_ID, Comment_ID 
+				SELECT Attachement_ID, Content, Name, Size, Type, Uploaded, AlternativeText, Ticket_ID, User_ID 
 				FROM Attachements 
 				WHERE Ticket_ID = @ticketId;";
 
@@ -133,8 +131,7 @@ namespace Fixatic.DO
 					{
 						AttachementId = (int)r["Attachement_ID"],
 						UserId = (int)r["User_ID"],
-						TicketId = r["Ticket_ID"] as int?,
-						CommentId = r["Comment_ID"] as int?,
+						TicketId = (int)r["Ticket_ID"],
 						Content = (byte[])r["Content"],
 						Name = (string)r["Name"],
 						Size = (int)r["Size"],

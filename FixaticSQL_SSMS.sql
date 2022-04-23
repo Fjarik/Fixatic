@@ -19,8 +19,7 @@ BEGIN
 CREATE TABLE [dbo].[Attachements](
 	[Attachement_ID] [int] IDENTITY(1,1) NOT NULL,
 	[User_ID] [int] NOT NULL,
-	[Comment_ID] [int] NULL,
-	[Ticket_ID] [int] NULL,
+	[Ticket_ID] [int] NOT NULL,
 	[Content] [varbinary](max) NOT NULL,
 	[Name] [nvarchar](50) NOT NULL,
 	[Size] [int] NOT NULL,
@@ -666,13 +665,6 @@ CREATE NONCLUSTERED INDEX [IXFK_Tickets_Assigned user] ON [dbo].[Tickets]
 (
 	[AssignedUser_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Attachements_Comments]') AND parent_object_id = OBJECT_ID(N'[dbo].[Attachements]'))
-ALTER TABLE [dbo].[Attachements]  WITH CHECK ADD  CONSTRAINT [FK_Attachements_Comments] FOREIGN KEY([Comment_ID])
-REFERENCES [dbo].[Comments] ([Comment_ID])
-GO
-IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Attachements_Comments]') AND parent_object_id = OBJECT_ID(N'[dbo].[Attachements]'))
-ALTER TABLE [dbo].[Attachements] CHECK CONSTRAINT [FK_Attachements_Comments]
 GO
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Attachements_Creator]') AND parent_object_id = OBJECT_ID(N'[dbo].[Attachements]'))
 ALTER TABLE [dbo].[Attachements]  WITH CHECK ADD  CONSTRAINT [FK_Attachements_Creator] FOREIGN KEY([User_ID])

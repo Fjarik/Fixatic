@@ -73,7 +73,6 @@ namespace FixaticApp.Components.Tickets
 			{
 				AttachementId = DB.IgnoredID,
 				TicketId = TicketID,
-				CommentId = null,
 				AlternativeText = AltTxt,
 				Name = _file.Name,
 				Type = _file.ContentType,

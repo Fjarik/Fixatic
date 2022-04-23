@@ -12,9 +12,7 @@ namespace Fixatic.Types
 
         public int UserId { get; set; }
 
-        public int? TicketId { get; set; }
-
-        public int? CommentId { get; set; }
+        public int TicketId { get; set; }
 
         public byte[] Content { get; set; }
 
