@@ -75,10 +75,10 @@ namespace FixaticApp.Pages
 			StateHasChanged();
 		}
 
-		private void ReturnButtonClicked()
+		private async Task ReturnButtonClicked()
 		{
 			SelectedGroup = null;
-			Projects = null;
+			await LoadProjects();
 		}
 
 		private void ProjectButtonClicked(Project project)
