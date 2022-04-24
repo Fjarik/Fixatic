@@ -48,7 +48,8 @@
                 <MudCard>
                     <MudCardContent>
                         <MudText>@project.Name</MudText>
-                        <MudText Typo="Typo.body2">@project.Shortcut</MudText>
+                        <MudText Typo="Typo.body1">@project.Shortcut</MudText>
+                        <MudText Typo="Typo.body2">@project.Description</MudText>
                     </MudCardContent>
                     <MudCardActions>
                         <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => ProjectButtonClicked(project))">Tickets</MudButton>
