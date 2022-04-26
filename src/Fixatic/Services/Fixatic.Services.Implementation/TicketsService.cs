@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Fixatic.Services.Implementation
 {
+	/// <inheritdoc/>
 	public class TicketsService : ITicketsService
 	{
 		private readonly ApplicationSettings _applicationSettings;
@@ -13,6 +14,7 @@ namespace Fixatic.Services.Implementation
 		private readonly ICurrentUserService _currentUserService;
 		private TicketsManager? _manager;
 
+		/// <inheritdoc/>
 		public TicketsService(
 			IOptions<ApplicationSettings> applicationSettings,
 			ILogger<TicketsService> logger,
@@ -23,6 +25,7 @@ namespace Fixatic.Services.Implementation
 			_currentUserService = currentUserService;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<int>> CreateOrUpdateAsync(Ticket entry)
 		{
 			await EnsureManagerAsync();
@@ -40,6 +43,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<FullTicket>>> GetAllAsync()
 		{
 			await EnsureManagerAsync();
@@ -57,6 +61,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<FullTicket?>> GetByIdAsync(int id)
 		{
 			await EnsureManagerAsync();
@@ -74,6 +79,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<FullTicket>>> GetByProjectAsync(int projectId)
 		{
 			await EnsureManagerAsync();
@@ -91,6 +97,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<FullTicket>>> GetFollowedTicketsAsync()
 		{
 			await EnsureManagerAsync();
@@ -107,7 +114,8 @@ namespace Fixatic.Services.Implementation
 
 			return response;
 		}
-		
+
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<FullTicket>>> GetAssignedTicketsAsync()
 		{
 			await EnsureManagerAsync();
@@ -125,6 +133,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> IsFollowedAsync(int ticketId)
 		{
 			await EnsureManagerAsync();
@@ -143,6 +152,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> SetAssigneeAsync(int ticketId, int userId)
 		{
 			await EnsureManagerAsync();
@@ -160,6 +170,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> SetFollowTicketAsync(int ticketId, bool shouldFollow)
 		{
 			await EnsureManagerAsync();
@@ -177,6 +188,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();
@@ -194,6 +206,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<FullTicketProperty>>> GetCustomPropertiesAsync(int ticketId)
 		{
 			await EnsureManagerAsync();
@@ -211,6 +224,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> AddPropertyOptionAsync(int ticketId, int propertyOptionId)
 		{
 			await EnsureManagerAsync();
@@ -228,6 +242,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> RemovePropertyOptionAsync(int ticketId, int propertyOptionId)
 		{
 			await EnsureManagerAsync();

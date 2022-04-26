@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Fixatic.Services.Implementation
 {
+	/// <inheritdoc/>
 	public class AttachementsService : IAttachementsService
 	{
 		private readonly ApplicationSettings _applicationSettings;
@@ -23,6 +24,7 @@ namespace Fixatic.Services.Implementation
 			_currentUserService = currentUserService;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<int>> CreateOrUpdateAsync(Attachement entry)
 		{
 			await EnsureManagerAsync();
@@ -39,6 +41,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<Attachement>>> GetAllAsync()
 		{
 			await EnsureManagerAsync();
@@ -55,7 +58,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
-
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<Attachement>>> GetByTicketAsync(int ticketId)
 		{
 			await EnsureManagerAsync();
@@ -72,6 +75,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();

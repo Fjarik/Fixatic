@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Fixatic.Services.Implementation
 {
+	/// <inheritdoc/>
 	public class ProjectsService : IProjectsService
 	{
 		private readonly ApplicationSettings _applicationSettings;
@@ -13,6 +14,7 @@ namespace Fixatic.Services.Implementation
 		private readonly ICurrentUserService _currentUserService;
 		private ProjectsManager? _manager;
 
+		/// <inheritdoc/>
 		public ProjectsService(
 			IOptions<ApplicationSettings> applicationSettings,
 			ILogger<ProjectsService> logger,
@@ -23,6 +25,7 @@ namespace Fixatic.Services.Implementation
 			_currentUserService = currentUserService;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<int>> CreateOrUpdateAsync(Project entry)
 		{
 			await EnsureManagerAsync();
@@ -39,6 +42,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<Project>>> GetAllAsync()
 		{
 			await EnsureManagerAsync();
@@ -55,6 +59,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<Project?>> GetByIdAsync(int projectId)
 		{
 			await EnsureManagerAsync();
@@ -71,6 +76,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<Project>>> GetGroupProjectsAsync(int groupId)
 		{
 			await EnsureManagerAsync();
@@ -87,6 +93,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<int>>> GetCategoryIdsAsync(int projectId)
 		{
 			await EnsureManagerAsync();
@@ -103,6 +110,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();

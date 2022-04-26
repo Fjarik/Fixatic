@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 
 namespace Fixatic.Services.Implementation
 {
+	/// <inheritdoc/>
 	public class CurrentUserService : ICurrentUserService
 	{
 		private readonly ApplicationSettings _applicationSettings;
@@ -41,6 +42,7 @@ namespace Fixatic.Services.Implementation
 		}
 
 
+		/// <inheritdoc/>
 		public async Task<CurrentUser> GetUserInfoAsync()
 		{
 			await EnsureCurrentUserAsync();
@@ -48,12 +50,14 @@ namespace Fixatic.Services.Implementation
 			return _currentUser!;
 		}
 
+		/// <inheritdoc/>
 		private async Task EnsureCurrentUserAsync()
 		{
 			if (ShouldReload)
 				await LoadCurrentUserAsync();
 		}
 
+		/// <inheritdoc/>
 		public async Task<bool> IsLoggedInAsync()
 		{
 			if (_currentUser != null)
@@ -63,6 +67,7 @@ namespace Fixatic.Services.Implementation
 			return authState?.User?.Identity?.IsAuthenticated == true;
 		}
 
+		/// <inheritdoc/>
 		private async Task LoadCurrentUserAsync()
 		{
 			var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
@@ -71,6 +76,7 @@ namespace Fixatic.Services.Implementation
 			_userLoadedDateTimeOffset = DateTimeOffset.UtcNow;
 		}
 
+		/// <inheritdoc/>
 		public void InvalidateCache()
 		{
 			_currentUser = null;

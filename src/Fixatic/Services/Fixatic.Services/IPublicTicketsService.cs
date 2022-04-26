@@ -3,9 +3,16 @@ using Fixatic.Types;
 
 namespace Fixatic.Services
 {
+	/// <summary>
+	/// Interface - Public ticket service
+	/// </summary>
 	public interface IPublicTicketsService
 	{
-		Task<ServiceResponse<List<Ticket>?>> GetPublicAsync();
+		/// <summary>
+		/// Gets the public tickets.
+		/// </summary>
+		/// <returns></returns>
+		Task<ServiceResponse<List<Ticket>>> GetPublicAsync();
 
 	}
 }

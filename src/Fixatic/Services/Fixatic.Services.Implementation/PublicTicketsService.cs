@@ -6,12 +6,14 @@ using Microsoft.Extensions.Options;
 
 namespace Fixatic.Services.Implementation
 {
+	/// <inheritdoc/>
 	public class PublicTicketsService : IPublicTicketsService
 	{
 		private readonly ApplicationSettings _applicationSettings;
 		private readonly ILogger _logger;
 		private PublicTicketsManager? _manager;
 
+		/// <inheritdoc/>
 		public PublicTicketsService(
 			IOptions<ApplicationSettings> applicationSettings,
 			ILogger<TicketsService> logger)
@@ -19,6 +21,7 @@ namespace Fixatic.Services.Implementation
 			_applicationSettings = applicationSettings.Value;
 			_logger = logger;
 		}
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<Ticket>>> GetPublicAsync()
 		{
 			await EnsureManagerAsync();

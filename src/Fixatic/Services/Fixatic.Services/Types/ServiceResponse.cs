@@ -6,15 +6,27 @@ using System.Threading.Tasks;
 
 namespace Fixatic.Services.Types
 {
+	/// <summary>
+	/// Service response
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <seealso cref="Fixatic.Services.Types.ServiceResponseBase" />
 	public sealed class ServiceResponse<T> : ServiceResponseBase
 	{
 		public T? Item { get; set; } = default;
 	}
 
+	/// <summary>
+	/// Service response
+	/// </summary>
+	/// <seealso cref="Fixatic.Services.Types.ServiceResponseBase" />
 	public sealed class ServiceResponse : ServiceResponseBase
 	{
 	}
 
+	/// <summary>
+	/// Service response
+	/// </summary>
 	public abstract class ServiceResponseBase
 	{
 		public bool IsSuccess { get; set; }

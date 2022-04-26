@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Fixatic.Services.Implementation
 {
+	/// <inheritdoc/>
 	public class UsersService : IUsersService
 	{
 		private readonly ApplicationSettings _applicationSettings;
@@ -13,6 +14,7 @@ namespace Fixatic.Services.Implementation
 		private readonly ICurrentUserService _currentUserService;
 		private UsersManager? _manager;
 
+		/// <inheritdoc/>
 		public UsersService(
 			IOptions<ApplicationSettings> applicationSettings,
 			ILogger<UsersService> logger,
@@ -23,6 +25,7 @@ namespace Fixatic.Services.Implementation
 			_currentUserService = currentUserService;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<int>> CreateOrUpdateAsync(User entry)
 		{
 			await EnsureManagerAsync();
@@ -38,7 +41,8 @@ namespace Fixatic.Services.Implementation
 			}
 			return response;
 		}
-		
+
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<int>> UpdateSansPasswordAsync(User entry)
 		{
 			await EnsureManagerAsync();
@@ -55,6 +59,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<User>>> GetAllAsync()
 		{
 			await EnsureManagerAsync();
@@ -71,6 +76,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<BasicUserInfo>>> GetPossibleTicketAssigneesAsync(int ticketId)
 		{
 			await EnsureManagerAsync();
@@ -87,6 +93,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<User>> GetByIdAsync(int userId)
 		{
 			await EnsureManagerAsync();
@@ -104,6 +111,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();

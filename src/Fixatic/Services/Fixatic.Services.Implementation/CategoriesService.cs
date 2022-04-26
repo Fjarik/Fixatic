@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Fixatic.Services.Implementation
 {
+	/// <inheritdoc/>
 	public class CategoriesService : ICategoriesService
 	{
 		private readonly ApplicationSettings _applicationSettings;
@@ -23,6 +24,7 @@ namespace Fixatic.Services.Implementation
 			_currentUserService = currentUserService;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<int>> CreateOrUpdateAsync(ProjectCategory entry)
 		{
 			await EnsureManagerAsync();
@@ -39,6 +41,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<List<ProjectCategory>>> GetAllAsync()
 		{
 			await EnsureManagerAsync();
@@ -55,6 +58,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> DeleteAsync(int id)
 		{
 			await EnsureManagerAsync();
@@ -71,6 +75,7 @@ namespace Fixatic.Services.Implementation
 			return response;
 		}
 
+		/// <inheritdoc/>
 		private async Task EnsureManagerAsync()
 		{
 			if (_manager == null)
