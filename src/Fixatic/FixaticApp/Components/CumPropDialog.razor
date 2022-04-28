@@ -1,36 +1,42 @@
-﻿<MudDialog>
+﻿@using Fixatic.DO.Types
+<MudDialog>
     <DialogContent>
         @if (Property != null)
         {
             <MudForm IsValid="@MainFormValid">
                 <MudTextField @bind-Value="@Property.Name" Label="Name" />
                 <MudTextField @bind-Value="@Property.Description" Label="Description" />
-
-                <br />
-                <MudText Typo="Typo.body1">Values:</MudText>
-                @foreach (var opt in _options)
+                @if (Property.CustomPropertyId != DB.IgnoredID)
                 {
-                    @if (opt.CanDelete)
+                    <br />
+                    <MudText Typo="Typo.body1">Values:</MudText>
+                    @foreach (var opt in _options)
                     {
-                        <MudChip Color="Color.Primary" Disabled="@(!opt.IsEnabled)" OnClose="@(() => DeleteOption(opt))">@opt.Content</MudChip>
-                    }
-                    else
-                    {
-                        <MudChip Color="Color.Primary" Disabled="@(!opt.IsEnabled)">@opt.Content</MudChip>
+                        @if (opt.CanDelete)
+                        {
+                            <MudChip Color="Color.Primary" Disabled="@(!opt.IsEnabled)" OnClose="@(() => DeleteOption(opt))">@opt.Content</MudChip>
+                        }
+                        else
+                        {
+                            <MudChip Color="Color.Primary" Disabled="@(!opt.IsEnabled)">@opt.Content</MudChip>
+                        }
                     }
                 }
             </MudForm>
-            <br />
-            <MudForm IsValid="@OptionFormValid">
-                <MudGrid>
-                    <MudItem xs="11">
-                        <MudTextField @bind-Value="@_optionValue" Label="New option value" />
-                    </MudItem>
-                    <MudItem xs="1">
-                        <MudButton OnClick="@AddOption" Disabled="@(!OptionFormValid)">Add</MudButton>
-                    </MudItem>
-                </MudGrid>
-            </MudForm>
+            @if (Property.CustomPropertyId != DB.IgnoredID)
+            {
+                <br />
+                <MudForm IsValid="@OptionFormValid">
+                    <MudGrid>
+                        <MudItem xs="11">
+                            <MudTextField @bind-Value="@_optionValue" Label="New option value" />
+                        </MudItem>
+                        <MudItem xs="1">
+                            <MudButton OnClick="@AddOption" Disabled="@(!OptionFormValid)">Add</MudButton>
+                        </MudItem>
+                    </MudGrid>
+                </MudForm>
+            }
         }
     </DialogContent>
     <DialogActions>

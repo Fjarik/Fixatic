@@ -318,7 +318,7 @@ SET IDENTITY_INSERT [dbo].[Comments] OFF
 GO
 SET IDENTITY_INSERT [dbo].[CustomProperties] ON 
 GO
-INSERT [dbo].[CustomProperties] ([Description], [Name], [CustomProperty_ID]) VALUES (N'Label for project', N'Label', 1)
+INSERT [dbo].[CustomProperties] ([Description], [Name], [CustomProperty_ID]) VALUES (N'Operating system this issue happened on', N'Operating system', 1)
 GO
 INSERT [dbo].[CustomProperties] ([Description], [Name], [CustomProperty_ID]) VALUES (N'Affected version', N'Version', 2)
 GO
@@ -326,13 +326,13 @@ SET IDENTITY_INSERT [dbo].[CustomProperties] OFF
 GO
 SET IDENTITY_INSERT [dbo].[CustomPropertyOptions] ON 
 GO
-INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [CustomPropertyOption_ID], [CustomProperty_ID]) VALUES (N'A', 1, 1, 1, 1)
+INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [CustomPropertyOption_ID], [CustomProperty_ID]) VALUES (N'Windows 7', 1, 1, 1, 1)
 GO
-INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [CustomPropertyOption_ID], [CustomProperty_ID]) VALUES (N'B', 1, 2, 2, 1)
+INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [CustomPropertyOption_ID], [CustomProperty_ID]) VALUES (N'Windows 11', 1, 2, 2, 1)
 GO
-INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [CustomPropertyOption_ID], [CustomProperty_ID]) VALUES (N'C', 1, 3, 3, 1)
+INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [CustomPropertyOption_ID], [CustomProperty_ID]) VALUES (N'MacOS', 1, 3, 3, 1)
 GO
-INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [CustomPropertyOption_ID], [CustomProperty_ID]) VALUES (N'D', 1, 4, 4, 1)
+INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [CustomPropertyOption_ID], [CustomProperty_ID]) VALUES (N'Ubuntu', 1, 4, 4, 1)
 GO
 INSERT [dbo].[CustomPropertyOptions] ([Content], [IsEnabled], [Sequence], [CustomPropertyOption_ID], [CustomProperty_ID]) VALUES (N'1.0.0', 1, 1, 5, 2)
 GO
