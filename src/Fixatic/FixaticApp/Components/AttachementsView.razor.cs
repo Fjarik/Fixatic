@@ -25,7 +25,7 @@ namespace FixaticApp.Components
 	public partial class AttachementsView
 	{
 		[CascadingParameter(Name = "CurrentUser")]
-		public CurrentUser CurrentUser { get; set; }
+		public CurrentUser? CurrentUser { get; set; }
 
 		[Parameter]
 		public int TicketID { get; set; } = -1;
@@ -64,7 +64,6 @@ namespace FixaticApp.Components
 			await AttachementsService!.DeleteAsync(attachmentId);
 			_attachements = _attachements.Where(x => x.AttachementId != attachmentId).ToList();
 		}
-
 
 		private static string GetSrc(Attachement attachement)
 		{

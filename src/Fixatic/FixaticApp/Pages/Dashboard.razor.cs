@@ -69,7 +69,7 @@ namespace FixaticApp.Pages
 
 		private async Task GroupButtonClicked(Group group)
 		{
-			this.SelectedGroup = group;
+			SelectedGroup = group;
 			await LoadProjects();
 
 			StateHasChanged();

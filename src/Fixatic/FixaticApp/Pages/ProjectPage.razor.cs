@@ -26,7 +26,7 @@ namespace FixaticApp.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
-			var projectRes = await ProjectsService!.GetByIdAsync(this.RouteProjectId);
+			var projectRes = await ProjectsService!.GetByIdAsync(RouteProjectId);
 			if (!projectRes.IsSuccess || projectRes.Item == null)
 			{
 				DialogService!.Show<ErrorDialog>("Failed to fetch Project data from database");
@@ -40,7 +40,7 @@ namespace FixaticApp.Pages
 
 		private async Task LoadTicketsAsync()
 		{
-			var ticketsRes = await TicketsService!.GetByProjectAsync(this.RouteProjectId);
+			var ticketsRes = await TicketsService!.GetByProjectAsync(RouteProjectId);
 			if (!ticketsRes.IsSuccess)
 			{
 				DialogService!.Show<ErrorDialog>("Failed to fetch Ticket data from database");

@@ -17,9 +17,10 @@ namespace Fixatic.Types.Extensions
 			{
 				throw new ArgumentException("EnumerationValue must be of Enum type", nameof(enumerationValue));
 			}
+			var name = enumerationValue.ToString();
 
 			//Tries to find a DescriptionAttribute for a potential friendly name for the enum
-			var memberInfo = type.GetMember(enumerationValue.ToString());
+			var memberInfo = type.GetMember(name!);
 			if (memberInfo != null && memberInfo.Length > 0)
 			{
 				var attrs = memberInfo[0].GetCustomAttributes(typeof(DisplayAttribute), false);
@@ -40,9 +41,10 @@ namespace Fixatic.Types.Extensions
 			{
 				throw new ArgumentException("EnumerationValue must be of Enum type", nameof(enumerationValue));
 			}
-
+			var name = enumerationValue.ToString();
+			
 			//Tries to find a DescriptionAttribute for a potential friendly name for the enum
-			var memberInfo = type.GetMember(enumerationValue.ToString());
+			var memberInfo = type.GetMember(name!);
 			if (memberInfo != null && memberInfo.Length > 0)
 			{
 				var attrs = memberInfo[0].GetCustomAttributes(typeof(DisplayAttribute), false);

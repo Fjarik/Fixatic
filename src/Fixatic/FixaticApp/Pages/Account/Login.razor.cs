@@ -23,13 +23,13 @@ namespace FixaticApp.Pages.Account
 	public partial class Login
 	{
 		[Inject]
-		protected NavigationManager NavigationManager { get; set; }
+		protected NavigationManager? NavigationManager { get; set; }
 
 		private string _message = string.Empty;
 
 		protected override void OnInitialized()
 		{
-			var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+			var uri = NavigationManager!.ToAbsoluteUri(NavigationManager.Uri);
 			if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("msg", out var msg))
 			{
 				_message = msg.ToString();

@@ -2,6 +2,6 @@
 {
 	public class TokenProvider
 	{
-		public string AntiforgeryToken { get; set; }
+		public string AntiforgeryToken { get; set; } = string.Empty;
 	}
 }

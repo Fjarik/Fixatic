@@ -24,26 +24,26 @@ namespace FixaticApp.Pages.Public
 		// !!! this page is for users that are NOT logged in !!!
 
 		[Inject]
-		private ICurrentUserService CurrentUserService { get; set; }
+		private ICurrentUserService? CurrentUserService { get; set; }
 
 		[Inject]
-		private IPublicTicketsService TicketService { get; set; }
+		private IPublicTicketsService? TicketService { get; set; }
 
 		[Inject]
-		private NavigationManager NavigationManager { get; set; }
+		private NavigationManager? NavigationManager { get; set; }
 
-		private List<Ticket> _tickets = new List<Ticket>();
+		private List<Ticket> _tickets = new();
 		private bool _load = false;
 
 		protected override async Task OnInitializedAsync()
 		{
-			var isLoggedIn = await CurrentUserService.IsLoggedInAsync();
+			var isLoggedIn = await CurrentUserService!.IsLoggedInAsync();
 			if (isLoggedIn)
 			{
-				NavigationManager.NavigateTo("/dashboard");
+				NavigationManager!.NavigateTo("/dashboard");
 				return;
 			}
-			var res = await TicketService.GetPublicAsync();
+			var res = await TicketService!.GetPublicAsync();
 			if (res.IsSuccess)
 			{
 				_tickets = res.Item!;

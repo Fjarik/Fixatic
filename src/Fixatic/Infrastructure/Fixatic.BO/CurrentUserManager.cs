@@ -84,10 +84,10 @@ namespace Fixatic.BO
 		{
 			var identity = new ClaimsIdentity(new[]
 			{
-				new Claim(ClaimTypes.Name, user.Email),
-				new Claim(ClaimTypes.Email, user.Email),
-				new Claim(ClaimTypes.GivenName, user.Firstname),
-				new Claim(ClaimTypes.Surname, user.Lastname),
+				new Claim(ClaimTypes.Name, user.Email!),
+				new Claim(ClaimTypes.Email, user.Email!),
+				new Claim(ClaimTypes.GivenName, user.Firstname!),
+				new Claim(ClaimTypes.Surname, user.Lastname!),
 				new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
 			}, "Fixatic");
 
