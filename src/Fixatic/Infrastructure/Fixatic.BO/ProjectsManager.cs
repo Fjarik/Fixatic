@@ -23,6 +23,11 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Creates the or update Project.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <returns></returns>
 		public async Task<int> CreateOrUpdateAsync(Project entry)
 		{
 			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(CreateOrUpdateAsync)}...");
@@ -34,6 +39,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+
+		/// <summary>
+		/// Gets all ProjectsProject.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<Project>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(GetAllAsync)}...");
@@ -44,7 +54,12 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(GetAllAsync)}... Done");
 			return res;
 		}
-		
+
+		/// <summary>
+		/// Gets the group projects.
+		/// </summary>
+		/// <param name="groupGroupId">The group group identifier.</param>
+		/// <returns></returns>
 		public async Task<List<Project>?> GetGroupProjectsAsync(int groupId)
 		{
 			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(GetGroupProjectsAsync)}...");
@@ -56,6 +71,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets Project the by identifier.
+		/// </summary>
+		/// <param name="projectId">The project identifier.</param>
+		/// <returns></returns>
 		public async Task<Project?> GetByIdAsync(int projectId)
 		{
 			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(GetByIdAsync)}...");
@@ -67,6 +87,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets the category ids.
+		/// </summary>
+		/// <param name="projectId">The project identifier.</param>
+		/// <returns></returns>
 		public async Task<List<int>?> GetCategoryIdsAsync(int projectId)
 		{
 			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(GetCategoryIdsAsync)}...");
@@ -78,6 +103,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Deletes the Project.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(ProjectsManager)}.{nameof(DeleteAsync)}...");

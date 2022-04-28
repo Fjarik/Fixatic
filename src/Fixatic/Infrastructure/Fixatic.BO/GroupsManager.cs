@@ -23,6 +23,11 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Creates the or update Group.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <returns></returns>
 		public async Task<int> CreateOrUpdateAsync(Group entry)
 		{
 			_logger.LogInformation($"{nameof(GroupsManager)}.{nameof(CreateOrUpdateAsync)}...");
@@ -34,6 +39,10 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets all Groups.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<Group>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(GroupsManager)}.{nameof(GetAllAsync)}...");
@@ -44,7 +53,11 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(GroupsManager)}.{nameof(GetAllAsync)}... Done");
 			return res;
 		}
-		
+
+		/// <summary>
+		/// Gets the user groups.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<Group>> GetUserGroupsAsync()
 		{
 			_logger.LogInformation($"{nameof(GroupsManager)}.{nameof(GetUserGroupsAsync)}...");
@@ -56,6 +69,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Deletes the Group.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(GroupsManager)}.{nameof(DeleteAsync)}...");

@@ -23,6 +23,11 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Creates the or update CustomPropertyOption.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <returns></returns>
 		public async Task<int> CreateOrUpdateAsync(CustomPropertyOption entry)
 		{
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsManager)}.{nameof(CreateOrUpdateAsync)}...");
@@ -34,6 +39,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets all CustomPropertyOptions.
+		/// </summary>
+		/// <param name="propertyId">The property identifier.</param>
+		/// <returns></returns>
 		public async Task<List<CustomPropertyOption>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsManager)}.{nameof(GetAllAsync)}...");
@@ -45,6 +55,11 @@ namespace Fixatic.BO
 			return res.OrderBy(x => x.Sequence).ToList();
 		}
 
+		/// <summary>
+		/// Gets CustomPropertyOptions by property.
+		/// </summary>
+		/// <param name="propertyId">The property identifier.</param>
+		/// <returns></returns>
 		public async Task<List<CustomPropertyOption>> GetByPropertyAsync(int propertyId)
 		{
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsManager)}.{nameof(GetByPropertyAsync)}...");
@@ -56,6 +71,11 @@ namespace Fixatic.BO
 			return res.OrderBy(x => x.Sequence).ToList();
 		}
 
+		/// <summary>
+		/// Deletes the CustomPropertyOption.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(CustomPropertyOptionsManager)}.{nameof(DeleteAsync)}...");

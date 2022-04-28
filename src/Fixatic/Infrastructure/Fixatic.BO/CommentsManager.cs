@@ -23,6 +23,11 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Creates the or update Comment.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <returns></returns>
 		public async Task<int> CreateOrUpdateAsync(Comment entry)
 		{
 			_logger.LogInformation($"{nameof(CommentsManager)}.{nameof(CreateOrUpdateAsync)}...");
@@ -34,6 +39,10 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets all Comment.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<Comment>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(CommentsManager)}.{nameof(GetAllAsync)}...");
@@ -45,6 +54,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets the by ticket Comment.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <returns></returns>		
 		public async Task<List<Comment>> GetByTicketAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(CommentsManager)}.{nameof(GetByTicketAsync)}...");
@@ -61,6 +75,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Deletes the Comment.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(CommentsManager)}.{nameof(DeleteAsync)}...");

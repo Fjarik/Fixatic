@@ -23,13 +23,17 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Creates the or update attachement.
+		/// </summary>
+		/// <param name="entry">The Attachement.</param>
 		public async Task<int> CreateOrUpdateAsync(Attachement? entry)
 		{
 			_logger.LogInformation($"{nameof(AttachementsManager)}.{nameof(CreateOrUpdateAsync)}...");
 
-			if(entry == null)
+			if (entry == null)
 				return -1;
-			
+
 			if (entry.AttachementId == DB.IgnoredID)
 			{
 				entry.UserId = _currentUser.UserId;
@@ -43,6 +47,10 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets all Attachements.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<Attachement>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(AttachementsManager)}.{nameof(GetAllAsync)}...");
@@ -54,6 +62,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets Attachement the by ticket.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <returns></returns>
 		public async Task<List<Attachement>> GetByTicketAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(AttachementsManager)}.{nameof(GetByTicketAsync)}...");
@@ -65,6 +78,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Deletes the Attachement.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(AttachementsManager)}.{nameof(DeleteAsync)}...");

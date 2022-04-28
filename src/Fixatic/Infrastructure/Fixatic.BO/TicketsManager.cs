@@ -25,6 +25,11 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(_applicationSettings);
 		}
 
+		/// <summary>
+		/// Creates the or update Ticket.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <returns></returns>
 		public async Task<int> CreateOrUpdateAsync(Ticket entry)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(CreateOrUpdateAsync)}...");
@@ -41,6 +46,10 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets all Tickets.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<FullTicket>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAllAsync)}...");
@@ -53,6 +62,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets Tickets the by project.
+		/// </summary>
+		/// <param name="projectId">The project identifier.</param>
+		/// <returns></returns>
 		public async Task<List<FullTicket>> GetByProjectAsync(int projectId)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetByProjectAsync)}...");
@@ -65,6 +79,10 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets the followed tickets.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<FullTicket>> GetFollowedTicketsAsync()
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowedTicketsAsync)}...");
@@ -76,7 +94,11 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowedTicketsAsync)}... Done");
 			return res;
 		}
-		
+
+		/// <summary>
+		/// Gets the assigned tickets.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<FullTicket>?> GetAssignedTicketsAsync()
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAssignedTicketsAsync)}...");
@@ -98,6 +120,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets Ticket the by identifier.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<FullTicket?> GetByIdAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetByIdAsync)}...");
@@ -132,6 +159,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets the follower.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <returns></returns>
 		public async Task<Follower?> GetFollowerAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetFollowerAsync)}...");
@@ -143,6 +175,12 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Sets the follow ticket.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <param name="shouldFollow">if set to <c>true</c> [should follow].</param>
+		/// <returns></returns>
 		public async Task<bool> SetFollowTicketAsync(int ticketId, bool shouldFollow)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(SetFollowTicketAsync)}...");
@@ -161,7 +199,13 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(SetFollowTicketAsync)}... Done");
 			return success && shouldFollow;
 		}
-		
+
+		/// <summary>
+		/// Sets the assignee.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <param name="userId">The user identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> SetAssigneeAsync(int ticketId, int userId)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(SetAssigneeAsync)}...");
@@ -173,6 +217,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets the custom properties.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <returns></returns>
 		public async Task<List<FullTicketProperty>> GetCustomPropertiesAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetCustomPropertiesAsync)}...");
@@ -208,6 +257,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets the custom property option ids.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <returns></returns>
 		public async Task<List<int>> GetCustomPropertyOptionIdsAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetCustomPropertyOptionIdsAsync)}...");
@@ -219,6 +273,12 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Adds the property option.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <param name="propertyOptionId">The property option identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> AddPropertyOptionAsync(int ticketId, int propertyOptionId)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(AddPropertyOptionAsync)}...");
@@ -230,6 +290,12 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Removes the property option.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <param name="propertyOptionId">The property option identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> RemovePropertyOptionAsync(int ticketId, int propertyOptionId)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(RemovePropertyOptionAsync)}...");
@@ -241,6 +307,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Deletes the Ticket.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(DeleteAsync)}...");

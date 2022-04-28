@@ -18,6 +18,12 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Login user.
+		/// </summary>
+		/// <param name="email">The email.</param>
+		/// <param name="password">The password.</param>
+		/// <returns></returns>
 		public async Task<ClaimsPrincipal?> LoginAsync(string? email, string? password)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(LoginAsync)}...");
@@ -45,6 +51,16 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Loads the user information
+		/// </summary>
+		/// <param name="principal">The principal.</param>
+		/// <returns></returns>
+		/// <exception cref="System.UnauthorizedAccessException">
+		/// User not found
+		/// or
+		/// User is disabled
+		/// </exception>
 		public async Task<CurrentUser> LoadUserInfoAsync(ClaimsPrincipal? principal)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(LoadUserInfoAsync)}...");

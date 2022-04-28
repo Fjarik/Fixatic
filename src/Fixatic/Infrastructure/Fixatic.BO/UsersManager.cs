@@ -24,14 +24,17 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Creates the or update User.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <returns></returns>
 		public async Task<int> CreateOrUpdateAsync(User user)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(CreateOrUpdateAsync)}...");
 
 			if (user == null)
 				return DB.IgnoredID;
-
-			// TODO: Validation
 
 			user.Email = user.Email?.ToLower();
 
@@ -47,11 +50,14 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Updates the sans password.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <returns></returns>		
 		public async Task<int> UpdateSansPasswordAsync(User user)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(UpdateSansPasswordAsync)}...");
-
-			// TODO: Validation
 
 			user.Email = user.Email?.ToLower();
 
@@ -67,6 +73,10 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets all Users.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<User>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetAllAsync)}...");
@@ -77,7 +87,12 @@ namespace Fixatic.BO
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetAllAsync)}... Done");
 			return res;
 		}
-		
+
+		/// <summary>
+		/// Gets the possible ticket assignees.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <returns></returns>
 		public async Task<List<BasicUserInfo>> GetPossibleTicketAssigneesAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetPossibleTicketAssigneesAsync)}...");
@@ -89,6 +104,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets User the by identifier.
+		/// </summary>
+		/// <param name="userId">The user identifier.</param>
+		/// <returns></returns>		
 		public async Task<User?> GetByIdAsync(int userId)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(GetByIdAsync)}...");
@@ -100,6 +120,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Deletes the User.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(UsersManager)}.{nameof(DeleteAsync)}...");

@@ -23,6 +23,11 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Creates the or update CustomProperty.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <returns></returns>
 		public async Task<int> CreateOrUpdateAsync(CustomProperty entry)
 		{
 			_logger.LogInformation($"{nameof(CustomPropertiesManager)}.{nameof(CreateOrUpdateAsync)}...");
@@ -34,6 +39,10 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets all CustomProperties.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<CustomProperty>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(CustomPropertiesManager)}.{nameof(GetAllAsync)}...");
@@ -45,6 +54,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets CustomProperty the by ticket.
+		/// </summary>
+		/// <param name="ticketId">The ticket identifier.</param>
+		/// <returns></returns>
 		public async Task<List<FullProperty>> GetByTicketAsync(int ticketId)
 		{
 			_logger.LogInformation($"{nameof(CustomPropertiesManager)}.{nameof(GetByTicketAsync)}...");
@@ -86,6 +100,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Deletes the CustomProperty.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(CustomPropertiesManager)}.{nameof(DeleteAsync)}...");

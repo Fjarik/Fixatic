@@ -23,6 +23,11 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Creates the or update ProjectCategory.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <returns></returns>
 		public async Task<int> CreateOrUpdateAsync(ProjectCategory entry)
 		{
 			_logger.LogInformation($"{nameof(CategoriesManager)}.{nameof(CreateOrUpdateAsync)}...");
@@ -34,6 +39,10 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Gets all ProjectCategory.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<ProjectCategory>> GetAllAsync()
 		{
 			_logger.LogInformation($"{nameof(CategoriesManager)}.{nameof(GetAllAsync)}...");
@@ -45,6 +54,11 @@ namespace Fixatic.BO
 			return res;
 		}
 
+		/// <summary>
+		/// Deletes the ProjectCategory.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
 		public async Task<bool> DeleteAsync(int id)
 		{
 			_logger.LogInformation($"{nameof(CategoriesManager)}.{nameof(DeleteAsync)}...");

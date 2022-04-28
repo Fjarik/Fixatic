@@ -21,6 +21,10 @@ namespace Fixatic.BO
 			_dbConnector = new DBConnector(applicationSettings);
 		}
 
+		/// <summary>
+		/// Gets the public tickets.
+		/// </summary>
+		/// <returns></returns>
 		public async Task<List<Ticket>> GetPublicAsync()
 		{
 			_logger.LogInformation($"{nameof(PublicTicketsManager)}.{nameof(GetPublicAsync)}...");
