@@ -70,6 +70,12 @@ namespace Fixatic.Services
 		Task<ServiceResponse<bool>> IsFollowedAsync(int ticketId);
 
 		/// <summary>
+		/// Gets the available ticket visiblity.
+		/// </summary>
+		/// <returns></returns>
+		Task<List<TicketVisibility>> GetAvailableVisiblityAsync();
+
+		/// <summary>
 		/// Sets the assignee.
 		/// </summary>
 		/// <param name="ticketId">The ticket identifier.</param>

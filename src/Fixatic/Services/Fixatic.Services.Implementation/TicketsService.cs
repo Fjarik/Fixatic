@@ -153,6 +153,24 @@ namespace Fixatic.Services.Implementation
 		}
 
 		/// <inheritdoc/>
+		public async Task<List<TicketVisibility>> GetAvailableVisiblityAsync()
+		{
+			await EnsureManagerAsync();
+
+			var response = new List<TicketVisibility>();
+			try
+			{
+				response = _manager!.GetAvailableVisiblity();
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex, "Failed to get available visibility for ticket");
+			}
+
+			return response;
+		}
+
+		/// <inheritdoc/>
 		public async Task<ServiceResponse<bool>> SetAssigneeAsync(int ticketId, int userId)
 		{
 			await EnsureManagerAsync();

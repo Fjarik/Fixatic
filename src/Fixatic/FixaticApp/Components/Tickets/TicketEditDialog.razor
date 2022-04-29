@@ -36,10 +36,10 @@
                     }
                 </MudSelect>
 
-                @if (IsCreate)
+                @if (IsCreate && _ticketVisibilities.Any())
                 {
                     <MudSelect T="TicketVisibility" Label="Visibility" @bind-Value="@Ticket.Visibility">
-                        @foreach (var value in Enum.GetValues<TicketVisibility>())
+                        @foreach (var value in _ticketVisibilities)
                         {
                             <MudSelectItem T="TicketVisibility" Value="@value">
                                 @value.GetName()

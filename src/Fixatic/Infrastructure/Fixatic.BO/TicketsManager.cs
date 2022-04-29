@@ -121,6 +121,30 @@ namespace Fixatic.BO
 		}
 
 		/// <summary>
+		/// Gets the available ticket visiblity.
+		/// </summary>
+		/// <returns></returns>
+		public List<TicketVisibility> GetAvailableVisiblity()
+		{
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAvailableVisiblity)}...");
+
+			var res = new List<TicketVisibility>();
+
+			res.Add(TicketVisibility.Normal);
+			
+			if (_currentUser.IsInternal())
+			{
+				res.Add(TicketVisibility.Internal);
+			}
+
+			res.Add(TicketVisibility.Public);
+			
+			_logger.LogInformation($"{nameof(TicketsManager)}.{nameof(GetAvailableVisiblity)}... Done");
+			return res;
+		}
+		
+
+		/// <summary>
 		/// Gets Ticket the by identifier.
 		/// </summary>
 		/// <param name="id">The identifier.</param>

@@ -35,6 +35,7 @@ namespace FixaticApp.Components.Tickets
 
 		private bool FormValid;
 		private bool IsCreate => Ticket?.TicketId < 1;
+		private List<TicketVisibility> _ticketVisibilities = new();
 
 		private readonly FluentValueValidator<string> _titleValidator = new(x => x
 			.NotEmpty()
@@ -43,6 +44,13 @@ namespace FixaticApp.Components.Tickets
 		private readonly FluentValueValidator<string> _contentValidator = new(x => x
 			.NotEmpty()
 			.Length(1, 500));
+
+		protected override async Task OnInitializedAsync()
+		{
+			_ticketVisibilities = await TicketsService!.GetAvailableVisiblityAsync();
+			
+			await base.OnInitializedAsync();
+		}
 
 		private void Cancel()
 		{
