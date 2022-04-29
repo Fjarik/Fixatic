@@ -33,7 +33,8 @@ namespace FixaticApp.Components.Tickets
 		[Inject]
 		private ITicketsService? TicketsService { get; set; }
 
-		private bool FormValid;
+		private MudForm? _form;
+		private bool FormValid = false;
 		private bool IsCreate => Ticket?.TicketId < 1;
 		private List<TicketVisibility> _ticketVisibilities = new();
 
@@ -59,6 +60,7 @@ namespace FixaticApp.Components.Tickets
 
 		private async Task Submit()
 		{
+			await _form!.Validate();
 			if (!FormValid || Ticket == null)
 				return;
 

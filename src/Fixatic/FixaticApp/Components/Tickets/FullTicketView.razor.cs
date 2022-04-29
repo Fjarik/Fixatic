@@ -96,7 +96,7 @@ namespace FixaticApp.Components.Tickets
 				return;
 			}
 
-			var confirmDialog = DialogService!.Show<ErrorDialog>("Delete the ticket ?");
+			var confirmDialog = DialogService!.Show<ConfirmDialog>("Delete the ticket?");
 			var confirmRes = await confirmDialog.Result;
 			if (confirmRes.Cancelled)
 			{
