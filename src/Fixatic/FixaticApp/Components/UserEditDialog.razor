@@ -2,15 +2,15 @@
     <DialogContent>
         @if (User != null && CurrentUser != null)
         {
-            <MudForm @bind-IsValid="@FormValid">
-                <MudTextField @bind-Value="@User.Firstname" Label="First name" Validation="_nameValidator.Validation" />
-                <MudTextField @bind-Value="@User.Lastname" Label="Last name" Validation="_nameValidator.Validation" />
-                <MudTextField @bind-Value="@User.Email" Label="E-mail" Validation="_emailValidator.Validation" InputType="InputType.Email" />
-                <MudTextField @bind-Value="@User.Phone" Label="Phone" Validation="_phoneValidator.Validation" />
+            <MudForm Model="User" @ref="_form" @bind-IsValid="@FormValid">
+                <MudTextField @bind-Value="@User.Firstname" Label="First name" Validation="_nameValidator.Validation" Immediate="true" />
+                <MudTextField @bind-Value="@User.Lastname" Label="Last name" Validation="_nameValidator.Validation" Immediate="true" />
+                <MudTextField @bind-Value="@User.Email" Label="E-mail" Validation="_emailValidator.Validation" InputType="InputType.Email" Immediate="true" />
+                <MudTextField @bind-Value="@User.Phone" Label="Phone" Validation="_phoneValidator.Validation" Immediate="true" />
 
                 @if (IsCreate)
                 {
-                    <MudTextField @bind-Value="@User.Password" Label="Password" Validation="_passwordValidator.Validation" InputType="InputType.Password" />
+                    <MudTextField @bind-Value="@User.Password" Label="Password" Validation="_passwordValidator.Validation" InputType="InputType.Password" Immediate="true" />
                 }
                 else
                 {

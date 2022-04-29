@@ -19,8 +19,9 @@ namespace FixaticApp.Components
 		[Inject] private IUsersService? UsersService { get; set; }
 		[Inject] private IDialogService? DialogService { get; set; }
 
+		private MudForm? _form;
 		private CurrentUser? CurrentUser;
-		private bool FormValid { get; set; }
+		private bool FormValid { get; set; } = false;
 		private bool UpdatePassword { get; set; } = false;
 
 		// Is this dialog for creating a new user or just for editing ?
@@ -41,12 +42,11 @@ namespace FixaticApp.Components
 			.NotEmpty()
 			.Length(5, 50));
 
-		// TODO: fix error with empty number... I thought NotEmpty() would take care of that...
 		private readonly FluentValueValidator<string> _phoneValidator = new(x => x
 			.NotEmpty()
 			.Length(10, 50)
 			.Must(phone => phone.StartsWith("+"))
-			.Must(phone => phone.ToCharArray()[1..].All(char.IsDigit))
+			.Must(phone => !string.IsNullOrWhiteSpace(phone) && phone.ToCharArray()[1..].All(char.IsDigit))
 			.WithMessage("Phone must start with '+' and then only contain digits"));
 
 		protected override async Task OnInitializedAsync()
@@ -67,7 +67,8 @@ namespace FixaticApp.Components
 
 		private async Task SubmitAsync()
 		{
-			if (User == null || !FormValid)
+			await _form!.Validate();
+			if (User == null || !_form.IsValid)
 				return;
 
 			if (IsCreate || UpdatePassword)
