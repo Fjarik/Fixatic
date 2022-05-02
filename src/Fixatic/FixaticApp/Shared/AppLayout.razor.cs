@@ -33,12 +33,21 @@ namespace FixaticApp.Shared
 		[Inject]
 		private ICurrentUserService? CurrentUserService { get; set; }
 
+		[Inject]
+		private NavigationManager? NavigationManager { get; set; }
+
 		private CurrentUser? _currentUser;
 
 		private bool _drawerOpen = true;
 
 		protected override async Task OnInitializedAsync()
 		{
+			if (!(await CurrentUserService!.IsLoggedInAsync()))
+			{
+				NavigationManager!.NavigateTo("/", true);
+				return;
+			}
+
 			_currentUser = await CurrentUserService!.GetUserInfoAsync();
 			await base.OnInitializedAsync();
 		}
